@@ -47,6 +47,8 @@
 
 %cluster
 
+%leaf or taxon?
+
 \begin{definition}
 	Let $A$ be a pending subtree of the tree $T$.
 	We call the set $c(A)$ of taxa of $A$ the \emph{cluster} induced by $A$.
@@ -85,7 +87,7 @@ For a more restricted subset of trees in $\rnni$, namely caterpillar trees that 
 \begin{proof}
 	Let $T_1$ and $T_2$ be two caterpillar trees, both having a leaf labelled by $a$ as part of their cherry.
 	Let $p$ be a shortest path from $T_1$ to $T_2$.
-	We introduce a labelling of internal nodes of all trees on $p$ by first defining it for $T_1$ and $T_2$ and then explaining how the labelling is changed by $\rnni$ moves.
+	We introduce a labelling of internal nodes of all trees on $p$ by first defining it for the caterpillar trees $T_1$ and $T_2$ and then explaining how the labelling is changed by $\rnni$ moves.
 
 	In $T_1$ and $T_2$ the internal node of the cherry is labelled by the label of its child that is not $a$.
 	All other internal nodes shall have the same label as their leaf children.
@@ -132,51 +134,29 @@ For a more restricted subset of trees in $\rnni$, namely caterpillar trees that 
 	\end{figure}
 
 	We proceed to show that $int_x$ and $int_y$ are ancestors of $x$ and $y$ after an $\nni$ move as described above, respectively.
-	Let $A$ and $B$ be the subtrees that are children of $int_x$ and $C$ the subtree that is child of $int_y$ and does not contain $A$ and $B$, as depicted on the left of .
-	Without loss of generality we can assume that $x \in A$, because $int_x$ is an ancestor of $x$ before the $\nni$ move.
-	If otherwise $x\in B$, we just need to exchange $A$ and $B$ in the following argumentation.
+	If $x$ stays in the subtree rooted in the lower node of $e$, this does obviously hold.
+	We now turn to the case that $x$ is not in the subtree rooted in the lower node of $e$ after the $\nni$ move.
+	Then the labels of the two internal nodes change such that $rank(int_x) > rank(int_y)$.
+	This makes sure that $int_x$ is an ancestor of $x$.
+	Thus, it remains to prove that $int_y$ is ancestor of $y$.
+	In particular, we need to show that $y$ is not in the same subtree $A$ as $x$, whose root has the node labelled by $int_x$ as parent before and after the $\nni$ move.
+	Let us consider the tree before the $\nni$ move.
+	$A$ has $|A|$ leaves and $|A| - 1$ internal nodes.
+	These internal nodes are labelled by some leaves of $A$, because all internal nodes must be labelled by a descendant leaf.
+	We know that $x \in A$, and the parent of the root of $A$ is labelled by $x$.
+	All remaining $|A|-1$ leaf labels of $A$ appear as labels of the $|A|-1$ internal nodes of $A$.
+	From the fact that the internal node labelled by $y$ is not inside $A$ we can conclude that $y$ cannot be a leaf of $A$.
+	This proves that the labelling of the internal nodes is is well defined and allows a unique identification of internal nodes by their labels.
 
-	If $A$ is a child of the lower of both new nodes after the $\nni$ move, as in the upper tree on the right of Figure~\ref{fig:nni_example_internal_label}, we can keep the rank order of $int_x$ and $int_y$.
-	So we assign $int_x$ to the lower node that is parent of $A$ and $C$ and $int_y$ to the upper node that is parent of $B$.
-	Because $x \in A$ and $y \in A \cup B \cup C$, $int_x$ and $int_y$ are ancestors of $x$ and $y$, respectively.
-
-	Let us now consider the $\nni$ move that results in a tree where $B$ and $C$ are the children of the lower of the two new nodes and $A$ is children of the upper new node.
-	Because $x \in A$, $int_x$ needs to be assigned to the upper new node.
-	It remains to prove that $y \in B \cup C$ to make sure that $int_y$ is an ancestor of $y$ after the $\nni$ move.
-
-	In the following we consider the tree after the $\nni$ move.
-	We know that $y \in A \cup B \cup C$, because $int_y$ is an ancestor of $y$ before the $\nni$ move.
-	Therefore, it is sufficient to prove $y \notin A$.
-	Let us consider the subtree $A$ and the labels of its internal nodes.
-	Let $|A| = k$ be the number of leaves in $A$.
-	There are $k-1$ internal nodes in $A$ that need to be labelled by these leaves.
-	The parent of the root of $A$ is $int_x$, as it is labelled by $x$.
-	Because $x \in A$, there are $k - 1$ leaves remaining in $A$ that must label some internal nodes.
-	As the $k-1$ internal nodes of $A$ must be labelled by leafs that are descendants of these nodes, these labels need to be the $k-1$ leafs of $A$.
-	Therefore, it holds:
-	$int_z \in A \iff z \in A$.
-	And as we know that $int_y \notin A$, $y$ can not be a leaf of $A$.
-	Therefore, it is $y \in B \cup C$ and thus, $int_y$ is an ancestor of $y$ after the $\nni$ move.
-
-	Concluding we see that our labelling is well defined.
-	Another thing we should point out is that this labelling method leads to the labelling of $T_2$ as it is defined for caterpillar trees.
-	This follows directly from the fact that $int_z$ is an ancestor of the leaf labelled by $z$.
-	If one considers the internal node in $T_2$ with lowest rank, it can only have the label of the leaf in the cherry that is not labelled by $a$, because $int_z$ is an ancestor of $z$ for all leaf labels $z$.
-	Now we can stepwise consider all internal nodes with rank one higher than the previously considered node and receive the same result.
-	Hence, our way to change the labels of internal nodes on $p$ is consistent and ends in the correct labelling of $T_2$.
-
-	Now we want to use this labelling to prove that there is always a caterpillar path that is at least as short as the given shortest path $p$.
+	The task is now to prove that there is always a caterpillar path at least as short as the given path $p$.
 	Therefore, we use the following observation:
 	Within each $\rnni$ move the ranks of at most two internal nodes change by at most one each.
-	This is true for both, rank swaps and $\nni$ moves.
-	Within a rank swap two nodes simply exchange their ranks.
-	And within an $\nni$ move two new nodes arise and are labelled by the former two nodes that bounded the edge on that the $\nni$ move is performed.
-	But still, the ranks of these two nodes $int_x$ and $int_y$ both change by $1$.
+	This is true for both rank swaps and $\nni$ moves, according to our definition of the labelling:
+	Within a rank swap two nodes exchange their ranks, while there are not necessarily changes of ranks when $\nni$ moves are performed.
 
-	On a caterpillar path the only possible moves are $\nni$ moves.
-	However, each of these $\nni$ move change the ranks of two internal nodes by at most one each.
+	On a caterpillar path the only possible moves are $\nni$ moves that change the ranks of two internal nodes by one each.
 	Therefore, we can construct a caterpillar path $r$ out of $p$:
-	every time two internla nodes $int_x$ and $int_y$ exchange ranks, they do so on the caterpillar path $r$ as well.
+	every time two internal nodes $int_x$ and $int_y$ exchange ranks on $p$, they do so on the caterpillar path $r$ as well.
 	Since there are moves on $p$ that do not change the ranks of internal nodes, this caterpillar path has length $|r| \leq |p|$.
 	Hence, there is always a shortest path between $T_1$ and $T_2$ that is a caterpillar path.
 \end{proof}
