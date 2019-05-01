@@ -1,0 +1,331 @@
+\documentclass[11pt, a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[UKenglish]{babel}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{todonotes}
+
+\newcommand{\nni}{\mathrm{NNI}}
+\newcommand{\rnni}{\mathrm{RNNI}}
+\newcommand{\rnniu}{\mathrm{RNNIu}}
+
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{conjecture}[definition]{Conjecture}
+\newtheorem{lemma}[definition]{Lemma}
+\newtheorem{corollary}[definition]{Corollary}
+
+\graphicspath{{figures/}}
+
+\title{The Ranked Nearest Neighbour Interchange space}
+\date{\today}
+\author{Lena Collienne, Alex Gavryushkin}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+	
+\end{abstract}
+
+
+\section{Introduction}
+
+\section{Definitions}
+
+%Do we restrict everything to RNNI? If not, make sure that we correctly distinguish between RNNI and RNNIu (for instance in the algorithm section)
+
+%MRCA
+
+%cluster
+
+\begin{definition}
+	Let $A$ be a pending subtree of the tree $T$.
+	We call the set $c(A)$ of taxa of $A$ the \emph{cluster} induced by $A$.
+\end{definition}
+
+\section{Caterpillar Trees}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{NNI_vs_RNNI}
+	\caption{Paths between caterpillar trees $T_1$ and $T_2$: black -- $\nni$ path of length $5$; red -- $\rnni$ path of length $6$; blue -- $\rnni$ path of length $8$.}
+	\label{NNI_vs_RNNI}
+\end{figure}
+
+\begin{conjecture}
+	The set of caterpillar trees is convex in $\rnni$ space.
+\end{conjecture}
+
+This conjecture is computationally proven for up to $8$ taxa (maximum $\rnni$ graph we can compute).
+For a more restricted subset of trees in $\rnni$, namely caterpillar trees that have one cherry leaf in common, one can show convexity.
+
+\begin{lemma}
+	Let $T_1$ and $T_2$ be two caterpillar trees that both have a leaf labelled by $a$ as part of their cherry.
+	There is a shortest paths from $T_1$ to $T_2$ that is a caterpillar path.
+	\label{lemma:caterpillar_subset_convex}
+\end{lemma}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=0.3\textwidth]{label_internal_nodes}
+	\caption{The labelling of the caterpillar tree as introduced in the proof of Lemma~\ref{lemma:caterpillar_subset_convex} is unique due to its definition.
+	}
+	\label{label_internal_nodes}
+\end{figure}
+
+\begin{proof}
+	Let $T_1$ and $T_2$ be two caterpillar trees, both having a leaf labelled by $a$ as part of their cherry.
+	Let $p$ be a shortest path from $T_1$ to $T_2$.
+	We introduce a labelling of internal nodes of all trees on $p$ by first defining it for $T_1$ and $T_2$ and then explaining how the labelling is changed by $\rnni$ moves.
+
+	In $T_1$ and $T_2$ the internal node of the cherry is labelled by the label of its child that is not $a$.
+	All other internal nodes shall have the same label as their leaf children.
+	From now on we will identify the leaf labelled by $x$ with $x$ and the internal node labelled by $x$ will be called $int_x$.
+	An example for a caterpillar tree with internal leaf labels is depicted in Figure~\ref{label_internal_nodes}.
+	In the following, changes of the internal labelling following $\rnni$ moves are defined:
+
+	\textbf{Rank swaps:}
+	Within rank swaps the labels of internal nodes do not change.
+	For an example consider Figure~\ref{fig:rank_swap_internal_label}.
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{rank_swap_internal_label}
+		\caption{The labelling of the internal nodes that swap ranks (red) do not change within the rank swap.
+		}
+		\label{fig:rank_swap_internal_label}
+	\end{figure}
+
+	\textbf{NNI move:}
+	Let there be an $\nni$ move on an edge $(int_x, int_y)$ where $rank(int_x) < rank(int_y)$ as in Figure~\ref{fig:nni_moves}.
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\textwidth]{nni_moves_internal_label}
+		\caption{Two possible $\nni$ moves on edge $(int_x, int_y)$ where $x \in A, y \in B$.
+		}
+		\label{fig:nni_moves}
+	\end{figure}
+
+	The nodes incident to the edge after the $\nni$ move are labelled by $int_x$ and $int_y$ as well.
+	By default, the node that has lower rank than the other one is labelled by $int_x$, the other one by $int_y$.
+	But if $int_x$ is no ancestor of $x$ or $int_y$ is no ancestor of $y$, we swap the labels of the two new nodes, such that $rank(int_x) > rank(int_y)$.
+	An example of an $\nni$ move and the new labelling is provided in Figure~\ref{fig:nni_example_internal_label}.
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.8\textwidth]{nni_example_internal_label}
+		\caption{The first labelling after the $\nni$ move preserves the ranks of $int_4$ and $int_6$.
+		But then $int_6$ is not an ancestor of $6$ any more.
+		Therefore, $int_4$ and $int_6$ have to change their labels.
+		}
+		\label{fig:nni_example_internal_label}
+	\end{figure}
+
+	We proceed to show that $int_x$ and $int_y$ are ancestors of $x$ and $y$ after an $\nni$ move as described above, respectively.
+	Let $A$ and $B$ be the subtrees that are children of $int_x$ and $C$ the subtree that is child of $int_y$ and does not contain $A$ and $B$, as depicted on the left of .
+	Without loss of generality we can assume that $x \in A$, because $int_x$ is an ancestor of $x$ before the $\nni$ move.
+	If otherwise $x\in B$, we just need to exchange $A$ and $B$ in the following argumentation.
+
+	If $A$ is a child of the lower of both new nodes after the $\nni$ move, as in the upper tree on the right of Figure~\ref{fig:nni_example_internal_label}, we can keep the rank order of $int_x$ and $int_y$.
+	So we assign $int_x$ to the lower node that is parent of $A$ and $C$ and $int_y$ to the upper node that is parent of $B$.
+	Because $x \in A$ and $y \in A \cup B \cup C$, $int_x$ and $int_y$ are ancestors of $x$ and $y$, respectively.
+
+	Let us now consider the $\nni$ move that results in a tree where $B$ and $C$ are the children of the lower of the two new nodes and $A$ is children of the upper new node.
+	Because $x \in A$, $int_x$ needs to be assigned to the upper new node.
+	It remains to prove that $y \in B \cup C$ to make sure that $int_y$ is an ancestor of $y$ after the $\nni$ move.
+
+	In the following we consider the tree after the $\nni$ move.
+	We know that $y \in A \cup B \cup C$, because $int_y$ is an ancestor of $y$ before the $\nni$ move.
+	Therefore, it is sufficient to prove $y \notin A$.
+	Let us consider the subtree $A$ and the labels of its internal nodes.
+	Let $|A| = k$ be the number of leaves in $A$.
+	There are $k-1$ internal nodes in $A$ that need to be labelled by these leaves.
+	The parent of the root of $A$ is $int_x$, as it is labelled by $x$.
+	Because $x \in A$, there are $k - 1$ leaves remaining in $A$ that must label some internal nodes.
+	As the $k-1$ internal nodes of $A$ must be labelled by leafs that are descendants of these nodes, these labels need to be the $k-1$ leafs of $A$.
+	Therefore, it holds:
+	$int_z \in A \iff z \in A$.
+	And as we know that $int_y \notin A$, $y$ can not be a leaf of $A$.
+	Therefore, it is $y \in B \cup C$ and thus, $int_y$ is an ancestor of $y$ after the $\nni$ move.
+
+	Concluding we see that our labelling is well defined.
+	Another thing we should point out is that this labelling method leads to the labelling of $T_2$ as it is defined for caterpillar trees.
+	This follows directly from the fact that $int_z$ is an ancestor of the leaf labelled by $z$.
+	If one considers the internal node in $T_2$ with lowest rank, it can only have the label of the leaf in the cherry that is not labelled by $a$, because $int_z$ is an ancestor of $z$ for all leaf labels $z$.
+	Now we can stepwise consider all internal nodes with rank one higher than the previously considered node and receive the same result.
+	Hence, our way to change the labels of internal nodes on $p$ is consistent and ends in the correct labelling of $T_2$.
+
+	Now we want to use this labelling to prove that there is always a caterpillar path that is at least as short as the given shortest path $p$.
+	Therefore, we use the following observation:
+	Within each $\rnni$ move the ranks of at most two internal nodes change by at most one each.
+	This is true for both, rank swaps and $\nni$ moves.
+	Within a rank swap two nodes simply exchange their ranks.
+	And within an $\nni$ move two new nodes arise and are labelled by the former two nodes that bounded the edge on that the $\nni$ move is performed.
+	But still, the ranks of these two nodes $int_x$ and $int_y$ both change by $1$.
+
+	On a caterpillar path the only possible moves are $\nni$ moves.
+	However, each of these $\nni$ move change the ranks of two internal nodes by at most one each.
+	Therefore, we can construct a caterpillar path $r$ out of $p$:
+	every time two internla nodes $int_x$ and $int_y$ exchange ranks, they do so on the caterpillar path $r$ as well.
+	Since there are moves on $p$ that do not change the ranks of internal nodes, this caterpillar path has length $|r| \leq |p|$.
+	Hence, there is always a shortest path between $T_1$ and $T_2$ that is a caterpillar path.
+\end{proof}
+
+\section{Split Theorem}
+
+When analysing the complexity of the $\rnni$ space, the comparison to $\nni$ is an important step.
+The proof of NP-completeness of $\nni$ in~\cite{jiang2000} is based on the fact that following theorem holds in $\nni$.
+
+\begin{theorem}
+	There are trees $T_1,T_2$ in $\nni$ sharing a partition which is not shared by any intermediate tree on a shortest path from $T_1$ to $T_2$.
+	\label{thm:split_nni}
+\end{theorem}
+
+\begin{proof}
+	See~\cite{Li1996}.
+\end{proof}
+
+The proof presented in~\cite{Li1996} for Theorem~\ref{thm:split_nni} does not work for $\rnni$. \todo{because?}
+Therefore, the following conjecture was raised~\cite{Gavryushkin2017}.
+
+\begin{conjecture}[Split Theorem]
+	For the $\rnni$ graph the following statement holds:
+	If a partition of leaves given by an edge is present in two trees $T$ and $R$ then the partition is presented in every tree on every shortest path between $T$ and $R$.
+	\label{split_theorem}
+\end{conjecture}
+
+However, we found a counterexample to this conjecture:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{split_theorem_counterexample}
+	\caption{The split $123|45$ is present in $T_1$ and $T_2$, but in none of the trees on this shortest caterpillar path between them.}
+	\label{split_theorem_counterexample}
+\end{figure}
+
+Since this counterexample clearly shows that the version of the Split Theorem stated in~\cite{Gavryushkin2017} does not hold, we will now claim an alternative to this conjecture.
+The alternative formulation is based on the observation that there is a shortest path preserving all splits between the trees of the counterexample of the Split Theorem.
+This path is shown in Figure~\ref{split_theorem_no_counterexample}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{split_theorem_no_counterexample}
+	\caption{The Split $123|45$ is present in $T_1$ and $T_2$ and in every tree on this shortest path between them.}
+	\label{split_theorem_no_counterexample}
+\end{figure}
+
+
+\begin{conjecture}[Weak Split Theorem]
+	For $\rnni$ graph the following statement holds:
+	if a partition of leaves given by an edge is present in two trees $T$ and $R$ then there exists a shortest path between $T$ and $R$ where this partition is present in every tree on this path.
+	\label{split_theorem_weak}
+\end{conjecture}
+
+
+% The weak Split Theorem (in the version as in Lena's thesis) is computationally proven to hold for trees with up to $6$ taxa ($\sim 38$ min running time on laptop).
+% We might want to consider the Cluster Theorem as well.
+% The weak split theorem is stronger than the cluster theorem, since it also makes a statement about some trees that do not share a cluster
+
+%A further and even weaker alternative formulation of the Split Theorem is the \emph{Cluster Theorem}, which considers clusters instead of splits.
+%One can see that the trees of our counterexample~\ref{split_theorem_counterexample} do not fulfil the assumptions of the cluster theorem.
+%
+%\begin{conjecture}[Cluster Theorem]
+%	For the $\rnni$ graph the following statement holds:
+%	if two trees $T$ and $R$ contain the same cluster $C$, then $C$ is present as cluster in every tree on every shortest path between $T$ and $R$.
+%	\label{cluster_theorem}
+%\end{conjecture}
+
+
+\section{Approximating Distances}
+
+Following algorithm computes paths between two trees in $\rnni$:
+
+\begin{algorithm}[H]
+\caption{FIND\_PATH($T_1,T_2$)}
+\label{alg:find_path}
+\begin{algorithmic}[1]
+	\STATE $T := T_1$
+	\STATE $p := (T_1)$
+	\FOR {$r = 1, \dots, n-2$}
+		\STATE Let $S$ be the cluster associated with the node $v$ in $T_2$ with $rank(v) = r$
+		\WHILE {$rank(MRCA_T(S))>r$}
+			\STATE Update $T$: Decrease $rank(MRCA_T(S))$ by an $\rnni$ move \label{alg:line:move_set_down}
+			\STATE $p = p+T$
+		\ENDWHILE
+	\ENDFOR
+	\RETURN p
+\end{algorithmic}
+\end{algorithm}
+
+One can easily prove that there is always exactly one possible $\rnni$ move that decreases the rank of $MRCA_T(S)$ as in line~\ref{alg:line:move_set_down} of Algorithm~\ref{alg:find_path}.
+
+The proof of Theorem 7 in \cite{Gavryushkin2017} gives an algorithm to compute paths between trees in $\rnni$.
+
+% Compare the two algorithms by sampling trees and check which algorithm gives shorter paths.
+
+% Also mention the exact algortihm for computing the whole RNNI space for up to 7 (?) taxa and check that Algorithm find_path gives correct distances there.
+%Maybe it's worth trying the other algorithm in these trees as well.
+
+Algorithm~\ref{alg:find_path} provides an upper bound for the diameter of $\rnniu$ space.
+It improves the bound $n^2 - 3n - \frac{5}{8}$ given in \cite{Gavryushkin2017}.
+
+\begin{theorem}
+	For $n \geq 3$, $\Delta(\rnniu) \leq \frac{1}{2}n^2-\frac{3}{2}n+1$
+\end{theorem}
+
+\begin{proof}
+	This result directly follows from Algorithm~\ref{alg:find_path}.
+	In the worst case each $r = 1, \dots, n-2$ requires $n-1-r$ $\rnni$ moves for moving the corresponding $MRCA$ down.
+	Hence, there is for each pair of trees a path of length less or equal to $\sum\limits_{i = 1}^{n-2} i = \frac{(n-2)(n-1)}{2} = \frac{1}{2}n^2-\frac{3}{2}n+1$.
+\end{proof}
+
+% Is this boundary tight? Idea: there are always caterpillar trees that have this distance (we can already check this computationally, if we were to prove the caterpillar convexity, this follows directly)
+
+\begin{lemma}
+	There are two caterpillar trees with distance $\frac{1}{2}n^2-\frac{3}{2}n+1$ if the set of caterpillar trees is convex.
+	\label{lemma:caterpillar_diameter_convex}
+\end{lemma}
+
+\begin{proof}
+	If the set of caterpillar trees is convex, Bubble Sort proves that there is a caterpillar path between the caterpillar trees
+	$(( \dots (1,2)3)\dots)n)$ and $(( \dots (n,n-1)n-2)\dots)1)$ with length $\frac{1}{2}n^2-\frac{3}{2}n+1$. 
+	\todo{Explain how to use Bubble Sort}
+\end{proof}
+
+\begin{conjecture}
+	There are two caterpillar trees in $\rnniu$ with distance $\frac{1}{2}n^2-\frac{3}{2}n+1$.
+	\label{conj:caterpillar_diameter}
+\end{conjecture}
+
+% This can be computationally proven for up to $8$ taxa.
+
+\begin{proof}
+	Consider trees $(( \dots (n,1)2)\dots)n-1)$ and $(( \dots (n,n-1)n-2)\dots)1)$ and apply Lemma~\ref{lemma:caterpillar_subset_convex} and use Bubble Sort.
+\end{proof}
+
+\begin{corollary}
+	If Conjecture~\ref{conj:caterpillar_diameter} holds, it is $\Delta(\rnniu) = \frac{1}{2}n^2-\frac{3}{2}n+1$.
+\end{corollary}
+
+\section{Partition lattice}
+
+% Define Partition Lattice $\Pi_n$ and max chains in that lattice!
+
+\begin{theorem}
+	The $\rnni$ space on $n$ taxa is isomorphic to the space of maximum chains of the partition lattice $\Pi_n$ where two maximum chains are connected by an edge if, and only if, they differ by exactly one partition.
+\end{theorem}
+
+\bibliographystyle{abbrv}
+\bibliography{lit}
+
+\end{document}
