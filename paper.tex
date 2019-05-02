@@ -175,7 +175,19 @@ The proof of NP-completeness of $\nni$ in~\cite{jiang2000} is based on the fact 
 	See~\cite{Li1996}.
 \end{proof}
 
-The proof presented in~\cite{Li1996} for Theorem~\ref{thm:split_nni} does not work for $\rnni$. \todo{because?}
+The proof presented in~\cite{Li1996} for Theorem~\ref{thm:split_nni} does not work for $\rnni$.
+
+%This part is mainly for myself, not sure whether it is important to have it in the paper
+The main reason that the counterexample presented in~\ref{Li1996} works in $\nni$ is following:
+Let $T_1$ and $T_2$ be two caterpillar trees.
+If each taxon $a$ is repaced by a cherry $(a_1,a_2)$ in both trees $T_1$ and $T_2$, the resulting trees $T_1'$ and $T_2'$ have distance $d_{\nni}(T_1',T_2') = d_{\nni}(T_1,T_2)$ in the $\nni$ graph.
+However, this does not work in $\rnni$.
+Introducing new cherries means introducing new internal nodes with new ranks.
+And a shortest path from $T_1$ to $T_2$ does not give a shortest path from $T_1'$ to $T_2'$, there will be some additional rank swaps needed for the internal nodes of the cherries.
+% How do we assign the ranks to the new cherry nodes?
+% We could give a precise example here, on 3 or 4 taxa (4 is the max, we can compute RNNI space for up to 8 taxa), because we know how the caterpillar trees with max distance look like.
+
+
 Therefore, the following conjecture was raised~\cite{Gavryushkin2017}.
 
 \begin{conjecture}[Split Theorem]
