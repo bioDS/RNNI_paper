@@ -41,7 +41,7 @@
 
 \section{Definitions}
 
-%Do we restrict everything to RNNI? If not, make sure that we correctly distinguish between RNNI and RNNIu (for instance in the algorithm section)
+%Do we restrict everything to RNNI? Make sure that we correctly distinguish between RNNI and RNNIu (for instance in the algorithm section)
 
 %MRCA
 
@@ -238,7 +238,32 @@ This path is shown in Figure~\ref{split_theorem_no_counterexample}.
 %\end{conjecture}
 
 
-\section{Approximating Distances}
+\section{Algorithms}
+
+We are now going to introduce different algorithms that computes paths in $\rnni$.
+\cite{Gavryushkin2017} gave an algorithm for computing the whole $\rnni$ space.
+We implemented this algorithm and are able to use it on trees with up to $8$ taxa.
+Therefore, we can compare the paths given by the algorithms presented in this chapter with the exact shortest path for trees with up to $8$ taxa.
+
+% Shall we mention the data structure we use (list of sets) - this might be useful to see the connection to the partition lattice.
+
+A modified version of the classic Bubble Sort \todo{cite} algorithm returns a caterpillar path that is shortest among all caterpillar paths between given caterpillar trees $T_1, T_2$.
+Let $T_1 = (\ldots((1,2)3) \ldots )n), T_2 = (\ldots((\sigma_1,\sigma_2)\sigma_3) \ldots )\sigma_n)$ be two caterpillar trees.
+They can be seen as sequences $(1,2,\ldots,n)$ and $(\sigma_1, \sigma_2, \ldots, \sigma_n)$ that need to be sorted.
+$\nni$ moves between caterpillar trees correspond to exchanging two neighboured elements in a sequence.
+The only exception of this are $\nni$ moves that change the cherry of a tree.
+The corresponding moves on sequences are exchanged of either the second and third element or the first and third element.
+On the other hand, there is no difference between two the trees corresponding to two sequences where only the first two taxa are exchanged.
+Since all pairs of taxa whose order in $T_1$ is different from the one in $T_2$ need to be exchanged by $\nni$ moves on a caterpillar path, Bubble Sort will give a shortest path among all caterpillar paths.
+Just the moves for the first three positions of the sequence must be adapted.
+Let us consider the first three elements $(a,b,c,\ldots)$ of a sequence representing a caterpillar tree on a caterpillar path between $T_1$ and $T_2$
+If the order of these elements is the same in $T_2$, there are no swaps needed for these taxa.
+If just one of the two taxa $a$ and $b$ is on the other side of $c$ in $T_2$, this one will change wih $c$.
+But if both $a$ and $b$ are on the other side of $c$ in $T_2$, the one which is the righmost of all three taxa in $T_2$ swaps with $c$ at first.
+This makes sure that there is no additional swap of $a$ and $b$ needed on the path to $T_2$.
+\todo{This paragraph is just a draft. Is it needed at all?}
+
+
 
 Following algorithm computes paths between two trees in $\rnni$:
 
