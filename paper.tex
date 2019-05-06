@@ -186,7 +186,7 @@ The split given by the edges incident to the root is $1, \ldots, n | n+1, \ldots
 For the given example there is a shortest path in $\nni$ where at first $T$ is transformed to a tree $T'$ with $n$ cherries where each cherry contains one taxon of $\{1, \ldots, n\}$ and one taxon of $\{n+1, \ldots, 2n\}$.
 Afterwards, $T'$ is tranformed to a tree $R'$ that contains the same cherries as $T'$.
 Finally, all cherries of $R'$ are resolved in order to end up in tree $R$.
-For proving that this path is shorter than any path preserving the split $1, \ldots, n | n+1, \ldots, 2n$, the fact that $d_{\nni}(T',R') = d_{\nni}(T|_{\{1, \ldots, n\}}, R|_{\{n+1, \ldots, 2n\}})$ is being used.
+For proving that this path is shorter than any path preserving the split $1, \ldots, n | n+1, \ldots, 2n$, the fact that $d_{\nni}(T',R') = d_{\nni}(T|_{\{1, \ldots, n\}}, R|_{\{1, \ldots, n\}})$ is being used.
 However, this does not work in $\rnni$.
 Introducing new cherries means introducing new internal nodes with new ranks.
 Since there are some rank swaps needed for an $\rnni$ path similar to the shortest $\nni$ path presented above, the path in $\rnni$ that breaks the split $1, \ldots, n | n+1, \ldots, 2n$ is no shortest path.
