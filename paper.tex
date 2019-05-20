@@ -331,7 +331,10 @@ It is $\Delta(\rnniu) = \frac{1}{2}n^2-\frac{3}{2}n+1$.
 \begin{lemma}
     Let $T$ be the caterpillar tree $(\ldots ((1,2),3), \ldots, n)$.\\
     A caterpillar tree $T'$ has distance $d(T,T') = \Delta(\rnniu) = \frac{1}{2}n^2-\frac{3}{2}n+1$ to $T$ if, and only if, $T' = ( \ldots ((n,t),n-1),n-2), \ldots, t+1), t-1) \ldots, 1)$
+    \label{lemma:caterpillar_dist=diameter}
 \end{lemma}
+
+\todo{At the top of $T'$ it could also be $2,1$, or $t=1$}
 
 \begin{figure}[H]
     \centering
@@ -373,6 +376,28 @@ It is $\Delta(\rnniu) = \frac{1}{2}n^2-\frac{3}{2}n+1$.
     Each $\rnni$ move can decrease the rank of a node by at most $1$.
     Therefore, there are at least $n-1$ $\rnni$ moves needed on $p$, which do not appear on $p'$, for moving the internal node $n+1$ down.
     Hence, it is $d(T,T') = |p| \geq n-1 + |p'| = n-1 + \frac{(n-1)(n-2)}{2} = \frac{n(n-1)}{2} = \Delta(\rnniu)$.
+    Thus, there is a shortest path from $T$ to $T'$ that only consists of caterpillar trees.
+
+\end{proof}
+
+\begin{theorem}
+    The set of caterpillar trees is convex.
+\end{theorem}
+
+\begin{proof}
+    We prove the Theorem by induction on the length $l$ of a shortest caterpillar path between two caterpillar trees $T_1$ and $T_2$.
+
+    Induction basis: $l = \Delta(\rnniu) = \frac{(n-1)(n-2)}{2}$\\
+    With Lemma~\ref{lemma:caterpillar_dist=diameter} one can see that for each pair of caterpillar trees $T_1$, $T_2$ with distance $d(T_1,T_2) = \Delta(\rnniu)$ there is a caterpillar path from $T_1$ to $T_2$ between these trees.
+
+    Induction step: $l+1 \to l$\\
+    Induction hypothesis: For each pait of caterpillar trees with distance $l+1$ there is a shortest path between these trees that only consists of caterpillar trees.
+    Let $T_1$ and $T_2$ be caterpillar trees with caterpillar distance $l$ \todo{define 'caterpillar distance'}.
+    If $l \neq \Delta(\rnniu)$, there must be a pair of taxa $x,y$ that are neighboured in $T_2$ and have the same order in $T_1$ and $T_2$, which means that $rank(p_x) > rank(p_y)$ or $rank(p_x) < rank(p_y)$ holds in both trees $T_1$ and $T_2$.
+    Then it follows that the tree $T_2'$ that equals $T_2$, but with exchanged taxa $x$ and $y$, has distance $l+1$ to $T_1$.
+    So there must be a shortest path from $T_2'$ to $T_1$ that only consists of caterpillar trees.
+    Since it does not matter in which order the pairs of taxa that need to exchange their position do exchange on a path between two caterpillar trees, $T_2$ is on a shortest caterpillar path from $T_2'$ to $T_1$.
+    Therefore, it must be $d(T_1, T_2) = l$.
 
 \end{proof}
 
