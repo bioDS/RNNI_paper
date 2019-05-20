@@ -10,6 +10,7 @@
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{todonotes}
+\usepackage{enumitem}
 
 \newcommand{\nni}{\mathrm{NNI}}
 \newcommand{\rnni}{\mathrm{RNNI}}
@@ -325,6 +326,55 @@ It improves the bound $n^2 - 3n - \frac{5}{8}$ given in \cite{Gavryushkin2017}.
 \begin{corollary}
 It is $\Delta(\rnniu) = \frac{1}{2}n^2-\frac{3}{2}n+1$.
 \end{corollary}
+
+
+\begin{lemma}
+    Let $T$ be the caterpillar tree $(\ldots ((1,2),3), \ldots, n)$.\\
+    A caterpillar tree $T'$ has distance $d(T,T') = \Delta(\rnniu) = \frac{1}{2}n^2-\frac{3}{2}n+1$ to $T$ if, and only if, $T' = ( \ldots ((n,t),n-1),n-2), \ldots, t+1), t-1) \ldots, 1)$
+\end{lemma}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{caterpillar_max_dist}
+    \caption{Caterpillar trees $T$ and $T'$ with distance $d(T,T') = \Delta(\rnniu)$}
+    \label{fig:caterpillar_max_distance}
+\end{figure}
+
+\begin{proof}
+    Let $T$ be the caterpillar tree $(\ldots ((1,2),3), \ldots, n)$.\\
+    If $T'$ has distance $d(T,T') = \Delta(\rnniu)$ to $T$, is must be $T' = ( \ldots ((n,t),n-1),n-2), \ldots, t+1), t-1) \ldots, 1)$:
+
+    Bubble Sort computes a shortest caterpillar path between two given trees.
+    The maximum distance $\frac{(n-1)(n-2)}{2}$ can be reached by this algorithm, if in every loop every neighboured pair of taxa needs to swap.
+    Starting at the tree $T$, this means that one of the taxa $1$ or $2$ moves up to the top of the tree in the first loop.
+    In every consecutive loop one taxon in the cherry of the current tree that moves up in the tree and ends up directly below the taxon that was moved up in the previously loop.
+    It is not hard to see that exchanging every neighboured pair of taxa as in Bubble Sort starting at $T$ leads to a tree $T'$ as described in the Lemma.
+    The taxon $t$ is an arbitrary taxon of the set $\{1, \ldots, n-1\}$.
+    If it is $1$, the uppermost taxon in $T'$ is $2$.
+    These trees $T'$ are the only ones that need this maximum number of $\rnni$ moves starting at $T$.
+    Therefore, it follows that $T' = ( \ldots ((n,t),n-1),n-2), \ldots, t+1), t-1) \ldots, 1)$ for every tree $T'$ with distance $d(T,T') = \Delta(\rnniu)$
+
+    It remains to show that if $T' = ( \ldots ((n,t),n-1),n-2), \ldots, t+1), t-1) \ldots, 1)$, it follows that $d(T,T') = \Delta(\rnniu)$ to $T$.
+    This can be proven by induction on the number of taxa $n$:
+
+    Induction basis: $n=3$\\
+    All trees have distance $1$.
+
+    Induction step: $n \to n+1$\\
+    Induction hypothesis: For trees $T_1 = (\ldots ((1,2),3), \ldots, n)$, $T_2 = ( \ldots ((n,t),n-1),n-2), \ldots, t+1), t-1) \ldots, 1)$ on $n$ taxa it is $d(T_1, T_2) = \frac{(n-1)(n-2)}{2} = \Delta(\rnniu_n)$.\\
+    Let $T, T'$ be trees on $n+1$ taxa as described in the Lemma and a shortest path $p$ from $T$ to $T'$.
+    Consider the trees $T|_n$ and $T'|_n$ that result from $T$ and $T'$ by deleting taxon $n+1$, respectively.
+    Deleting taxon $n+1$ from all trees on $p$, and deleting all trees that appear more than once in a row, results in a path $p'$ from $T|_n$ to $T'|_n$.
+    Applying the induction hypothesis onto $T|_n$ and $T'|_n$ shows that this path has length $\frac{(n-1)(n-2)}{2}$.
+    We can now compare this new path $p'$ with $p$.
+    The only steps that appear on $p$ but not on $p'$ are those involving the additional internal node.
+    We can label this node by $n+1$ and define a bijection between the internal nodes in all trees on $p'$ and the corresponding nodes in the trees in $p'$.
+    The additional internal node $n+1$ has rank $n$ in $T$ and ran $1$ in $T'$.
+    Each $\rnni$ move can decrease the rank of a node by at most $1$.
+    Therefore, there are at least $n-1$ $\rnni$ moves needed on $p$, which do not appear on $p'$, for moving the internal node $n+1$ down.
+    Hence, it is $d(T,T') = |p| \geq n-1 + |p'| = n-1 + \frac{(n-1)(n-2)}{2} = \frac{n(n-1)}{2} = \Delta(\rnniu)$.
+
+\end{proof}
 
 \section{Partition lattice}
 
