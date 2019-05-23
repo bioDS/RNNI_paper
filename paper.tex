@@ -396,10 +396,11 @@ It is $\Delta(\rnniu) = \frac{1}{2}n^2-\frac{3}{2}n+1$.
     Induction hypothesis: For each pair of caterpillar trees with distance $l+1$ there is a shortest path between these trees that only consists of caterpillar trees.
     Let $T$ and $T'$ be caterpillar trees with caterpillar distance $l$.
     Since $l < \Delta(\rnniu) = \frac{(n-1)(n-2)}{2}$, there is one loop $k$ in the Bubble Sort algorithm from $T'$ to $T$ where there are less than $n-2-k$ swaps of neighboured taxa.
-    This means that the taxon $a$ that has parent with rank $n-2-k$ in $T'$ does not need to move all the way up starting at the cherry.
-    Hence, there is a taxon $b$ that has parent with rank one less than the parent of taxon $a$ in $T'$ that does not exchange with $a$ on the path to $p$. \todo{$a$ and $b$ do not need to be neighbours in $T'$!}
+    This means that there is a taxon $a$ that has parent with rank $n-2-k$ in $T'$ and $a$ does not need to move all the way up starting at the cherry in loop $k$.
+    Therefore, there must be a taxon $b$ which has parent with rank one less than the parent of $a$ in the tree at the beginning of loop number $k$.
+    If we assume that loop $k$ is the first loop where a single taxon is not moved by $n-k-2$ $\rnni$ moves, it follows that $a$ and $b$ must be neighboured taxa in $T'$.
     Let $T''$ be the caterpillar tree resulting from $T'$ by exchanging $a$ and $b$.
-    It follows that $T'$ is on a shortest caterpillar path from $T''$ to $T$ and therefore, $d_c(T,T'') = d_c(T,T') + 1 = l+1$.
+    It follows that $T'$ has caterpillar distance $d_c(T,T'') = d_c(T,T') + 1 = l+1$ to $T$ and $d(T',T'') = 1$.
     We can apply the induction hypothesis on $T$ and $T''$ and know that $d(T,T'') = l+1$.
     If it was $d(T,T') < l$, it would hold $d(T,T'') \leq d(T,T') + d(T',T'') < l + 1$ which contradicts the induction hypothesis.
     We can conclude that $d(T,T') = l$.
