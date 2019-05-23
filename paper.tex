@@ -282,7 +282,7 @@ Following algorithm computes paths between two trees in $\rnni$:
 		\WHILE {$rank(MRCA_T(S))>r$}
 			\STATE Update $T$: Decrease $rank(MRCA_T(S))$ by an $\rnni$ move \label{alg:line:move_set_down}
 			\STATE $p = p+T$
-		\ENDWHILE between these trees
+		\ENDWHILE
 	\ENDFOR
 	\RETURN p
 \end{algorithmic}
@@ -310,7 +310,7 @@ It improves the bound $n^2 - 3n - \frac{5}{8}$ given in \cite{Gavryushkin2017}.
 	Hence, there is for each pair of trees a path of length less or equal to $\sum\limits_{i = 1}^{n-2} i = \frac{(n-2)(n-1)}{2} = \frac{1}{2}n^2-\frac{3}{2}n+1$.
 \end{proof}
 
-\begin{lemma} between these trees
+\begin{lemma}
 	There are two caterpillar trees in $\rnniu$ with distance $\frac{1}{2}n^2-\frac{3}{2}n+1$.
 	\label{conj:caterpillar_diameter}
 \end{lemma}
@@ -376,7 +376,7 @@ It is $\Delta(\rnniu) = \frac{1}{2}n^2-\frac{3}{2}n+1$.
 
     In general, deleting taxon $n+1$ and its parent in every tree on any path $p$ from $T$ to $T'$ results in a path $p'$ from $T|_n$ to $T'|n$.
     Such a path $p'$ from $T|_n$ to $T'|n$ does not contain the $n-1$ $\rnni$ moves for moving the parent of $n+1$ down from the root to the cherry, so it is at least $n-1$ $\rnni$ moves shorter than $p$.
-    If we assume that there is a path from $T$ to $T'$ of length less than $\Delta(\rnniu_{n+1}) = \frac{n(n-1)}{2}$, we could delete between these trees taxon $n+1$ and the $n-1$ moves of it's parent and receive a path from $T|_n$ to $T'|_n$ of length less than $\frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2}$.
+    If we assume that there is a path from $T$ to $T'$ of length less than $\Delta(\rnniu_{n+1}) = \frac{n(n-1)}{2}$, we could delete taxon $n+1$ and the $n-1$ moves of it's parent and receive a path from $T|_n$ to $T'|_n$ of length less than $\frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2}$.
     So it would be $d(T|_n, T'|_n) < \Delta(\rnniu_n)$.
     Since this is a contradiction to $d(T|_n, T'|_n) = \Delta(\rnniu_n)$, it must be $d(T,T') = \Delta(\rnniu_{n+1}) = \frac{n(n-1)}{2} $.
 
