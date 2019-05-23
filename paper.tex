@@ -50,6 +50,8 @@
 
 %leaf or taxon?
 
+%caterpillar path, shortest caterpillar path, caterpillar distance (def currently in proof of lemma:caterpillar_dist=diameter)
+
 \begin{definition}
 	Let $A$ be a pending subtree of the tree $T$.
 	We call the set $c(A)$ of taxa of $A$ the \emph{cluster} induced by $A$.
@@ -280,7 +282,7 @@ Following algorithm computes paths between two trees in $\rnni$:
 		\WHILE {$rank(MRCA_T(S))>r$}
 			\STATE Update $T$: Decrease $rank(MRCA_T(S))$ by an $\rnni$ move \label{alg:line:move_set_down}
 			\STATE $p = p+T$
-		\ENDWHILE
+		\ENDWHILE between these trees
 	\ENDFOR
 	\RETURN p
 \end{algorithmic}
@@ -308,7 +310,7 @@ It improves the bound $n^2 - 3n - \frac{5}{8}$ given in \cite{Gavryushkin2017}.
 	Hence, there is for each pair of trees a path of length less or equal to $\sum\limits_{i = 1}^{n-2} i = \frac{(n-2)(n-1)}{2} = \frac{1}{2}n^2-\frac{3}{2}n+1$.
 \end{proof}
 
-\begin{lemma}
+\begin{lemma} between these trees
 	There are two caterpillar trees in $\rnniu$ with distance $\frac{1}{2}n^2-\frac{3}{2}n+1$.
 	\label{conj:caterpillar_diameter}
 \end{lemma}
@@ -374,7 +376,7 @@ It is $\Delta(\rnniu) = \frac{1}{2}n^2-\frac{3}{2}n+1$.
 
     In general, deleting taxon $n+1$ and its parent in every tree on any path $p$ from $T$ to $T'$ results in a path $p'$ from $T|_n$ to $T'|n$.
     Such a path $p'$ from $T|_n$ to $T'|n$ does not contain the $n-1$ $\rnni$ moves for moving the parent of $n+1$ down from the root to the cherry, so it is at least $n-1$ $\rnni$ moves shorter than $p$.
-    If we assume that there is a path from $T$ to $T'$ of length less than $\Delta(\rnniu_{n+1}) = \frac{n(n-1)}{2}$, we could delete taxon $n+1$ and the $n-1$ moves of it's parent and receive a path from $T|_n$ to $T'|_n$ of length less than $\frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2}$.
+    If we assume that there is a path from $T$ to $T'$ of length less than $\Delta(\rnniu_{n+1}) = \frac{n(n-1)}{2}$, we could delete between these trees taxon $n+1$ and the $n-1$ moves of it's parent and receive a path from $T|_n$ to $T'|_n$ of length less than $\frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2}$.
     So it would be $d(T|_n, T'|_n) < \Delta(\rnniu_n)$.
     Since this is a contradiction to $d(T|_n, T'|_n) = \Delta(\rnniu_n)$, it must be $d(T,T') = \Delta(\rnniu_{n+1}) = \frac{n(n-1)}{2} $.
 
@@ -385,19 +387,22 @@ It is $\Delta(\rnniu) = \frac{1}{2}n^2-\frac{3}{2}n+1$.
 \end{theorem}
 
 \begin{proof}
-    We prove the Theorem by induction on the length $l$ of a shortest caterpillar path between two caterpillar trees $T_1$ and $T_2$.
+    We prove the Theorem by backwards induction on the length $l$ of a shortest caterpillar path between two caterpillar trees $T$ and $T'$.
 
     Induction basis: $l = \Delta(\rnniu) = \frac{(n-1)(n-2)}{2}$\\
-    With Lemma~\ref{lemma:caterpillar_dist=diameter} one can see that for each pair of caterpillar trees $T_1$, $T_2$ with distance $d(T_1,T_2) = \Delta(\rnniu)$ there is a caterpillar path from $T_1$ to $T_2$ between these trees.
+    With Lemma~\ref{lemma:caterpillar_dist=diameter} one can see that for each pair of caterpillar trees $T$, $T'$ with distance $d(T,T') = \Delta(\rnniu)$ there is a caterpillar path that is a shortest path from $T$ to $T'$.
 
     Induction step: $l+1 \to l$\\
-    Induction hypothesis: For each pait of caterpillar trees with distance $l+1$ there is a shortest path between these trees that only consists of caterpillar trees.
-    Let $T_1$ and $T_2$ be caterpillar trees with caterpillar distance $l$ \todo{define 'caterpillar distance'}.
-    If $l \neq \Delta(\rnniu)$, there must be a pair of taxa $x,y$ that are neighboured in $T_2$ and have the same order in $T_1$ and $T_2$, which means that $rank(p_x) > rank(p_y)$ or $rank(p_x) < rank(p_y)$ holds in both trees $T_1$ and $T_2$.
-    Then it follows that the tree $T_2'$ that equals $T_2$, but with exchanged taxa $x$ and $y$, has distance $l+1$ to $T_1$. \todo{really??}
-    So there must be a shortest path from $T_2'$ to $T_1$ that only consists of caterpillar trees.
-    Since it does not matter in which order the pairs of taxa that need to exchange their position do exchange on a path between two caterpillar trees, $T_2$ is on a shortest caterpillar path from $T_2'$ to $T_1$.
-    Therefore, it must be $d(T_1, T_2) = l$.
+    Induction hypothesis: For each pair of caterpillar trees with distance $l+1$ there is a shortest path between these trees that only consists of caterpillar trees.
+    Let $T$ and $T'$ be caterpillar trees with caterpillar distance $l$.
+    Since $l < \Delta(\rnniu) = \frac{(n-1)(n-2)}{2}$, there is one loop $k$ in the Bubble Sort algorithm from $T'$ to $T$ where there are less than $n-2-k$ swaps of neighboured taxa.
+    This means that the taxon $a$ that has parent with rank $n-2-k$ in $T'$ does not need to move all the way up starting at the cherry.
+    Hence, there is a taxon $b$ that has parent with rank one less than the parent of taxon $a$ in $T'$ that does not exchange with $a$ on the path to $p$. \todo{$a$ and $b$ do not need to be neighbours in $T'$!}
+    Let $T''$ be the caterpillar tree resulting from $T'$ by exchanging $a$ and $b$.
+    It follows that $T'$ is on a shortest caterpillar path from $T''$ to $T$ and therefore, $d_c(T,T'') = d_c(T,T') + 1 = l+1$.
+    We can apply the induction hypothesis on $T$ and $T''$ and know that $d(T,T'') = l+1$.
+    If it was $d(T,T') < l$, it would hold $d(T,T'') \leq d(T,T') + d(T',T'') < l + 1$ which contradicts the induction hypothesis.
+    We can conclude that $d(T,T') = l$.
 
 \end{proof}
 
