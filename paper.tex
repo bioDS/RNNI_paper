@@ -390,13 +390,13 @@ It is $\Delta(\rnniu) = \frac{1}{2}n^2-\frac{3}{2}n+1$.
     We prove the Theorem by backwards induction on the length $l$ of a shortest caterpillar path between two caterpillar trees $T$ and $T'$.
 
     Induction basis: $l = \Delta(\rnniu) = \frac{(n-1)(n-2)}{2}$\\
-    With Lemma~\ref{lemma:caterpillar_dist=diameter} one can see that for each pair of caterpillar trees $T$, $T'$ with distance $d(T,T') = \Delta(\rnniu)$ there is a caterpillar path that is a shortest path from $T$ to $T'$.
+    With Lemma~\ref{lemma:caterpillar_dist=diameter} one can see that for each pair of caterpillar trees $T$, $T'$ with caterpillar distance $d_c(T,T') = \Delta(\rnniu)$, it is $d(T,T') = d_c(T,T')$, which means that there is a shortest path between $T$ and $T'$ that is a caterpillar path.
 
     Induction step: $l+1 \to l$\\
-    Induction hypothesis: For each pair of caterpillar trees with distance $l+1$ there is a shortest path between these trees that only consists of caterpillar trees.
+    Induction hypothesis: For each pair of caterpillar trees with caterpillar distance $l+1$ there is a shortest path between these trees that only consists of caterpillar trees, which means that the distance between these trees is $l+1$.
     Let $T$ and $T'$ be caterpillar trees with caterpillar distance $l$.
     Since $l < \Delta(\rnniu) = \frac{(n-1)(n-2)}{2}$, there is one loop $k$ in the Bubble Sort algorithm from $T'$ to $T$ where there are less than $n-2-k$ swaps of neighboured taxa.
-    This means that there is a taxon $a$ that has parent with rank $n-2-k$ in $T'$ and $a$ does not need to move all the way up starting at the cherry in loop $k$.
+    This means that there is a taxon $a$ that has parent with rank $n-2-k$ in $T$ and that does not need to move all the way up starting at the cherry in loop $k$.
     Therefore, there must be a taxon $b$ which has parent with rank one less than the parent of $a$ in the tree at the beginning of loop number $k$.
     If we assume that loop $k$ is the first loop where a single taxon is not moved by $n-k-2$ $\rnni$ moves, it follows that $a$ and $b$ must be neighboured taxa in $T'$.
     Let $T''$ be the caterpillar tree resulting from $T'$ by exchanging $a$ and $b$.
