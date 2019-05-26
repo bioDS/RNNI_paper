@@ -331,8 +331,8 @@ It is $\Delta(\rnniu) = \frac{1}{2}n^2-\frac{3}{2}n+1$.
 
 
 \begin{lemma}
-    Let $T$ and $T'$ be two caterpillar trees with distance $d(T,T') = \Delta(\rnniu) = \frac{(n-1)(n-2)}{2}$.
-    There is a shortest path between $T$ and $T'$ that is a caterpillar path.
+    Let $T$ and $T'$ be two caterpillar trees.
+    $T$ and $T'$ have distance $d(T,T') = \Delta(\rnniu) = \frac{(n-1)(n-2)}{2}$ if, and only if, they have caterpillar distance $d_c(T,T') = \Delta(\rnniu) = \frac{(n-1)(n-2)}{2}$. \todo{define $d_c$}
     \label{lemma:caterpillar_dist=diameter}
 \end{lemma}
 
@@ -353,7 +353,7 @@ It is $\Delta(\rnniu) = \frac{1}{2}n^2-\frac{3}{2}n+1$.
     We can compute a  shortest caterpillar path from $T$ to $T'$ using Bubble Sort.
     In each loop $k=1, \ldots, n-2$ of the algorithm there can be at most $n-2-k$ exchanges of taxa.
     It follows that the maximum length of a path computed by Bubble Sort is $\sum\limits_{k=1}^{n-2} k = \frac{(n-1)(n-2)}{2}$.
-    Since there cannot be a caterpillar path shorter than $\frac{(n-1)(n-2)}{2}$, if the distance is $d(T,T') \frac{(n-1)(n-2)}{2}$, it follows $d_c(T,T') = \Delta(\rnniu)$.
+    Since there cannot be a caterpillar path shorter than $\frac{(n-1)(n-2)}{2}$ if it is $d(T,T') = \frac{(n-1)(n-2)}{2}$, it follows $d_c(T,T') = \Delta(\rnniu)$.
 
     Let now $T$ and $T'$ have caterpillar distance $d_c(T,T') = \Delta(\rnniu)$.
     We prove $d(T,T') = d_c(T,T')$ by induction on the number of taxa $n$ of $T$ ad $T'$:
