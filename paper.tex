@@ -356,7 +356,7 @@ It is $\Delta(\rnniu) = \frac{1}{2}n^2-\frac{3}{2}n+1$.
     Since there cannot be a caterpillar path shorter than $\frac{(n-1)(n-2)}{2}$ if it is $d(T,T') = \frac{(n-1)(n-2)}{2}$, it follows $d_c(T,T') = \Delta(\rnniu)$.
 
     Let now $T$ and $T'$ have caterpillar distance $d_c(T,T') = \Delta(\rnniu)$.
-    We prove $d(T,T') = d_c(T,T')$ by induction on the number of taxa $n$ of $T$ ad $T'$:
+    We prove $d(T,T') = d_c(T,T')$ by induction on the number of taxa $n$ of $T$ and $T'$:
     We assume without loss of generality that $T$ is the caterpillar tree $(\ldots ((1,2),3), \ldots, n)$.
     Otherwise, we re-label $T$ and $T'$.
     Let $T'$ be a caterpillar tree with distance $\Delta(\rnniu)$ to $T$.
@@ -366,12 +366,12 @@ It is $\Delta(\rnniu) = \frac{1}{2}n^2-\frac{3}{2}n+1$.
 
     Induction step: $n \to n+1$\\
     Induction hypothesis: For trees $T$, $T'$ on $n$ taxa it is $d_c(T,T') = d(T, T') = \frac{(n-1)(n-2)}{2} = \Delta(\rnniu_n)$.\\
-    Let $T, T'$ be trees on $n+1$ taxa with caterpillar distance $\Delta(\rnniu)$.
+    Let $T, T'$ be trees on $n+1$ taxa with caterpillar distance $\Delta(\rnniu_{n+1})$.
     Since we can reach $T'$ from $T$ by using Bubble Sort where each pair of taxa that is compared in that algorithm exchanges, we can conclude that taxon $n+1$ must be in the cherry of $T'$.
-    It follows that there are on every path (not only caterpillar paths) from $T$ to $T'$ there are $n-1$ $\rnni$ moves needed to move the parent of $n+1$ down in the tree, since each $\rnni$ move can decrease the rank of an internal node by at most one.
+    It follows that there are on every path (not only caterpillar paths) from $T$ to $T'$ $n-1$ $\rnni$ moves needed to move the parent of $n+1$ down in the tree, since each $\rnni$ move can decrease the rank of an internal node by at most one.
     Let us consider the trees $T|_n$ to $T'|_n$ that result from $T$ and $T'$ by deleting taxon $n+1$.
     When running Bubble Sort to compute a path from $T|_n$ to $T'|_n$ one can observe the same exchanges of taxa as on the caterpillar path from $T$ to $T'$, except for the $n-1$ ones that involve taxon $n+1$.
-    Hence, the caterpillar distance $d_c(T|_n, T'|_n)$ is $\frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2}$.
+    Hence, the caterpillar distance is $d_c(T|_n, T'|_n) = \frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2}$.
     So we can apply the induction hypothesis on $T|_n$ and $T'|_n$ and know that $d(T|_n,T'|_n) = \frac{(n-1)(n-2)}{2}$.
 
     In general, deleting taxon $n+1$ and its parent in every tree on any path $p$ from $T$ to $T'$ results in a path $p'$ from $T|_n$ to $T'|n$.
