@@ -375,8 +375,9 @@ It is $\Delta(\rnniu) = \frac{1}{2}n^2-\frac{3}{2}n+1$.
     So we can apply the induction hypothesis on $T|_n$ and $T'|_n$ and know that $d(T|_n,T'|_n) = \frac{(n-1)(n-2)}{2}$.
 
     In general, deleting taxon $n+1$ and its parent in every tree on any path $p$ from $T$ to $T'$ results in a path $p'$ from $T|_n$ to $T'|n$.
-    Such a path $p'$ from $T|_n$ to $T'|n$ does not contain the $n-1$ $\rnni$ moves for moving the parent of $n+1$ down from the root to the cherry, so it is at least $n-1$ $\rnni$ moves shorter than $p$.
-    If we assume that there is a path from $T$ to $T'$ of length less than $\Delta(\rnniu_{n+1}) = \frac{n(n-1)}{2}$, we could delete taxon $n+1$ and the $n-1$ moves of it's parent and receive a path from $T|_n$ to $T'|_n$ of length less than $\frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2}$.
+    Such a path $p'$ from $T|_n$ to $T'|n$ does not contain moves involving the parent of $n+1$.
+    Since the parent of $n+1$ need to move from the root of $T_1$ to the cherry of $T_2$ and each $\rnni$ move can change the rank of a node by at most one, $p'$ is at least $n-1$ $\rnni$ moves shorter than $p$. \todo{Really?}
+    If we assume that there is a path from $T$ to $T'$ of length less than $\Delta(\rnniu_{n+1}) = \frac{n(n-1)}{2}$, we could delete taxon $n+1$ and at least $n-1$ moves of it's parent and receive a path from $T|_n$ to $T'|_n$ of length less than $\frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2}$.
     So it would be $d(T|_n, T'|_n) < \Delta(\rnniu_n)$.
     Since this is a contradiction to $d(T|_n, T'|_n) = \Delta(\rnniu_n)$, it must be $d(T,T') = \Delta(\rnniu_{n+1}) = \frac{n(n-1)}{2} $.
 
@@ -405,6 +406,22 @@ It is $\Delta(\rnniu) = \frac{1}{2}n^2-\frac{3}{2}n+1$.
     If it was $d(T,T') < l$, it would hold $d(T,T'') \leq d(T,T') + d(T',T'') < l + 1$ which contradicts the induction hypothesis.
     We can conclude that $d(T,T') = l$.
 
+\end{proof}
+
+% idea for description of max distance caterpillar trees:
+
+\begin{lemma}
+    Let $T_1$ and $T_2$ be caterpillar trees.
+    It is $d_c(T_1,T_2) = \Delta(\rnniu)$ if, and only if, $T_1$ and $T_2$ share no induced triplet.
+    \todo{define induced triplets}
+\end{lemma}
+
+This Lemma does only hold for caterpillar trees and not for trees with more than one cherry.
+Furthermore, triplets do not represent ranked trees uniquely as they do not contain information about the ranks of internal nodes (but they can uniquely define caterpillar trees as these only have one cherry)
+
+\begin{proof}
+    % Insert the proof here
+    Fix $T_1 = (\ldots(1,2) \ldots ,n)$, use induction on $n$ and bubble sort (taxon $n$ must be in cherry of $T_2$ if distance is max).
 \end{proof}
 
 \section{Partition lattice}
