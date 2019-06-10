@@ -424,6 +424,28 @@ Furthermore, triplets do not represent ranked trees uniquely as they do not cont
     Fix $T_1 = (\ldots(1,2) \ldots ,n)$, use induction on $n$ and bubble sort (taxon $n$ must be in cherry of $T_2$ if distance is max).
 \end{proof}
 
+\begin{conjecture}
+    Algorithm~\ref{alg:max_dist_tree} computes a tree with maximum distance $\Delta(\rnniu)$ from a given tree $T$.
+\end{conjecture}
+
+According to Algorithm~\ref{alg:max_dist_tree}, the number of trees with maximum distance to a given tree $T$ depends on the number of cherries of $T$.
+For caterpillar trees it is $(n-1)!$.
+
+\begin{algorithm}[H]
+\caption{MAX\_DISTANCE\_TREE($T$)}
+\label{alg:max_dist_tree}
+\begin{algorithmic}[1]
+	\STATE $R$ only contains cherry taxa of $T$ and has internal node with rank $n-1$
+    \STATE In list $L$ all taxa $\{1,\ldots,n\}$ are sorted such that the ranks of their parents in $T$ do not decrease
+	\FOR {taxon $a$ in $L$}
+		\STATE Add an internal node as parent of $a$ on any edge in $R$ such that the new internal node has rank one less than the previously lowest internal node
+	\ENDFOR
+	\RETURN $R$
+\end{algorithmic}
+\end{algorithm}
+
+
+
 \section{Partition lattice}
 
 % Define Partition Lattice $\Pi_n$ and max chains in that lattice!
