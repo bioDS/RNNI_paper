@@ -290,7 +290,7 @@ Following algorithm computes paths between two trees in $\rnni$:
 
 One can easily prove that there is always exactly one possible $\rnni$ move that decreases the rank of $MRCA_T(S)$ as in line~\ref{alg:line:move_set_down} of Algorithm~\ref{alg:find_path}.
 
-The proof of Theorem 7 in \cite{Gavryushkin2017} gives an algorithm to compute paths between trees in $\rnni$.
+The proof of Theorem 7 in \cite{Gavryushkin2017} gives an algorithm to compute paths between trees in $\rnni$. %Do we want to mention that algorithm here?
 
 % Compare the two algorithms by sampling trees and check which algorithm gives shorter paths.
 
@@ -326,9 +326,8 @@ It improves the bound $n^2 - 3n - \frac{5}{8}$ given in \cite{Gavryushkin2017}.
 \end{proof}
 
 \begin{corollary}
-It is $\Delta(\rnniu) = \frac{1}{2}n^2-\frac{3}{2}n+1$.
+It is $\Delta(\rnniu) = \frac{(n-1)(n-2)}{2} = \frac{1}{2}n^2-\frac{3}{2}n+1$.
 \end{corollary}
-
 
 \begin{lemma}
     Let $T$ and $T'$ be two caterpillar trees.
@@ -436,8 +435,8 @@ For caterpillar trees it is $(n-1)!$.
 \caption{MAX\_DISTANCE\_TREE($T$)}
 \label{alg:max_dist_tree}
 \begin{algorithmic}[1]
-	\STATE $R$ only contains cherry taxa of $T$ and has internal node with rank $n-1$
-    \STATE In list $L$ all taxa $\{1,\ldots,n\}$ are sorted such that the ranks of their parents in $T$ do not decrease
+	\STATE $R$ only contains cherry taxa $(a,b)$ of $T$ and has internal node with rank $n-1$
+    \STATE In list $L$ all taxa $\{1,\ldots,n\}\setminus\{a,b\}$ are sorted such that the ranks of their parents in $T$ do not decrease
 	\FOR {taxon $a$ in $L$}
 		\STATE Add an internal node as parent of $a$ on any edge in $R$ such that the new internal node has rank one less than the previously lowest internal node
 	\ENDFOR
@@ -445,6 +444,10 @@ For caterpillar trees it is $(n-1)!$.
 \end{algorithmic}
 \end{algorithm}
 
+\begin{lemma}
+    Let $T$ and $R$ be trees.
+    Algorithm~\ref{alg:find_path} gives a path of length $\frac{(n-1)(n-2)}{2}$ between $T$ and $R$ if, and only if, $R$ can be generated from $T$ by applying Algorithm~\ref{alg:max_dist_tree}.
+\end{lemma}
 
 
 \section{Partition lattice}
