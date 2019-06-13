@@ -471,12 +471,12 @@ For caterpillar trees it is $(n-1)!$.
     We can apply the induction hypothesis on $T_1$ and $T_2'$ and see that $d(T_1|_n, T_2'|_n) \leq d(T_1, T_2') - |r_{T_1}(p_{n+1}) - r_{T_2'}(p_{n+1})| := k - m$.
     Now we differ two cases:
     \begin{enumerate}
-        \item $p_{n+1}$ changes its rank between $T_2$ and $T_2'$.
+        \item $p_{n+1}$ changes its rank between $T_2$ and $T_2'$ or is affected by the $\nni$ move is performed between $T_2$ and $T_2'$.
 
         Then the trees $T_2|_n$ and $T_2'|_n$ are equal. \todo{Is this obivous?}
         Therefore, it is $d(T_1|_n,T_2|_n) = d(T_1|_n, T_2'|_n) \leq k - m$.
-        Since the rank of $p_{n+1}$ changes by one between $T_2$ and $T_2'$ it is either $|r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})| = m+1$ or $|r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})| = m-1$.
-        In either case, we have $d(T_1|_n,T_2|_n) = d(T_1|_n, T_2'|_n) \leq k - m = (k+1) - (m-1) \leq d(T_1, T_2) - |r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})|$.
+        It is either $|r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})| = m+1$, $|r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})| = m$, or $|r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})| = m-1$.
+        In either case, we have $d(T_1|_n,T_2|_n) = d(T_1|_n, T_2'|_n) \leq k - m = (k+1) - (m+1) \leq d(T_1, T_2) - |r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})|$.
 
         \item $p_{n+1}$ has same rank in $T_2$ and $T_2'$.
 
