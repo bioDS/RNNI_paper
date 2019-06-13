@@ -44,6 +44,8 @@
 
 %Do we restrict everything to RNNI? Make sure that we correctly distinguish between RNNI and RNNIu (for instance in the algorithm section)
 
+%ranks of internal node shall be from 1 to n, leaves have rank 0
+
 %MRCA
 
 %cluster
@@ -51,6 +53,8 @@
 %leaf or taxon?
 
 %caterpillar path, shortest caterpillar path, caterpillar distance (def currently in proof of lemma:caterpillar_dist=diameter)
+
+%convexity (there is a shortest path within that set, not: all shortest path are within this set)
 
 \begin{definition}
 	Let $A$ be a pending subtree of the tree $T$.
@@ -329,6 +333,45 @@ It improves the bound $n^2 - 3n - \frac{5}{8}$ given in \cite{Gavryushkin2017}.
 It is $\Delta(\rnniu) = \frac{(n-1)(n-2)}{2} = \frac{1}{2}n^2-\frac{3}{2}n+1$.
 \end{corollary}
 
+
+%This lemma might be central  for induction proofs in RNNI space
+%Is it correct and if it is, do we need to prove the statement, or is it rather obvious?
+%The lemma implies another algorithm to compute distances (it would not give shortest paths explicitly, unlike alg:find_path)
+\begin{lemma}
+    Let $T_1$ and $T_2$ be two trees on $n+1$ taxa.
+    Let $T_1|_n$ and $T_2|_n$ be these trees restricted to $n$ taxa, i.e. the same taxon $n+1$ is deleted from both trees $T_1$ and $T_2$.
+    Then it is $d(T_1|_n, T_2|_n) \leq d(T_1,T_2) - |r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})|$ where $r_{T_i}(p_j)$ determines the rank of the parent of taxon $j$ in tree $T_i$.
+    \label{lemma:distance_delete_taxon}
+\end{lemma}
+
+\begin{proof}
+    Induction on $k = d(T_1,T_2)$:
+
+    Basis($k = 1$):
+    If rank of $p_{n+1}$ changes between $T_1$ and $T_2$, it is $d(T_1|_n, T_2|_n) = 0$ and $|r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})| = 1$ and therefore, $d(T_1|_n, T_2|_n) = 0 \leq 1 - 1 = d(T_1,T_2) - |r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})|$.
+    If on the other hand the rank of $p_{n+1}$ does not change between $T_1$ and $T_2$, it is $d(T_1|_n, T_2|_n) = d(T_1,T_2) = 1$ and $|r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})| = 1$ and therefore, $d(T_1|_n, T_2|_n) = 1 \leq 1 - 0 = d(T_1,T_2) - |r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})|$.
+
+    Step($k \to k+1$):
+    Let $T_1$ and $T_2$ be trees on $n+1$ taxa with distance $d(T_1,T_2) = k$.
+    Let $T_2'$ be the last tree on a shortest path from $T_1$ to $T_2$, i.e. $d(T_1,T_2') = k$.
+    We can apply the induction hypothesis on $T_1$ and $T_2'$ and see that $d(T_1|_n, T_2'|_n) \leq d(T_1, T_2') - |r_{T_1}(p_{n+1}) - r_{T_2'}(p_{n+1})| := k - m$.
+    Now we differ two cases:
+    \begin{enumerate}
+        \item $p_{n+1}$ changes its rank between $T_2$ and $T_2'$ or is affected by the $\nni$ move is performed between $T_2$ and $T_2'$.
+
+        Then the trees $T_2|_n$ and $T_2'|_n$ are equal. \todo{Is this obivous?}
+        Therefore, it is $d(T_1|_n,T_2|_n) = d(T_1|_n, T_2'|_n) \leq k - m$.
+        It is either $|r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})| = m+1$, $|r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})| = m$, or $|r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})| = m-1$.
+        In either case, we have $d(T_1|_n,T_2|_n) = d(T_1|_n, T_2'|_n) \leq k - m = (k+1) - (m+1) \leq d(T_1, T_2) - |r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})|$.
+
+        \item $p_{n+1}$ has same rank in $T_2$ and $T_2'$.
+
+        In this case it is $d(T_1|_n,T_2|_n) \leq d(T_1|_n,T_2'|_n) + d(T_2'|_n, T_2|_n) \leq d(T_1|_n, T_2'|_n) + 1 \leq (k-m)+ 1$.
+        It also follows that $|r_{T_1}(p_{n+1}) - r_{T_2'}(p_{n+1})| = |r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})|$ and therefore, we can conclude $d(T_1|_n,T_2|_n) \leq k-m+1 = k+1-m = d(T_1,T_2) -  |r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})|$.
+    \end{enumerate}
+\end{proof}
+
+
 \begin{lemma}
     Let $T$ and $T'$ be two caterpillar trees.
     $T$ and $T'$ have distance $d(T,T') = \Delta(\rnniu) = \frac{(n-1)(n-2)}{2}$ if, and only if, they have caterpillar distance $d_c(T,T') = \Delta(\rnniu) = \frac{(n-1)(n-2)}{2}$. \todo{define $d_c$}
@@ -350,7 +393,7 @@ It is $\Delta(\rnniu) = \frac{(n-1)(n-2)}{2} = \frac{1}{2}n^2-\frac{3}{2}n+1$.
 
     Let $T$ and $T'$ have distance $d(T,T') = \Delta(\rnniu)$.
     We can compute a  shortest caterpillar path from $T$ to $T'$ using Bubble Sort.
-    In each loop $k=1, \ldots, n-2$ of the algorithm there can be at most $n-2-k$ exchanges of taxa.
+    In each loop $k=1, \ldots, n-2$ of the algorithm there can be at most $n-1-k$ exchanges of taxa.
     It follows that the maximum length of a path computed by Bubble Sort is $\sum\limits_{k=1}^{n-2} k = \frac{(n-1)(n-2)}{2}$.
     Since there cannot be a caterpillar path shorter than $\frac{(n-1)(n-2)}{2}$ if it is $d(T,T') = \frac{(n-1)(n-2)}{2}$, it follows $d_c(T,T') = \Delta(\rnniu)$.
 
@@ -364,19 +407,18 @@ It is $\Delta(\rnniu) = \frac{(n-1)(n-2)}{2} = \frac{1}{2}n^2-\frac{3}{2}n+1$.
     All trees have distance $1$ and are caterpillar trees.
 
     Induction step: $n \to n+1$\\
-    Induction hypothesis: For trees $T$, $T'$ on $n$ taxa it is $d_c(T,T') = d(T, T') = \frac{(n-1)(n-2)}{2} = \Delta(\rnniu_n)$.\\
+    Induction hypothesis: For trees $R$, $R'$ on $n$ taxa it is $d_c(R,R') = d(R, R') = \frac{(n-1)(n-2)}{2} = \Delta(\rnniu_n)$.\\
     Let $T, T'$ be trees on $n+1$ taxa with caterpillar distance $\Delta(\rnniu_{n+1})$.
-    Since we can reach $T'$ from $T$ by using Bubble Sort where each pair of taxa that is compared in that algorithm exchanges, we can conclude that taxon $n+1$ must be in the cherry of $T'$.
-    It follows that there are on every path (not only caterpillar paths) from $T$ to $T'$ $n-1$ $\rnni$ moves needed to move the parent of $n+1$ down in the tree, since each $\rnni$ move can decrease the rank of an internal node by at most one.
+    When applying the Bubble Sort algorithm to compute a path between $T'$ and $T$, each pair of taxa that is compared in that algorithm exchanges, since there must be $\Delta(\rnniu)=\frac{(n-1)(n-2)}{2}$ moves between $T$ and $T'$.
+    So we can conclude that taxon $n+1$ must be in the cherry of $T'$.
     Let us consider the trees $T|_n$ to $T'|_n$ that result from $T$ and $T'$ by deleting taxon $n+1$.
-    When running Bubble Sort to compute a path from $T|_n$ to $T'|_n$ one can observe the same exchanges of taxa as on the caterpillar path from $T$ to $T'$, except for the $n-1$ ones that involve taxon $n+1$.
+    When running Bubble Sort to compute a path from $T|_n$ to $T'|_n$ one can observe the same exchanges of taxa as on the Bubble Sort path from $T$ to $T'$, except for the $n-1$ ones that involve taxon $n+1$.
     Hence, the caterpillar distance is $d_c(T|_n, T'|_n) = \frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2}$.
     So we can apply the induction hypothesis on $T|_n$ and $T'|_n$ and know that $d(T|_n,T'|_n) = \frac{(n-1)(n-2)}{2}$.
 
-    In general, deleting taxon $n+1$ and its parent in every tree on any path $p$ from $T$ to $T'$ results in a path $p'$ from $T|_n$ to $T'|n$.
-    Such a path $p'$ from $T|_n$ to $T'|n$ does not contain moves involving the parent of $n+1$.
-    Since the parent of $n+1$ need to move from the root of $T_1$ to the cherry of $T_2$ and each $\rnni$ move can change the rank of a node by at most one, $p'$ is at least $n-1$ $\rnni$ moves shorter than $p$. \todo{Really?}
-    If we assume that there is a path from $T$ to $T'$ of length less than $\Delta(\rnniu_{n+1}) = \frac{n(n-1)}{2}$, we could delete taxon $n+1$ and at least $n-1$ moves of it's parent and receive a path from $T|_n$ to $T'|_n$ of length less than $\frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2}$.
+    With Lemma~\ref{lemma:distance_delete_taxon} we know that the distance between $T|_n$ and $T'|_n$ is at least $d(T|_n, T'|_n) \leq d(T,T') - |r_{T}(p_{n+1}) - r_{T'}(p_{n+1})|$.
+    We also know $|r_{T}(p_{n+1}) - r_{T'}(p_{n+1})| = n-1$
+    If we assume that there is a path from $T$ to $T'$ of length less than $\Delta(\rnniu_{n+1}) = \frac{n(n-1)}{2}$, it would follow that $d(T|_n, T'|_n) \leq d(T,T') - |r_{T}(p_{n+1}) - r_{T'}(p_{n+1})| < \frac{n(n-1)}{2} - (n-1) < \frac{(n-1)(n-2)}{2}$.
     So it would be $d(T|_n, T'|_n) < \Delta(\rnniu_n)$.
     Since this is a contradiction to $d(T|_n, T'|_n) = \Delta(\rnniu_n)$, it must be $d(T,T') = \Delta(\rnniu_{n+1}) = \frac{n(n-1)}{2} $.
 
@@ -449,41 +491,6 @@ For caterpillar trees it is $(n-1)!$.
     Algorithm~\ref{alg:find_path} gives a path of length $\frac{(n-1)(n-2)}{2}$ between $T$ and $R$ if, and only if, $R$ can be generated from $T$ by applying Algorithm~\ref{alg:max_dist_tree}.
 \end{lemma}
 
-%This lemma might be central  for induction proofs in RNNI space
-%Is it correct and if it is, do we need to prove the statement, or is it rather obvious?
-%The lemma implies another algorithm to compute distances (it would not give shortest paths explicitly, unlike alg:find_path)
-\begin{lemma}
-    Let $T_1$ and $T_2$ be two trees on $n+1$ taxa.
-    Let $T_1|_n$ and $T_2|_n$ be these trees restricted to $n$ taxa, i.e. the same taxon $n+1$ is deleted from both trees $T_1$ and $T_2$.
-    Then it is $d(T_1|_n, T_2|_n) \leq d(T_1,T_2) - |r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})|$ where $r_{T_i}(p_j)$ determines the rank of the parent of taxon $j$ in tree $T_i$.
-\end{lemma}
-
-\begin{proof}
-    Induction on $k = d(T_1,T_2)$:
-
-    Basis($k = 1$):
-    If rank of $p_{n+1}$ changes between $T_1$ and $T_2$, it is $d(T_1|_n, T_2|_n) = 0$ and $|r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})| = 1$ and therefore, $d(T_1|_n, T_2|_n) = 0 \leq 1 - 1 = d(T_1,T_2) - |r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})|$.
-    If on the other hand the rank of $p_{n+1}$ does not change between $T_1$ and $T_2$, it is $d(T_1|_n, T_2|_n) = d(T_1,T_2) = 1$ and $|r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})| = 1$ and therefore, $d(T_1|_n, T_2|_n) = 1 \leq 1 - 0 = d(T_1,T_2) - |r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})|$.
-
-    Step($k \to k+1$):
-    Let $T_1$ and $T_2$ be trees on $n+1$ taxa with distance $d(T_1,T_2) = k$.
-    Let $T_2'$ be the last tree on a shortest path from $T_1$ to $T_2$, i.e. $d(T_1,T_2') = k$.
-    We can apply the induction hypothesis on $T_1$ and $T_2'$ and see that $d(T_1|_n, T_2'|_n) \leq d(T_1, T_2') - |r_{T_1}(p_{n+1}) - r_{T_2'}(p_{n+1})| := k - m$.
-    Now we differ two cases:
-    \begin{enumerate}
-        \item $p_{n+1}$ changes its rank between $T_2$ and $T_2'$ or is affected by the $\nni$ move is performed between $T_2$ and $T_2'$.
-
-        Then the trees $T_2|_n$ and $T_2'|_n$ are equal. \todo{Is this obivous?}
-        Therefore, it is $d(T_1|_n,T_2|_n) = d(T_1|_n, T_2'|_n) \leq k - m$.
-        It is either $|r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})| = m+1$, $|r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})| = m$, or $|r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})| = m-1$.
-        In either case, we have $d(T_1|_n,T_2|_n) = d(T_1|_n, T_2'|_n) \leq k - m = (k+1) - (m+1) \leq d(T_1, T_2) - |r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})|$.
-
-        \item $p_{n+1}$ has same rank in $T_2$ and $T_2'$.
-
-        In this case it is $d(T_1|_n,T_2|_n) \leq d(T_1|_n,T_2'|_n) + d(T_2'|_n, T_2|_n) \leq d(T_1|_n, T_2'|_n) + 1 \leq (k-m)+ 1$.
-        It also follows that $|r_{T_1}(p_{n+1}) - r_{T_2'}(p_{n+1})| = |r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})|$ and therefore, we can conclude $d(T_1|_n,T_2|_n) \leq k-m+1 = k+1-m = d(T_1,T_2) -  |r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})|$.
-    \end{enumerate}
-\end{proof}
 
 \section{Partition lattice}
 
