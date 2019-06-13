@@ -449,6 +449,41 @@ For caterpillar trees it is $(n-1)!$.
     Algorithm~\ref{alg:find_path} gives a path of length $\frac{(n-1)(n-2)}{2}$ between $T$ and $R$ if, and only if, $R$ can be generated from $T$ by applying Algorithm~\ref{alg:max_dist_tree}.
 \end{lemma}
 
+%This lemma might be central  for induction proofs in RNNI space
+%Is it correct and if it is, do we need to prove the statement, or is it rather obvious?
+%The lemma implies another algorithm to compute distances (it would not give shortest paths explicitly, unlike alg:find_path)
+\begin{lemma}
+    Let $T_1$ and $T_2$ be two trees on $n+1$ taxa.
+    Let $T_1|_n$ and $T_2|_n$ be these trees restricted to $n$ taxa, which means that the same taxon $n+1$ is deleted from both trees $T_1$ and $T_2$.
+    Then it is $d(T_1|_n, T_2|_n) \leq d(T_1,T_2) - |r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})|$ where $r_{T_i}(p_j)$ determines the rank of the parent of taxon $i$ in tree $T_i$.
+\end{lemma}
+
+\begin{proof}
+    Induction on $k = d(T_1,T_2)$:
+
+    Basis($k = 1$):
+    If rank of $p_{n+1}$ changes between $T_1$ and $T_2$, it is $d(T_1|_n, T_2|_n) = 0$ and $|r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})| = 1$ and therefore, $d(T_1|_n, T_2|_n) = 0 \leq 1 - 1 = d(T_1,T_2) - |r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})|$.
+    If on the other hand the rank of $p_{n+1}$ does not change between $T_1$ and $T_2$, it is $d(T_1|_n, T_2|_n) = d(T_1,T_2) = 1$ and $|r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})| = 1$ and therefore, $d(T_1|_n, T_2|_n) = 1 \leq 1 - 0 = d(T_1,T_2) - |r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})|$.
+
+    Step($k \to k+1$):
+    Let $T_1$ ad $T_2$ be trees on $n+1$ taxa with distance $d(T_1,T_2) = k$.
+    Let $T_2'$ be the last tree on a shortest path from $T_1$ to $T_2$, i.e. $d(T_1,T_2') = k$.
+    We can apply the induction hypothesis on $T_1$ and $T_2'$ and see that $d(T_1|_n, T_2'|_n) \leq d(T_1, T_2') - |r_{T_1}(p_{n+1}) - r_{T_2'}(p_{n+1})| := k - m$.
+    Now we differ two cases:
+    \begin{enumerate}
+        \item $p_{n+1}$ changes its rank between $T_2$ and $T_2'$.
+
+        Then the trees $T_2|_n$ and $T_2'|_n$ are equal. \todo{Is this obivous?}
+        Therefore, it is $d(T_1|_n,T_2|_n) = d(T_1|_n, T_2'|_n) \leq k - m$.
+        Since the rank of $p_{n+1}$ changes by one between $T_2$ and $T_2'$ it is either $|r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})| = m+1$ or $|r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})| = m-1$.
+        In either case, we have $d(T_1|_n,T_2|_n) = d(T_1|_n, T_2'|_n) \leq k - m = (k+1) - (m-1) \leq d(T_1, T_2) - |r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})|$.
+
+        \item $p_{n+1}$ has same rank in $T_2$ and $T_2'$.
+
+        In this case it is $d(T_1|_n,T_2|_n) = d(T_1|_n, T_2'|_n) + 1 \leq (k-m)+ 1$.
+        It also follows that $|r_{T_1}(p_{n+1}) - r_{T_2'}(p_{n+1})| = |r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})|$ and therefore, we can conclude $d(T_1|_n,T_2|_n) \leq k-m+1 = k+1-m = d(T_1,T_2) -  |r_{T_1}(p_{n+1}) - r_{T_2}(p_{n+1})|$.
+    \end{enumerate}
+\end{proof}
 
 \section{Partition lattice}
 
