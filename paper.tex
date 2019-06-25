@@ -5,6 +5,7 @@
 \usepackage[UKenglish]{babel}
 \usepackage{amsmath}
 \usepackage{amsthm}
+\usepackage{amssymb}
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{algorithm}
@@ -42,24 +43,55 @@
 
 \section{Definitions}
 
-%Do we restrict everything to RNNI? Make sure that we correctly distinguish between RNNI and RNNIu (for instance in the algorithm section)
+\todo{citation of definitions??}
 
-%ranks of internal node shall be from 1 to n, leaves have rank 0
+A \amph{rooted binary phylogenetic tree} a set $X$ is a pair $(t, \Phi)$ where $t$ is a rooted binary tree with leaf set $\mathcal{L}(t)$ and $\Phi:X \mapsto \mathcal{L}(T)$ a bijective mapping. \todo{do we need to define leaves and internal nodes, child, parent?}
+A \emph{ranked tree} is given by a pair of such a rooted binary phylogenetic tree $(t, \Phi)$ on $X = \{1, \ldots, n\}$ for $n \in \mathbb N$, and a rank function that maps the vertex set of $t$ onto the set $\{0,\ldots,n-1\}$ such that all leaves are assigned rank $0$ and each internal node has rank greater than its children.
+The number $n$ of taxa will remain fixed throughout the whole paper.
+For simplicity of notation we use the term \emph{tree} instead instead of ranked tree.
+Furthermore, we will identify leaves by their labels and might call them \emph{taxa} (singular: \emph{taxon}).
+For a tree $T$ a subtree consisting of an internal node with both children being leaves is called \emph{cherry}.
+An edge $e$ that has no leaf as child is an \emph{internal edge}.
+The set of taxa that are descending from an internal edge $e$ is called \emph{cluster}. \todo{OK?}
+In the literature, clusters often refer to sets of taxa descending from internal nodes.
+The set of clusters as defined above would then be recalled as non-trivial clusters.
+Given a subset $M$ of the set of taxa $X$, the \emph{most recent common ancestor} $mrca(M)$ of $M$ is the internal node with lowest rank that is ancestor of all taxa in $M$. \todo{OK?}
+For a single taxon $x$, $mrca(\{x\})$ is the parent of $x$ and will be denoted by $parent(x)$.
+Two trees are called \emph{isomorphic} if the underlying rooted phylogenetic trees are isomorphic and the isomorphism preserves ranks of the nodes.
 
-%MRCA
+The set of ranked trees builds the vertex set of the \emph{$\rnni$-graph}.
+We introduce two types of operations (\emph{$\rnni$ moves}) connecting trees $T$ and $R$ in that graph by an edge:
+The swap of the ranks of two internal nodes that have rank difference one is called \emph{rank move}.
+We say that there is an $\nni$ move between trees $T$ and $R$ if there are edges $e$ in $T$ and $f$ in $R$ that are bounded by internal nodes with rank difference one such that the graphs obtained by shrinking $e$ and $f$ to internal nodes are isomorphic.
+Trees that are connected by either a rank swap or an $\nni$ move are called \emph{$\rnni$ neighbours} or briefly neighbours.
+Note that the previously defined $\rnni$ graph is a metric space, which is why we may call it \emph{$\rnni$ space}.
 
-%cluster
+\todo{figure: rank + $\nni$ move}
 
-%leaf or taxon?
+The main purpose of this paper is understanding geometric properties of the $\rnni$ space.
+Therefore, further notations need to be introduced.
+If every internal node of a tree $T$ has at least one leaf as child, $T$ is called \emph{caterpillar tree}.
+A \emph{path} $p$ between trees $T_0$ and $T_m$ in $\rnni$ is a sequence $T_0, T_1, \ldots, T_m$ of trees such that there is an edge $\{T_i, T_{i+1}\}$ for all $i=0,\ldots,m-1$.
+For such a path $p$ we say the \emph{length} $|p|$ of $p$ is $m$.
+A path $p$ between trees $T$ and $R$ is a \emph{shortest path} if for every path $r$ between $T$ and $R$, $|p| \leq |r|$.
+The \emph{distance} $d(T,R)$ between trees $T$ and $R$ is the length of a shortest path between them.
+If $p$ is a path only consisting of caterpillar trees we call it \emph{caterpillar path}.
+For two caterpillar trees $T$ and $R$ a \emph{shortest caterpillar path} is a caterpillar path that is shortest among all caterpillar paths.
+The length of such a shortest caterpillar path is called \emph{caterpillar distance} and denoted by $d_c(T,R)$.
+A set $\mathbb S$ of trees is called \emph{convex} if for all pairs of trees $T,R \in \mathbb S$, there exists a shortest path from $T$ to $R$ such that every tree on $p$ is element of $\mathbb S$.
 
-%caterpillar path, shortest caterpillar path, caterpillar distance (def currently in proof of lemma:caterpillar_dist=diameter)
+%Is it sufficient to mention what RNNI stands for in the Introduction?
 
-%convexity (there is a shortest path within that set, not: all shortest path are within this set)
+%Restrict to RNNIu (See whether we can get same results for RNNI)
 
-\begin{definition}
-	Let $A$ be a pending subtree of the tree $T$.
-	We call the set $c(A)$ of taxa of $A$ the \emph{cluster} induced by $A$.
-\end{definition}
+%Definitions inside a tree: cherry, partition, edges represent partitions
+
+%If needed: diameter, radius (in the corresponding chapter?), induced triplet (in that chapter?)
+
+%delete definitions in the following chapters that are already covered here!
+
+
+%replace rank swap with rank move in the following!!
 
 \section{Caterpillar Trees}
 
@@ -102,14 +134,14 @@ For a more restricted subset of trees in $\rnni$, namely caterpillar trees that 
 	An example for a caterpillar tree with internal leaf labels is depicted in Figure~\ref{label_internal_nodes}.
 	In the following, changes of the internal labelling following $\rnni$ moves are defined:
 
-	\textbf{Rank swaps:}
-	Within rank swaps the labels of internal nodes do not change.
+	\textbf{Rank moves:}
+	Within rank moves the labels of internal nodes do not change.
 	For an example consider Figure~\ref{fig:rank_swap_internal_label}.
 
 	\begin{figure}[H]
 		\centering
 		\includegraphics[width=0.8\textwidth]{rank_swap_internal_label}
-		\caption{The labelling of the internal nodes that swap ranks (red) do not change within the rank swap.
+		\caption{The labelling of the internal nodes that swap ranks (red) do not change within the rank move.
 		}
 		\label{fig:rank_swap_internal_label}
 	\end{figure}
@@ -158,8 +190,8 @@ For a more restricted subset of trees in $\rnni$, namely caterpillar trees that 
 	The task is now to prove that there is always a caterpillar path at least as short as the given path $p$.
 	Therefore, we use the following observation:
 	Within each $\rnni$ move the ranks of at most two internal nodes change by at most one each.
-	This is true for both rank swaps and $\nni$ moves, according to our definition of the labelling:
-	Within a rank swap two nodes exchange their ranks, while there are not necessarily changes of ranks when $\nni$ moves are performed.
+	This is true for both rank moves and $\nni$ moves, according to our definition of the labelling:
+	Within a rank move two nodes exchange their ranks, while there are not necessarily changes of ranks when $\nni$ moves are performed.
 
 	On a caterpillar path the only possible moves are $\nni$ moves that change the ranks of two internal nodes by one each.
 	Therefore, we can construct a caterpillar path $r$ out of $p$:
@@ -196,9 +228,9 @@ Finally, all cherries of $R'$ are resolved in order to end up in tree $R$.
 For proving that this path is shorter than any path preserving the split $1, \ldots, n | n+1, \ldots, 2n$, the fact that $d_{\nni}(T',R') = d_{\nni}(T|_{\{1, \ldots, n\}}, R|_{\{1, \ldots, n\}})$ is being used.
 However, this does not work in $\rnni$.
 Introducing new cherries means introducing new internal nodes with new ranks.
-Since there are some rank swaps needed for an $\rnni$ path similar to the shortest $\nni$ path presented above, the path in $\rnni$ that breaks the split $1, \ldots, n | n+1, \ldots, 2n$ is no shortest path.
+Since there are some rank moves needed for an $\rnni$ path similar to the shortest $\nni$ path presented above, the path in $\rnni$ that breaks the split $1, \ldots, n | n+1, \ldots, 2n$ is no shortest path.
 % How do we assign the ranks to the new cherry nodes?
-% We could either create a path where $T'$ and $R'$ have distance equal to $d_{\rnni}(T|_{\{1, \ldots, n\}}, R|_{\{n+1, \ldots, 2n\}})$ and have a lot of additional rank swaps before and after that part OR
+% We could either create a path where $T'$ and $R'$ have distance equal to $d_{\rnni}(T|_{\{1, \ldots, n\}}, R|_{\{n+1, \ldots, 2n\}})$ and have a lot of additional rank moves before and after that part OR
 % Build $T'$ and $R'$ that contain all the cherries within the least number of moves possible (3n-3) and having a longer path between $T'$ and $R'$.
 % Also anything in between these two options is possible. Are we able to disprove every option??
 
@@ -449,6 +481,15 @@ It is $\Delta(\rnniu) = \frac{(n-1)(n-2)}{2} = \frac{1}{2}n^2-\frac{3}{2}n+1$.
 
 \end{proof}
 
+% With the knowledge that the set of caterpillar trees is convex in $\rnniu$, we can prove the Cluster Theorem restricted to caterpillar trees.
+
+\begin{conjecture}
+    Let $T_1$ and $T_2$ be caterpillar trees.
+    If $T_1$ and $T_2$ contain the same cluster $C$, then $C$ is present as cluster in every tree on every shortest path between $T_1$ and $T_2$. \todo{Cluster means non-trivial cluster -> def chapter?}
+\end{conjecture}
+
+
+% Following are some ideas that did not lead to major results so far:
 % idea for description of max distance caterpillar trees:
 
 \begin{lemma}
@@ -472,7 +513,7 @@ Furthermore, triplets do not represent ranked trees uniquely as they do not cont
 
 According to Algorithm~\ref{alg:max_dist_tree}, the number of trees with maximum distance to a given tree $T$ depends on the number of cherries of $T$ and the ranks of their internal nodes.
 For caterpillar trees it is $(n-1)!$.
-The number of caterpillar trees with distance $\Delta(\rnniu)$ from a given caterpillar tree is $2^{n-2}$. 
+The number of caterpillar trees with distance $\Delta(\rnniu)$ from a given caterpillar tree is $2^{n-2}$.
 
 \begin{algorithm}[H]
 \caption{MAX\_DISTANCE\_TREE($T$)}
@@ -491,6 +532,8 @@ The number of caterpillar trees with distance $\Delta(\rnniu)$ from a given cate
     Let $T$ and $R$ be trees.
     Algorithm~\ref{alg:find_path} gives a path of length $\frac{(n-1)(n-2)}{2}$ between $T$ and $R$ if, and only if, $R$ can be generated from $T$ by applying Algorithm~\ref{alg:max_dist_tree}.
 \end{lemma}
+
+%If this is true, we can follow that radius = diameter
 
 
 \section{Partition lattice}
