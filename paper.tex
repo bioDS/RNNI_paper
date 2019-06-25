@@ -45,38 +45,39 @@
 
 \todo{citation of definitions??}
 
-A \amph{rooted binary phylogenetic tree} a set $X$ is a pair $(t, \Phi)$ where $t$ is a rooted binary tree with leaf set $\mathcal{L}(t)$ and $\Phi:X \mapsto \mathcal{L}(T)$ a bijective mapping. \todo{do we need to define leaves and internal nodes, child, parent?}
-A \emph{ranked tree} is given by a pair of such a rooted binary phylogenetic tree $(t, \Phi)$ on $X = \{1, \ldots, n\}$ for $n \in \mathbb N$, and a rank function that maps the vertex set of $t$ onto the set $\{0,\ldots,n-1\}$ such that all leaves are assigned rank $0$ and each internal node has rank greater than its children.
-The number $n$ of taxa will remain fixed throughout the whole paper.
+A \amph{rooted binary phylogenetic tree} on a set $X$ is a pair $(t, \Phi)$ where $t$ is a rooted binary tree with leaf set $\mathcal{L}(t)$ and $\Phi:X \mapsto \mathcal{L}(T)$ a bijective mapping. \todo{do we need to define leaves and internal nodes, child, parent, subtree, cherry(defined below)?}
+From now on, we assume $X = \{1,\ldots,n\}$ for a fixed number $n \in \mathbb N$ of leaves.
+Within this paper we study \emph{ranked trees} that are determined by a pair consisting of a rooted binary phylogenetic tree $(t, \Phi)$ on $X = \{1, \ldots, n\}$ for $n \in \mathbb N$, and a rank function.
+A \emph{rank function} on $t$ maps the vertex set of $t$ onto the set $\{0,\ldots,n-1\}$ such that all leaves are assigned rank $0$ and each internal node has rank greater than its children.
 For simplicity of notation we use the term \emph{tree} instead instead of ranked tree.
 Furthermore, we will identify leaves by their labels and might call them \emph{taxa} (singular: \emph{taxon}).
 For a tree $T$ a subtree consisting of an internal node with both children being leaves is called \emph{cherry}.
 An edge $e$ that has no leaf as child is an \emph{internal edge}.
-The set of taxa that are descending from an internal edge $e$ is called \emph{cluster}. \todo{OK?}
-In the literature, clusters often refer to sets of taxa descending from internal nodes.
-The set of clusters as defined above would then be recalled as non-trivial clusters.
-Given a subset $M$ of the set of taxa $X$, the \emph{most recent common ancestor} $mrca(M)$ of $M$ is the internal node with lowest rank that is ancestor of all taxa in $M$. \todo{OK?}
-For a single taxon $x$, $mrca(\{x\})$ is the parent of $x$ and will be denoted by $parent(x)$.
+Each internal edge defines a \emph{cluster} which is the set of taxa that are descending from the lower of both nodes bounding $e$. \todo{OK?}
+In the literature, clusters often refer to sets of taxa descending from internal nodes in which case clusters as defined above coincide with non-trivial clusters.
+Given a subset $S$ of the set of taxa $X$, the \emph{most recent common ancestor} $mrca(S)$ of $S$ is the internal node with lowest rank that is ancestor of all taxa in $S$. \todo{OK?}
+In particular, for a single taxon $x \in X$, $mrca(\{x\})$ is the parent of $x$ and will be denoted by $parent(x)$.
 Two trees are called \emph{isomorphic} if the underlying rooted phylogenetic trees are isomorphic and the isomorphism preserves ranks of the nodes.
 
-The set of ranked trees builds the vertex set of the \emph{$\rnni$-graph}.
-We introduce two types of operations (\emph{$\rnni$ moves}) connecting trees $T$ and $R$ in that graph by an edge:
+Now we are ready to define the tree space that is the subject of study of this paper, the $\rnni$ graph.
+The vertex set of the \emph{$\rnni$-graph} is given by the set of all ranked trees on $n$ taxa.
+We introduce two types of operations (\emph{$\rnni$ moves}) connecting trees $T$ and $R$ in this graph by an edge:
 The swap of the ranks of two internal nodes that have rank difference one is called \emph{rank move}.
 We say that there is an $\nni$ move between trees $T$ and $R$ if there are edges $e$ in $T$ and $f$ in $R$ that are bounded by internal nodes with rank difference one such that the graphs obtained by shrinking $e$ and $f$ to internal nodes are isomorphic.
-Trees that are connected by either a rank swap or an $\nni$ move are called \emph{$\rnni$ neighbours} or briefly neighbours.
+Trees that are connected by either a rank move or an $\nni$ move are called \emph{$\rnni$ neighbours} or briefly neighbours.
 Note that the previously defined $\rnni$ graph is a metric space, which is why we may call it \emph{$\rnni$ space}.
 
 \todo{figure: rank + $\nni$ move}
 
 The main purpose of this paper is understanding geometric properties of the $\rnni$ space.
 Therefore, further notations need to be introduced.
-If every internal node of a tree $T$ has at least one leaf as child, $T$ is called \emph{caterpillar tree}.
+If every internal node of a tree $T$ has at least one child that is a leaf, $T$ is called \emph{caterpillar tree}.
 A \emph{path} $p$ between trees $T_0$ and $T_m$ in $\rnni$ is a sequence $T_0, T_1, \ldots, T_m$ of trees such that there is an edge $\{T_i, T_{i+1}\}$ for all $i=0,\ldots,m-1$.
 For such a path $p$ we say the \emph{length} $|p|$ of $p$ is $m$.
 A path $p$ between trees $T$ and $R$ is a \emph{shortest path} if for every path $r$ between $T$ and $R$, $|p| \leq |r|$.
 The \emph{distance} $d(T,R)$ between trees $T$ and $R$ is the length of a shortest path between them.
 If $p$ is a path only consisting of caterpillar trees we call it \emph{caterpillar path}.
-For two caterpillar trees $T$ and $R$ a \emph{shortest caterpillar path} is a caterpillar path that is shortest among all caterpillar paths.
+For two caterpillar trees $T$ and $R$ a \emph{shortest caterpillar path} is a caterpillar path that is shortest among all caterpillar paths between $T$ and $R$.
 The length of such a shortest caterpillar path is called \emph{caterpillar distance} and denoted by $d_c(T,R)$.
 A set $\mathbb S$ of trees is called \emph{convex} if for all pairs of trees $T,R \in \mathbb S$, there exists a shortest path from $T$ to $R$ such that every tree on $p$ is element of $\mathbb S$.
 
