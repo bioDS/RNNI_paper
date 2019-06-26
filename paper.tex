@@ -48,6 +48,8 @@
 
 %We use the exact algorithm to calculate all the distances for the examples given in this paper
 
+%Figure of ranked tree in introduction
+
 \section{Definitions}
 
 \todo{citation of definitions??}
@@ -106,7 +108,7 @@ A set $\mathbb S$ of trees is called \emph{convex} if for all pairs of trees $T,
 
 \section{Geometry of $\rnni$}
 
-The following Algorithm~\ref{alg:find_path} which computes paths between pairs of trees in $\rnni$ is a central tool for our investigation of shortest paths in $\rnni$.
+Algorithm~\ref{alg:find_path} computes paths between pairs of trees in $\rnni$ and will be a central tool for our investigation of shortest paths in $\rnni$.
 
 \begin{algorithm}[H]
 \caption{FIND\_PATH($T,R$)}
@@ -125,7 +127,7 @@ The following Algorithm~\ref{alg:find_path} which computes paths between pairs o
 \end{algorithmic}
 \end{algorithm}
 
-\todo{figure of an example?}
+\todo{figure of an example? Brief explanation what algorithm does?}
 
 One can easily prove that there is always exactly one $\rnni$ move on $T$ that decreases the rank of $mrca_T(C)$ as in line~\ref{alg:line:move_set_down} of Algorithm~\ref{alg:find_path}.
 It follows that Algorithm~\ref{alg:find_path} returns a path in $\rnni$ for any pair of trees $T,R$.
@@ -214,6 +216,7 @@ If the rank of $parent(c)$ is higher than the ranks of $parent(a)$ and $parent(b
 If just one of the two taxa $a$ and $b$ is on the other side of $c$ in $R$, this one swaps position with $c$ in the sequence.
 But if both $a$ and $b$ are on the other side of $c$ in $R$, the one that has the parent with highest rank of all these three taxa in $R$ swaps with $c$ at first.
 This makes sure that there is no additional swap of $a$ and $b$ needed on the path to $R$.
+\todo{Pseudo-Code for algorithm?}
 
 Lemma~\ref{lemma:caterpillar_dist=diameter} regards caterpillar trees with distance $\frac{(n-1)(n-2)}{2}$ and will be needed for proving the convexity of the set of caterpillar trees in $\rnni$.
 
@@ -286,7 +289,6 @@ Lemma~\ref{lemma:caterpillar_dist=diameter} regards caterpillar trees with dista
 
 \subsection{Diameter}
 
-In~\cite{Gavryushkin2017} upper and lower bound for the diameter of $\rnni$ are given.
 Following the results of section~\ref{section:caterpillar_convex} one can directly improve this result by giving the exact diameter of the $\rnni$ graph.
 
 \begin{lemma}
@@ -460,7 +462,7 @@ However, we found a simple counterexample to this conjecture:
 
 Since the counterexample in Figure~\ref{splitthm_counterexample} clearly shows that the version of the Split Theorem stated in~\cite{Gavryushkin2017} does not hold, we will now claim an alternative to this conjecture, the \emph{Cluster Theorem}.
 Within the Cluster Theorem we are considering clusters instead of splits.
-This is motivated by the fact that rooted phylogenetic trees can uniquely be represented by sets of clusters~\ref{steel2016}, but not by sets of splits as they cannot define the position of the root.
+This is motivated by the fact that rooted phylogenetic trees can uniquely be represented by sets of clusters~\cite{steel2016}, but not by sets of splits as they cannot define the position of the root.
 Moreover, a ranked tree can be uniquely determined by ordering the set of clusters increasingly according to the ranks of the internal nodes inducing those clusters.
 
 % \begin{conjecture}[Weak Split Theorem]
@@ -491,7 +493,7 @@ Following are some ideas that did not lead to major results so far:
 
 \begin{lemma}
     Let $T$ and $R$ be caterpillar trees.
-    It is $d_c(T,R) = \Delta(\rnniu)$ if, and only if, $T$ and $R$ share no induced triplet.
+    It is $d_c(T,R) = \Delta(\rnni)$ if, and only if, $T$ and $R$ share no induced triplet.
     \todo{define induced triplets}
 \end{lemma}
 
@@ -505,12 +507,14 @@ Furthermore, triplets do not represent ranked trees uniquely as they do not cont
 
 \begin{conjecture}
     Let $T$ and $R$ be trees on $n$ taxa.
-    It is $d(T,R) = \Delta(\rnniu)$ if, and only if, $R$ can be produced from $T$ by applying Algorithm~\ref{alg:max_dist_tree}.
+    It is $d(T,R) = \Delta(\rnni)$ if, and only if, $R$ can be produced from $T$ by applying Algorithm~\ref{alg:max_dist_tree}.
 \end{conjecture}
+
+If this conjecture is true, we have that $\Delta(\rnni) = rad(\rnni)$.
 
 According to Algorithm~\ref{alg:max_dist_tree}, the number of trees with maximum distance to a given tree $T$ depends on the number of cherries of $T$ and the ranks of their internal nodes.
 For caterpillar trees it is $(n-1)!$.
-The number of caterpillar trees with distance $\Delta(\rnniu)$ from a given caterpillar tree is $2^{n-2}$.
+The number of caterpillar trees with distance $\Delta(\rnni)$ from a given caterpillar tree is $2^{n-2}$.
 
 \begin{algorithm}[H]
 \caption{MAX\_DISTANCE\_TREE($T$)}
