@@ -52,7 +52,7 @@
 
 \todo{citation of definitions??}
 
-A \emph{rooted binary phylogenetic tree} on a set $X$ is a pair $(t, \Phi)$ where $t$ is a rooted binary tree with leaf set $\mathcal{L}(t)$ and $\Phi:X \mapsto \mathcal{L}(T)$ a bijective mapping. \todo{do we need to define leaves and internal nodes, child, parent, subtree, cherry(defined below)?}
+A \emph{rooted binary phylogenetic tree} on a set $X$ is a pair $(t, \Phi)$ where $t$ is a rooted binary tree with leaf set $\mathcal{L}(t)$ and $\Phi:X \to \mathcal{L}(T)$ a bijective mapping. \todo{do we need to define leaves and internal nodes, child, parent, subtree, cherry(defined below)?}
 From now on, we assume $X = \{1,\ldots,n\}$ for a fixed number $n \in \mathbb N$ of leaves.
 Within this paper we study \emph{ranked trees} that are determined by a pair consisting of a rooted binary phylogenetic tree $(t, \Phi)$ on $X = \{1, \ldots, n\}$ for $n \in \mathbb N$, and a rank function.
 A \emph{rank function} on $t$ maps the vertex set of $t$ onto the set $\{0,\ldots,n-1\}$ such that all leaves are assigned rank $0$ and each internal node has rank greater than its children.
@@ -61,18 +61,18 @@ For simplicity of notation we use the term \emph{tree} instead instead of ranked
 Furthermore, we will identify leaves by their labels and might call them \emph{taxa} (singular: \emph{taxon}).
 For a tree $T$ a subtree consisting of an internal node with both children being leaves is called \emph{cherry}.
 An edge $e$ that has no leaf as child is an \emph{internal edge} and we say an edge $e=(u,v)$ has \emph{length} $l$ if $|rank(v) - rank(u)| = l$.
-Each internal edge defines a \emph{cluster} which is the set of taxa that are descending from the lower of both nodes bounding $e$. \todo{OK?}
-In the literature, clusters often refer to sets of taxa descending from internal nodes in which case clusters as defined above coincide with non-trivial clusters.
+Each internal node $v$ gives a \emph{cluster} $C$ that is the set of taxa descending from this node. \todo{OK?}
+We then say that $v$ induces the cluster $C$.
+Note that all trees on $n$ taxa share the cluster $\{1,\ldots,n\}$ induced by the root.
 Given a subset $S$ of the set of taxa $X$, the \emph{most recent common ancestor} $mrca(S)$ of $S$ is the internal node with lowest rank that is ancestor of all taxa in $S$. \todo{OK?}
 In particular, for a single taxon $x \in X$, $mrca(\{x\})$ is the parent of $x$ and will be denoted by $parent(x)$.
 We write $mrca_T(S)$ to emphasise that we consider the most recent common ancestor of set $S$ in tree $T$.
 Two trees are called \emph{isomorphic} if the underlying rooted phylogenetic trees are isomorphic and the isomorphism preserves ranks of the nodes.
 
 \todo{define splits and delete definition from split thm chapter!}
-\todo{change definition of clusters: induced by vertices, not edges!}
 
 Now we are ready to define the tree space that is the subject of study of this paper, the $\rnni$ graph.
-The vertex set of the \emph{$\rnni$-graph} is given by the set of all ranked trees on $n$ taxa.
+The vertex set of the \emph{$\rnni$ graph} is given by the set of all ranked trees on $n$ taxa.
 We introduce two types of operations (\emph{$\rnni$ moves}) connecting trees $T$ and $R$ in this graph by an edge:
 The swap of the ranks of two internal nodes that have rank difference one is called \emph{rank move}.
 We say that there is an $\nni$ move between trees $T$ and $R$ if there are edges $e$ in $T$ and $f$ in $R$ that are bounded by internal nodes with rank difference one such that the graphs obtained by shrinking $e$ and $f$ to internal nodes are isomorphic.
@@ -124,7 +124,7 @@ The following Algorithm~\ref{alg:find_path} which computes paths between pairs o
 	\STATE $\hat{T} := T$
 	\STATE $p := (T)$
 	\FOR {$i = 1, \dots, n-2$}
-		\STATE Let $C$ be the cluster associated with edge $(v,w)$ in $R$ with $rank(v) = i < rank(w)$
+		\STATE Let $C$ be the cluster node $v$ in $R$ with $rank(v) = i$
 		\WHILE {$rank(mrca_{\hat{T}}(C))>i$}
 			\STATE Update $\hat{T}$: Decrease $rank(mrca_{\hat{T}}(C))$ by an $\rnni$ move \label{alg:line:move_set_down}
 			\STATE $p = p+\hat{T}$
@@ -146,7 +146,7 @@ Moreover, it gives an upper bound for the diameter of $\rnni$, which improves th
 
 \begin{proof}
     Let us consider the maximum length of a path given by Algorithm~\ref{alg:find_path}.
-    In worst case each of the $n-2$ clusters $C$ given by internal edges of $R$, represented by $i = 1, \dots, n-2$ in the algorithm, requires $n-1-i$ $\rnni$ moves for moving $mrca(C)$ down in $\hat{T}$.
+    In worst case each of the $n-2$ clusters $C$ induced by internal nodes of $R$ with ranks $i = 1, \dots, n-2$, requires $n-1-i$ $\rnni$ moves to move $mrca(C)$ down in $\hat{T}$.
 	Hence, the maximum length of a path computed by that algorithm for any pair of trees is less or equal to $\sum\limits_{i = 1}^{n-2} i = \frac{(n-2)(n-1)}{2}$.
 \end{proof}
 
@@ -435,7 +435,7 @@ The proof presented in~\cite{Li1996} for Theorem~\ref{thm:split_nni} does not wo
 \todo{Shall we keep this explanation? The problem is that the $\rnni$ path depends on the assignment of ranks to the cherries produced on the path}
 The counterexample presented in~\cite{Li1996} works in $\nni$ because of the following:
 When proving Theorem~\ref{thm:split_nni},~\cite{Li1996} gives an example of two trees $T$ and $R$ on $2n$ taxa that consist of two caterpillar trees each that share the root as parent.
-The clusters given by the two edges incident to the root are $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$ in both trees $T$ and $R$.
+The clusters given by the two nodes adjacent to the root are $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$ in both trees $T$ and $R$.
 Between these there is a shortest path in $\nni$ where at first $T$ is transformed to a tree $T'$ with $n$ cherries where each cherry contains one taxon of $\{1, \ldots, n\}$ and one taxon of $\{n+1, \ldots, 2n\}$.
 Afterwards, $T'$ is transformed to a tree $R'$ still containing the same cherries as $T'$ but in a way that resolving all these cherries of $R'$ results in $R$.
 For proving that this path is shorter than any path preserving the clusters $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$, the fact that $d_{\nni}(R,R') = d_{\nni}(T|_{\{1, \ldots, n\}}, R|_{\{1, \ldots, n\}})$ where $T|_{\{1, \ldots, n\}}$ and $R|_{\{1, \ldots, n\}}$ are $T$ and $R$ restricted to taxa $\{1,\ldots,n\}$, respectively, is being used.
@@ -456,7 +456,7 @@ Since the example given in~\cite{Li1996} that proves Theorem~\ref{thm:split_nni}
 	\label{split_theorem}
 \end{conjecture}
 
-Instead of using the notion of clusters as we do within this paper, the Split Theorem considers partitions of the taxon set $X$, so-called splits, received by deleting an edge of a tree and taking the taxon sets of the two resulting trees as partition of $X$.
+Instead of using the notion of clusters as we do within this paper, the Split Theorem considers splits of the taxon set $X$.
 However, we found a simple counterexample to this conjecture:
 
 \begin{figure}[H]
