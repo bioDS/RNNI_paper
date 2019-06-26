@@ -58,18 +58,19 @@ Within this paper we study \emph{ranked trees} that are determined by a pair con
 A \emph{rank function} on $t$ maps the vertex set of $t$ onto the set $\{0,\ldots,n-1\}$ such that all leaves are assigned rank $0$ and each internal node has rank greater than its children.
 The rank of a node $v$ in a ranked tree will be denoted by $rank(v)$ or $rank_T(v)$ if it is not obvious that we consider tree $T$.
 For simplicity of notation we use the term \emph{tree} instead instead of ranked tree.
+
 Furthermore, we will identify leaves by their labels and might call them \emph{taxa} (singular: \emph{taxon}).
 For a tree $T$ a subtree consisting of an internal node with both children being leaves is called \emph{cherry}.
 An edge $e$ that has no leaf as child is an \emph{internal edge} and we say an edge $e=(u,v)$ has \emph{length} $l$ if $|rank(v) - rank(u)| = l$.
 Each internal node $v$ gives a \emph{cluster} $C$ that is the set of taxa descending from this node. \todo{OK?}
 We then say that $v$ induces the cluster $C$.
 Note that all trees on $n$ taxa share the cluster $\{1,\ldots,n\}$ induced by the root.
+A \emph{split} is a bipartition of the taxon set $X$ into sets $A,B$ such that there is an edge $e$ whose deletion results in two trees with taxon sets $A$ and $B$, respectively.
+Such a split will be denoted by $A|B$ and we say that it is induced by edge $e$.
 Given a subset $S$ of the set of taxa $X$, the \emph{most recent common ancestor} $mrca(S)$ of $S$ is the internal node with lowest rank that is ancestor of all taxa in $S$. \todo{OK?}
 In particular, for a single taxon $x \in X$, $mrca(\{x\})$ is the parent of $x$ and will be denoted by $parent(x)$.
 We write $mrca_T(S)$ to emphasise that we consider the most recent common ancestor of set $S$ in tree $T$.
-Two trees are called \emph{isomorphic} if the underlying rooted phylogenetic trees are isomorphic and the isomorphism preserves ranks of the nodes.
-
-\todo{define splits and delete definition from split thm chapter!}
+Two trees are called \emph{isomorphic} if the underlying rooted phylogenetic trees are isomorphic and the isomorphism preserves ranks of the nodes
 
 Now we are ready to define the tree space that is the subject of study of this paper, the $\rnni$ graph.
 The vertex set of the \emph{$\rnni$ graph} is given by the set of all ranked trees on $n$ taxa.
@@ -100,18 +101,8 @@ For two caterpillar trees $T$ and $R$ a \emph{shortest caterpillar path} is a ca
 The length of such a shortest caterpillar path is called \emph{caterpillar distance} and denoted by $d_c(T,R)$.
 A set $\mathbb S$ of trees is called \emph{convex} if for all pairs of trees $T,R \in \mathbb S$, there exists a shortest path from $T$ to $R$ such that every tree on $p$ is element of $\mathbb S$.
 
-%Is it sufficient to mention what RNNI stands for in the Introduction?
-
-%Restrict to RNNIu (See whether we can get same results for RNNI)
-
-%Definitions inside a tree: cherry, partition, edges represent partitions
-
 %If needed: diameter, radius (in the corresponding chapter?), induced triplet (in that chapter?)
 
-%delete definitions in the following chapters that are already covered here!
-
-
-%replace rank swap with rank move in the following!!
 
 \section{Geometry of $\rnni$}
 
