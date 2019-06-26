@@ -69,6 +69,7 @@ We write $mrca_T(S)$ to emphasise that we consider the most recent common ancest
 Two trees are called \emph{isomorphic} if the underlying rooted phylogenetic trees are isomorphic and the isomorphism preserves ranks of the nodes.
 
 \todo{define splits and delete definition from split thm chapter!}
+\todo{change definition of clusters: induced by vertices, not edges!}
 
 Now we are ready to define the tree space that is the subject of study of this paper, the $\rnni$ graph.
 The vertex set of the \emph{$\rnni$-graph} is given by the set of all ranked trees on $n$ taxa.
@@ -82,7 +83,7 @@ Note that the previously defined $\rnni$ graph is a metric space, which is why w
 	\centering
 	\includegraphics[width=\textwidth]{RNNI}
 	\caption{Four trees connected by edges in the $\rnni$ graph. A rank move of $mrca(\{1,2\})$ and $mrca(\{3,4\})$ and all $\nni$ moves on the edge highlighted in red are illustrated}
-	\label{fig:NNI_vs_RNNI}
+	\label{fig:RNNI}
 \end{figure}
 
 \todo{label of taxa in figure shouldn't be numbers}
@@ -456,7 +457,7 @@ Since the example given in~\cite{Li1996} that proves Theorem~\ref{thm:split_nni}
 \end{conjecture}
 
 Instead of using the notion of clusters as we do within this paper, the Split Theorem considers partitions of the taxon set $X$, so-called splits, received by deleting an edge of a tree and taking the taxon sets of the two resulting trees as partition of $X$.
-However, there is a simple counterexample to this conjecture:
+However, we found a simple counterexample to this conjecture:
 
 \begin{figure}[H]
 	\centering
@@ -466,29 +467,29 @@ However, there is a simple counterexample to this conjecture:
 	\label{splitthm_counterexample}
 \end{figure}
 
-Since the counterexample in Figure~\ref{splitthm_counterexample} clearly shows that the version of the Split Theorem stated in~\cite{Gavryushkin2017} does not hold, we will now claim an alternative to this conjecture.
-The alternative formulation is based on the observation that there is a shortest path preserving all splits between the trees of the counterexample of the Split Theorem, which is presented at the bottom of Figure~\ref{splitthm_counterexample}.
+Since the counterexample in Figure~\ref{splitthm_counterexample} clearly shows that the version of the Split Theorem stated in~\cite{Gavryushkin2017} does not hold, we will now claim an alternative to this conjecture, the \emph{Cluster Theorem}.
+Within the Cluster Theorem we are considering clusters instead of splits.
+This is motivated by the fact that rooted phylogenetic trees can uniquely be represented by sets of clusters~\ref{steel2016}, but not by sets of splits as they cannot define the position of the root.
+Moreover, a ranked tree can be uniquely determined by ordering the set of clusters increasingly according to the ranks of the internal nodes inducing those clusters.
 
-
-\begin{conjecture}[Weak Split Theorem]
-	For $\rnni$ graph the following statement holds:
-	if a partition of leaves given by an edge is present in two trees $T$ and $R$ then there exists a shortest path between $T$ and $R$ where this partition is present in every tree on this path.
-	\label{split_theorem_weak}
-\end{conjecture}
-
-\todo{Do we want to keep the weak version of the split thm? It is stronger than the Cluster Thm!}
-
+% \begin{conjecture}[Weak Split Theorem]
+% 	For $\rnni$ graph the following statement holds:
+% 	if a partition of leaves given by an edge is present in two trees $T$ and $R$ then there exists a shortest path between $T$ and $R$ where this partition is present in every tree on this path.
+% 	\label{split_theorem_weak}
+% \end{conjecture}
+%
+% \todo{Do we want to keep the weak version of the split thm? It is stronger than the Cluster Thm!}
+%
 % The weak Split Theorem (in the version as in Lena's thesis) is computationally proven to hold for trees with up to $6$ taxa ($\sim 38$ min running time on laptop).
-
-Another alternative formulation of the Split Theorem is the \emph{Cluster Theorem}, which considers clusters instead of splits.
-Considering clusters rather than splits is more reasonable since two rooted trees have the same set of clusters if, and only if, they are isomorphic~\cite{steel2016}.
-The trees $T, R$ of counterexample~\ref{splitthm_counterexample} share the same set of induced splits, but have distinct sets of clusters.
 
 \begin{conjecture}[Cluster Theorem]
 	For the $\rnni$ graph the following statement holds:
 	if two trees $T$ and $R$ contain the same cluster $C$, then $C$ is present as cluster in every tree on every shortest path between $T$ and $R$.
 	\label{cluster_theorem}
 \end{conjecture}
+
+Note that the trees $T, R$ of counterexample~\ref{splitthm_counterexample} share the same set of induced splits, but have distinct sets of clusters.
+Furthermore, the example used in $\rnni$ to show that there are trees that share splits that are not present on any shortest path between these trees can be used to prove that the Cluster Theorem does not hold in $\nni$.
 
 
 \section{Ideas}
