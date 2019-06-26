@@ -268,22 +268,22 @@ Lemma~\ref{lemma:caterpillar_dist=diameter} regards caterpillar trees with dista
 \begin{proof}
     We prove the Theorem by backwards induction on the length $l$ of a shortest caterpillar path between two caterpillar trees $T$ and $R$.
 
-    Induction basis: $l = \Delta(\rnniu) = \frac{(n-1)(n-2)}{2}$\\
-    With Lemma~\ref{lemma:caterpillar_dist=diameter} one can see that for each pair of caterpillar trees $T$, $R$ with caterpillar distance $d_c(T,R) = \Delta(\rnniu)$, it is $d(T,R) = d_c(T,R)$, which means that there is a shortest path between $T$ and $R$ that is a caterpillar path.
+    Induction basis: $l = \frac{(n-1)(n-2)}{2}$\\
+    With Lemma~\ref{lemma:caterpillar_dist=diameter} one can see that for each pair of caterpillar trees $T$, $R$ with caterpillar distance $d_c(T,R) = \frac{(n-1)(n-2)}{2}$, it is $d(T,R) = d_c(T,R)$, which means that there is a shortest path between $T$ and $R$ that is a caterpillar path.
 
     Induction step: $l+1 \to l$\\
     Induction hypothesis: For each pair of caterpillar trees with caterpillar distance $l+1$ there is a shortest path between these trees that only consists of caterpillar trees, which means that the distance between these trees is $l+1$.
     Let $T$ and $R$ be caterpillar trees with caterpillar distance $l$.
-    Since $l < \Delta(\rnniu) = \frac{(n-1)(n-2)}{2}$, there is one loop $k$ in the Bubble Sort algorithm from $R$ to $T$ where there are less than $n-2-k$ swaps of neighboured taxa.
-    This means that there is a taxon $a$ that has parent with rank $n-2-k$ in $T$ and that does not need to move all the way up starting at the cherry in loop $k$.
-    Therefore, there must be a taxon $b$ which has parent with rank one less than the parent of $a$ in the tree at the beginning of loop number $k$.
-    If we assume that loop $k$ is the first loop where a single taxon is not moved by $n-k-2$ $\rnni$ moves, it follows that $a$ and $b$ must be neighboured taxa in $R$.
-    Let $R'$ be the caterpillar tree resulting from $R$ by exchanging $a$ and $b$.
-    It follows that $R$ has caterpillar distance $d_c(T,R') = d_c(T,R) + 1 = l+1$ to $T$ and $d(R,R') = 1$.
-    We can apply the induction hypothesis on $T$ and $R'$ and know that $d(T,R') = l+1$.
-    If it was $d(T,R) < l$, it would hold $d(T,R') \leq d(T,R) + d(R,R') < l + 1$ which contradicts the induction hypothesis.
-    We can conclude that $d(T,R) = l$.
-
+    Since $l < \frac{(n-1)(n-2)}{2}$, there is one loop $k$ in the caterpillar path from $R$ to $T$ that is given by the Bubble Sort algorithm \todo{name} where less than $n-2-k$ pairs taxa swap positions.
+    It follows that there is a taxon $a$ that has parent with rank $n-2-k$ in $T$ and does not need to move all the way up starting at the cherry in loop $k$.
+    Let $b$ be the taxon whose parent has rank one less than the parent of $a$ in the tree at the beginning of loop number $k$.
+    We can assume without loss of generality that loop $k$ is the first loop in which the number of swaps is not maximal.
+    It follows that $a$ and $b$ must be neighboured taxa in $R$.
+    Let us no consider caterpillar tree $R'$ resulting from $R$ by exchanging taxa $a$ and $b$.
+    It is clear that $R'$ has caterpillar distance $d_c(T,R') = d_c(T,R) + 1 = l+1$ to $T$ and moreover, $d(R,R') = 1$.
+    Hence we can apply the induction hypothesis on $T$ and $R'$ and see that $d(T,R') = l+1$.
+    If it were $d(T,R) < l$, we would have $d(T,R') \leq d(T,R) + d(R,R') < l + 1$ which contradicts the induction hypothesis.
+    We can conclude $d(T,R) = l$, which completes the proof.
 \end{proof}
 
 
@@ -296,6 +296,8 @@ Following the results of section~\ref{section:caterpillar_convex} one can direct
 	There are two caterpillar trees in $\rnniu$ with distance $\frac{(n-1)(n-2))}{2}$.
 	\label{conj:caterpillar_diameter}
 \end{lemma}
+
+\todo{This is already an implication of the results above. Shall we still keep a subsection for Diameter? In case we find something about the radius, this could be added here.}
 
 \begin{proof}
 	Let $T = (( \dots (n,1)2)\dots)n-1)$ and $R = (( \dots (n,n-1)n-2)\dots)1)$.
