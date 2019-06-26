@@ -13,9 +13,12 @@
 \usepackage{todonotes}
 \usepackage{enumitem}
 
+\newcommand{\np}{\mathcal{NP}}
 \newcommand{\nni}{\mathrm{NNI}}
 \newcommand{\rnni}{\mathrm{RNNI}}
 \newcommand{\rnniu}{\mathrm{RNNIu}}
+\newcommand{\tbr}{\mathrm{TBR}}
+\newcommand{\rspr}{\mathrm{rSPR}}
 
 \newtheorem{definition}{Definition}
 \newtheorem{theorem}[definition]{Theorem}
@@ -64,6 +67,8 @@ Given a subset $S$ of the set of taxa $X$, the \emph{most recent common ancestor
 In particular, for a single taxon $x \in X$, $mrca(\{x\})$ is the parent of $x$ and will be denoted by $parent(x)$.
 We write $mrca_T(S)$ to emphasise that we consider the most recent common ancestor of set $S$ in tree $T$.
 Two trees are called \emph{isomorphic} if the underlying rooted phylogenetic trees are isomorphic and the isomorphism preserves ranks of the nodes.
+
+\todo{define splits and delete definition from split thm chapter!}
 
 Now we are ready to define the tree space that is the subject of study of this paper, the $\rnni$ graph.
 The vertex set of the \emph{$\rnni$-graph} is given by the set of all ranked trees on $n$ taxa.
@@ -406,11 +411,16 @@ Following the results of section~\ref{section:caterpillar_convex} one can direct
 
 \subsection{Split Theorem}
 
-When analysing the complexity of the $\rnni$ space, the comparison to $\nni$ is an important step.
+%Shall we put this bit into the introduction?
+It is natural to try to relate the $\rnni$ graph to the $\nni$ as we already did in previous sections.
+Since computing distances in tree spaces is a main issue in most commonly known tree spaces as $\nni$~\cite{jiang2000}, $\rspr$~\cite{Bordewich2005}, or $\tbr$~\cite{allen2001subtree} is $\np$-hard, it would be desirable to find a tree space that is less complex.
+However, it is not known whether computing distances in $\rnni$ is $\np$-hard or not.
+The natural approach to solve this question is to compare $\rnni$ and $\nni$ graph to see whether the reason that $\nni$ is $\np$-hard transfers to $\rnni$.
+
 The proof of NP-completeness of $\nni$ in~\cite{jiang2000} is based on the fact that following theorem holds in $\nni$.
 
 \begin{theorem}
-	There are trees $T,R$ in $\nni$ sharing a partition which is not shared by any intermediate tree on a shortest path from $T$ to $R$.
+	There are trees $T,R$ in $\nni$ sharing a cluster which is not shared by any intermediate tree on any shortest path from $T$ to $R$.
 	\label{thm:split_nni}
 \end{theorem}
 
@@ -421,25 +431,23 @@ The proof of NP-completeness of $\nni$ in~\cite{jiang2000} is based on the fact 
 The proof presented in~\cite{Li1996} for Theorem~\ref{thm:split_nni} does not work for $\rnni$.
 
 %This part is mainly for myself, not sure whether it is important to have it in the paper
-The counterexample presented in~\cite{Li1996} works in $\nni$ is based on following observation:
-Let $T$ and $R$ be two caterpillar trees.
-If each taxon $a$ is replaced by a cherry $(a_1,a_2)$ in both trees $T$ and $R$, the resulting trees $R$ and $R'$ have distance $d_{\nni}(R,R') = d_{\nni}(T,R)$ in the $\nni$ graph.
-When proving~\ref{thm:split_nni},~\cite{Li1996} give an example of two trees $T$ and $R$ on $2n$ taxa that consist of two caterpillar trees each that share the root as parent.
-The split given by the edges incident to the root is $1, \ldots, n | n+1, \ldots, 2n$ in both trees $T$ and $R$.
-For the given example there is a shortest path in $\nni$ where at first $T$ is transformed to a tree $R$ with $n$ cherries where each cherry contains one taxon of $\{1, \ldots, n\}$ and one taxon of $\{n+1, \ldots, 2n\}$.
-Afterwards, $R$ is tranformed to a tree $R'$ that contains the same cherries as $R$.
-Finally, all cherries of $R'$ are resolved in order to end up in tree $R$.
-For proving that this path is shorter than any path preserving the split $1, \ldots, n | n+1, \ldots, 2n$, the fact that $d_{\nni}(R,R') = d_{\nni}(T|_{\{1, \ldots, n\}}, R|_{\{1, \ldots, n\}})$ is being used.
+\todo{Shall we keep this explanation? The problem is that the $\rnni$ path depends on the assignment of ranks to the cherries produced on the path}
+The counterexample presented in~\cite{Li1996} works in $\nni$ because of the following:
+When proving Theorem~\ref{thm:split_nni},~\cite{Li1996} gives an example of two trees $T$ and $R$ on $2n$ taxa that consist of two caterpillar trees each that share the root as parent.
+The clusters given by the two edges incident to the root are $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$ in both trees $T$ and $R$.
+Between these there is a shortest path in $\nni$ where at first $T$ is transformed to a tree $T'$ with $n$ cherries where each cherry contains one taxon of $\{1, \ldots, n\}$ and one taxon of $\{n+1, \ldots, 2n\}$.
+Afterwards, $T'$ is transformed to a tree $R'$ still containing the same cherries as $T'$ but in a way that resolving all these cherries of $R'$ results in $R$.
+For proving that this path is shorter than any path preserving the clusters $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$, the fact that $d_{\nni}(R,R') = d_{\nni}(T|_{\{1, \ldots, n\}}, R|_{\{1, \ldots, n\}})$ where $T|_{\{1, \ldots, n\}}$ and $R|_{\{1, \ldots, n\}}$ are $T$ and $R$ restricted to taxa $\{1,\ldots,n\}$, respectively, is being used.
 However, this does not work in $\rnni$.
 Introducing new cherries means introducing new internal nodes with new ranks.
-Since there are some rank moves needed for an $\rnni$ path similar to the shortest $\nni$ path presented above, the path in $\rnni$ that breaks the split $1, \ldots, n | n+1, \ldots, 2n$ is no shortest path.
+Since there are lots of rank moves needed for an $\rnni$ path similar to the shortest $\nni$ path presented above, the path in $\rnni$ that breaks the clusters $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$ is no shortest path.
 % How do we assign the ranks to the new cherry nodes?
 % We could either create a path where $R$ and $R'$ have distance equal to $d_{\rnni}(T|_{\{1, \ldots, n\}}, R|_{\{n+1, \ldots, 2n\}})$ and have a lot of additional rank moves before and after that part OR
 % Build $R$ and $R'$ that contain all the cherries within the least number of moves possible (3n-3) and having a longer path between $R$ and $R'$.
 % Also anything in between these two options is possible. Are we able to disprove every option??
 
 
-Therefore, the following conjecture was raised~\cite{Gavryushkin2017}.
+Since the example given in~\cite{Li1996} that proves Theorem~\ref{thm:split_nni} in $\nni$ does not work in $\rnni$, the following conjecture was raised~\cite{Gavryushkin2017}.
 
 \begin{conjecture}[Split Theorem]
 	For the $\rnni$ graph the following statement holds:
@@ -447,7 +455,8 @@ Therefore, the following conjecture was raised~\cite{Gavryushkin2017}.
 	\label{split_theorem}
 \end{conjecture}
 
-However, we found a counterexample to this conjecture:
+Instead of using the notion of clusters as we do within this paper, the Split Theorem considers partitions of the taxon set $X$, so-called splits, received by deleting an edge of a tree and taking the taxon sets of the two resulting trees as partition of $X$.
+However, there is a simple counterexample to this conjecture:
 
 \begin{figure}[H]
 	\centering
