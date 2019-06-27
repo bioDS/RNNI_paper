@@ -84,23 +84,24 @@ For simplicity of notation we use the term \emph{tree} instead instead of ranked
 
 We will identify leaves with their labels and also call them \emph{taxa} (singular: \emph{taxon}) following the systematic biology tradition.
 For a tree $T$, a subtree consisting of an internal node with both children being leaves is called a \emph{cherry}.
-An edge $e$ that has no leaf as a child is called an \emph{internal edge} and we say an edge $e=(u,v)$ has \emph{length} $l$ if $|rank(v) - rank(u)| = l$.
+An edge $e$ that has no leaf as a child is called an \emph{internal edge} and we say an edge $e=(u,v)$ has \emph{length} $l$ if $|\rank(v) - \rank(u)| = l$.
 Each internal node $v$ can be uniquely identified by its \emph{cluster} $C$, which is the set of taxa descending from the node.
+We also say that $v$ \emph{induces} the cluster $C$.
 Note that all trees on $n$ taxa share the cluster $\{1,\ldots,n\}$ induced by the root.
 A \emph{split} is a bipartition of the taxon set $X$ into sets $A,B$ such that there is an edge $e$ whose deletion results in two trees with taxon sets $A$ and $B$, respectively.
-Such a split will be denoted by $A|B$ and we say that it is induced by edge $e$.
-Given a subset $S$ of the set of taxa $X$, the \emph{most recent common ancestor} $mrca(S)$ of $S$ is the internal node with lowest rank that is ancestor of all taxa in $S$. \todo{OK?}
+Such a split will be denoted by $A|B$ and we say that it is \emph{induced} by edge $e$.
+Given a subset $S$ of the set of taxa $X$, the \emph{most recent common ancestor} of $S$, denoted by $\mrca(S)$, is the internal node of the lowest rank that is ancestral to all the taxa in $S$.
 In particular, for a single taxon $x \in X$, $\mrca(\{x\})$ is the parent of $x$ and will be denoted by $\parent(x)$.
 We write $\mrca_T(S)$ to emphasise that we consider the most recent common ancestor of set $S$ in tree $T$.
 Two trees are called \emph{isomorphic} if the underlying rooted phylogenetic trees are isomorphic and the isomorphism preserves ranks of the nodes.
 
-Now we are ready to define the tree space that is the subject of study of this paper, the $\rnni$ graph.
+Now we are ready to define the tree space which is the subject of study in this paper, the $\rnni$ graph.
 The vertex set of the \emph{$\rnni$ graph} is given by the set of all ranked trees on $n$ taxa.
 We introduce two types of operations (\emph{$\rnni$ moves}) connecting trees $T$ and $R$ in this graph by an edge:
-The swap of the ranks of two internal nodes that have rank difference one is called \emph{rank move}.
-We say that there is an $\nni$ move between trees $T$ and $R$ if there are edges $e$ in $T$ and $f$ in $R$ that are bounded by internal nodes with rank difference one such that the graphs obtained by shrinking $e$ and $f$ to internal nodes are isomorphic.
-Trees that are connected by either a rank move or an $\nni$ move are called \emph{$\rnni$ neighbours} or briefly neighbours.
-Note that the previously defined $\rnni$ graph is a metric space, which is why we may call it \emph{$\rnni$ space} or just $\rnni$.
+A swap of the ranks of two internal nodes ($x$ and $y$) of subsequent ranks (|\rank(x) - \rank(y)| = 1) is called a \emph{rank move}.
+We say that trees $T$ and $R$ are \emph{connected} by an \emph{$\nni$ move} move if there exist internal edges $e$ in $T$ and $f$ in $R$ both of length one such that the graphs obtained by shrinking $e$ and $f$ to internal nodes are isomorphic.
+Trees that are connected by either a rank move or an $\nni$ move are called \emph{$\rnni$ neighbours} or \emph{adjacent in} $\rnni$.
+Note that thus defined $\rnni$ graph is a metric space with the standard shortest-path distance.
 
 \begin{figure}[H]
 	\centering
@@ -111,13 +112,8 @@ Note that the previously defined $\rnni$ graph is a metric space, which is why w
 
 \todo{label of taxa in figure shouldn't be numbers}
 
-The main purpose of this paper is understanding geometric properties of the $\rnni$ space.
-Therefore, further notations need to be introduced.
-If every internal node of a tree $T$ has at least one child that is a leaf, $T$ is called \emph{caterpillar tree}.
-A \emph{path} $p$ between trees $T_0$ and $T_m$ in $\rnni$ is a sequence $T_0, T, \ldots, T_m$ of trees such that there is an edge $\{T_i, T_{i+1}\}$ for all $i=0,\ldots,m-1$.
-For such a path $p$ we say the \emph{length} $|p|$ of $p$ is $m$.
-A path $p$ between trees $T$ and $R$ is a \emph{shortest path} if for every path $r$ between $T$ and $R$, $|p| \leq |r|$.
-The \emph{distance} $d(T,R)$ between trees $T$ and $R$ is the length of a shortest path between them.
+The following definitions are less standard and required for the results obtained in this paper.
+If every internal node of a tree $T$ has at least one child that is a leaf, $T$ is called a \emph{caterpillar tree}.
 If $p$ is a path only consisting of caterpillar trees we call it \emph{caterpillar path}.
 For two caterpillar trees $T$ and $R$ a \emph{shortest caterpillar path} is a caterpillar path that is shortest among all caterpillar paths between $T$ and $R$.
 The length of such a shortest caterpillar path is called \emph{caterpillar distance} and denoted by $d_c(T,R)$.
@@ -127,6 +123,8 @@ A set $\mathbb S$ of trees is called \emph{convex} if for all pairs of trees $T,
 
 
 \section{Geometry of $\rnni$}
+
+This paper is an advance towards the general goal of understanding the geometry of the $\rnni$ space.
 
 Algorithm~\ref{alg:find_path} computes paths between pairs of trees in $\rnni$ and will be a central tool for our investigation of shortest paths in $\rnni$.
 
