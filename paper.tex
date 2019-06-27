@@ -1,4 +1,4 @@
-\documentclass[11pt, a4paper]{article}
+\documentclass{amsart}
 
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
@@ -12,6 +12,11 @@
 \usepackage{algorithmic}
 \usepackage{todonotes}
 \usepackage{enumitem}
+\usepackage[foot]{amsaddr}
+\usepackage[hidelinks]{hyperref}
+\usepackage[style=authoryear,ibidtracker=false,uniquename=false,giveninits=true,terseinits=true,maxbibnames=5,backend=biber]{biblatex}
+\renewbibmacro{in:}{}
+\addbibresource{lit.bib}
 
 \newcommand{\np}{\mathcal{NP}}
 \newcommand{\nni}{\mathrm{NNI}}
@@ -28,9 +33,14 @@
 
 \graphicspath{{figures/}}
 
+
 \title{The Ranked Nearest Neighbour Interchange space}
 \date{\today}
-\author{Lena Collienne, Alex Gavryushkin}
+\author{Lena Collienne}
+\email{lena.collienne@postgrad.otago.ac.nz}
+\author{Alex Gavryushkin}
+\email{alex@biods.org}
+\address{Department of Computer Science, University of Otago, New Zealand}
 
 
 \begin{document}
@@ -50,9 +60,11 @@
 
 %Figure of ranked tree in introduction
 
-\section{Definitions}
+Although we endeavour to make this paper self-sufficient, we refer the reader to standard textbooks in phylogenetics for terminology \autocite{Felsenstein2004-of, Semple2003-nj, Steel2016-ye}.
+Unless is explicit, we follow these textbooks in our terminology.
 
-\todo{citation of definitions??}
+
+\section{Definitions}
 
 A \emph{rooted binary phylogenetic tree} on a set $X$ is a pair $(t, \Phi)$ where $t$ is a rooted binary tree with leaf set $\mathcal{L}(t)$ and $\Phi:X \to \mathcal{L}(T)$ a bijective mapping. \todo{do we need to define leaves and internal nodes, child, parent, subtree, cherry(defined below)?}
 From now on, we assume $X = \{1,\ldots,n\}$ for a fixed number $n \in \mathbb N$ of leaves.
@@ -72,7 +84,7 @@ Such a split will be denoted by $A|B$ and we say that it is induced by edge $e$.
 Given a subset $S$ of the set of taxa $X$, the \emph{most recent common ancestor} $mrca(S)$ of $S$ is the internal node with lowest rank that is ancestor of all taxa in $S$. \todo{OK?}
 In particular, for a single taxon $x \in X$, $mrca(\{x\})$ is the parent of $x$ and will be denoted by $parent(x)$.
 We write $mrca_T(S)$ to emphasise that we consider the most recent common ancestor of set $S$ in tree $T$.
-Two trees are called \emph{isomorphic} if the underlying rooted phylogenetic trees are isomorphic and the isomorphism preserves ranks of the nodes
+Two trees are called \emph{isomorphic} if the underlying rooted phylogenetic trees are isomorphic and the isomorphism preserves ranks of the nodes.
 
 Now we are ready to define the tree space that is the subject of study of this paper, the $\rnni$ graph.
 The vertex set of the \emph{$\rnni$ graph} is given by the set of all ranked trees on $n$ taxa.
@@ -131,7 +143,7 @@ Algorithm~\ref{alg:find_path} computes paths between pairs of trees in $\rnni$ a
 
 One can easily prove that there is always exactly one $\rnni$ move on $T$ that decreases the rank of $mrca_T(C)$ as in line~\ref{alg:line:move_set_down} of Algorithm~\ref{alg:find_path}.
 It follows that Algorithm~\ref{alg:find_path} returns a path in $\rnni$ for any pair of trees $T,R$.
-Moreover, it gives an upper bound for the diameter of $\rnni$, which improves the one given in~\cite{Gavryushkin2017}:
+Moreover, it gives an upper bound for the diameter of $\rnni$, which improves the one given in \autocite{Gavryushkin2017}:
 
 \begin{lemma}
     It is $\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$.
@@ -208,7 +220,7 @@ One can see caterpillar trees as sequences of taxa, ordered non-decreasing accor
 $\nni$ moves between caterpillar trees, which are the only possible $\rnni$ moves between caterpillar trees, coincide with exchanges of two neighboured elements in the sequence.
 In these sequences the first two taxa are somehow equivalent since they build the unique cherry.
 $\nni$ moves that change the cherry of a tree refer to exchanges of the first or the second element with the third element of the sequence while exchanges of the first two elements do not change the corresponding tree.
-With this observation we can provide an algorithm for computing shortest caterpillar paths by a simple modification of the commonly known \emph{Bubble Sort} algorithm~\cite{knuth1997}:
+With this observation we can provide an algorithm for computing shortest caterpillar paths by a simple modification of the commonly known \emph{Bubble Sort} algorithm \autocite{knuth1997}:
 
 Following the observations above, only the moves for the first three positions of a sequence with Bubble Sort need to be adapted for the computation of shortest caterpillar paths.
 Let us consider the first three elements $a,b,c$ which appear in this order in a sequence representing a caterpillar tree on a caterpillar path between trees $T$ and $R$.
@@ -407,11 +419,11 @@ Following the results of section~\ref{section:caterpillar_convex} one can direct
 
 %Shall we put this bit into the introduction?
 It is natural to try to relate the $\rnni$ graph to the $\nni$ as we already did in previous sections.
-Since computing distances in tree spaces is a main issue in most commonly known tree spaces as $\nni$~\cite{jiang2000}, $\rspr$~\cite{Bordewich2005}, or $\tbr$~\cite{allen2001subtree} is $\np$-hard, it would be desirable to find a tree space that is less complex.
+Since computing distances in tree spaces is a main issue in most commonly known tree spaces as $\nni$ \autocite{jiang2000}, $\rspr$ \autocite{Bordewich2005}, or $\tbr$ \autocite{allen2001subtree} is $\np$-hard, it would be desirable to find a tree space that is less complex.
 However, it is not known whether computing distances in $\rnni$ is $\np$-hard or not.
 The natural approach to solve this question is to compare $\rnni$ and $\nni$ graph to see whether the reason that $\nni$ is $\np$-hard transfers to $\rnni$.
 
-The proof of NP-completeness of $\nni$ in~\cite{jiang2000} is based on the fact that following theorem holds in $\nni$.
+The proof of NP-completeness of $\nni$ in \autocite{jiang2000} is based on the fact that following theorem holds in $\nni$.
 
 \begin{theorem}
 	There are trees $T,R$ in $\nni$ sharing a cluster which is not shared by any intermediate tree on any shortest path from $T$ to $R$.
@@ -419,15 +431,15 @@ The proof of NP-completeness of $\nni$ in~\cite{jiang2000} is based on the fact 
 \end{theorem}
 
 \begin{proof}
-	See~\cite{Li1996}.
+	See \autocite{Li1996}.
 \end{proof}
 
-The proof presented in~\cite{Li1996} for Theorem~\ref{thm:split_nni} does not work for $\rnni$.
+The proof presented in \autocite{Li1996} for Theorem~\ref{thm:split_nni} does not work for $\rnni$.
 
 %This part is mainly for myself, not sure whether it is important to have it in the paper
 \todo{Shall we keep this explanation? The problem is that the $\rnni$ path depends on the assignment of ranks to the cherries produced on the path}
-The counterexample presented in~\cite{Li1996} works in $\nni$ because of the following:
-When proving Theorem~\ref{thm:split_nni},~\cite{Li1996} gives an example of two trees $T$ and $R$ on $2n$ taxa that consist of two caterpillar trees each that share the root as parent.
+The counterexample presented in \autocite{Li1996} works in $\nni$ because of the following:
+When proving Theorem~\ref{thm:split_nni}, \autocite{Li1996} gives an example of two trees $T$ and $R$ on $2n$ taxa that consist of two caterpillar trees each that share the root as parent.
 The clusters given by the two nodes adjacent to the root are $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$ in both trees $T$ and $R$.
 Between these there is a shortest path in $\nni$ where at first $T$ is transformed to a tree $T'$ with $n$ cherries where each cherry contains one taxon of $\{1, \ldots, n\}$ and one taxon of $\{n+1, \ldots, 2n\}$.
 Afterwards, $T'$ is transformed to a tree $R'$ still containing the same cherries as $T'$ but in a way that resolving all these cherries of $R'$ results in $R$.
@@ -441,7 +453,7 @@ Since there are lots of rank moves needed for an $\rnni$ path similar to the sho
 % Also anything in between these two options is possible. Are we able to disprove every option??
 
 
-Since the example given in~\cite{Li1996} that proves Theorem~\ref{thm:split_nni} in $\nni$ does not work in $\rnni$, the following conjecture was raised~\cite{Gavryushkin2017}.
+Since the example given in \autocite{Li1996} that proves Theorem~\ref{thm:split_nni} in $\nni$ does not work in $\rnni$, the following conjecture was raised \autocite{Gavryushkin2017}.
 
 \begin{conjecture}[Split Theorem]
 	For the $\rnni$ graph the following statement holds:
@@ -460,9 +472,9 @@ However, we found a simple counterexample to this conjecture:
 	\label{splitthm_counterexample}
 \end{figure}
 
-Since the counterexample in Figure~\ref{splitthm_counterexample} clearly shows that the version of the Split Theorem stated in~\cite{Gavryushkin2017} does not hold, we will now claim an alternative to this conjecture, the \emph{Cluster Theorem}.
+Since the counterexample in Figure~\ref{splitthm_counterexample} clearly shows that the version of the Split Theorem stated in \autocite{Gavryushkin2017} does not hold, we will now claim an alternative to this conjecture, the \emph{Cluster Theorem}.
 Within the Cluster Theorem we are considering clusters instead of splits.
-This is motivated by the fact that rooted phylogenetic trees can uniquely be represented by sets of clusters~\cite{steel2016}, but not by sets of splits as they cannot define the position of the root.
+This is motivated by the fact that rooted phylogenetic trees can uniquely be represented by sets of clusters \autocite{steel2016}, but not by sets of splits as they cannot define the position of the root.
 Moreover, a ranked tree can be uniquely determined by ordering the set of clusters increasingly according to the ranks of the internal nodes inducing those clusters.
 
 % \begin{conjecture}[Weak Split Theorem]
@@ -545,7 +557,7 @@ The number of caterpillar trees with distance $\Delta(\rnni)$ from a given cater
 	The $\rnni$ space on $n$ taxa is isomorphic to the space of maximum chains of the partition lattice $\Pi_n$ where two maximum chains are connected by an edge if, and only if, they differ by exactly one partition.
 \end{theorem}
 
-\bibliographystyle{abbrv}
-\bibliography{lit}
+
+\printbibliography
 
 \end{document}
