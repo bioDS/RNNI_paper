@@ -79,7 +79,7 @@ The rank of a node $v$ in a ranked tree will be denoted by $rank(v)$ or $rank_T(
 For simplicity of notation we use the term \emph{tree} instead instead of ranked tree.
 
 Furthermore, we will identify leaves by their labels and might call them \emph{taxa} (singular: \emph{taxon}).
-For a tree $T$ a subtree consisting of an internal node with both children being leaves is called \emph{cherry}.
+For a tree $T$ a subtree consisting of an internal node with both children being leaves is called a \emph{cherry}.
 An edge $e$ that has no leaf as child is an \emph{internal edge} and we say an edge $e=(u,v)$ has \emph{length} $l$ if $|rank(v) - rank(u)| = l$.
 Each internal node $v$ gives a \emph{cluster} $C$ that is the set of taxa descending from this node. \todo{OK?}
 We then say that $v$ induces the cluster $C$.
@@ -87,8 +87,8 @@ Note that all trees on $n$ taxa share the cluster $\{1,\ldots,n\}$ induced by th
 A \emph{split} is a bipartition of the taxon set $X$ into sets $A,B$ such that there is an edge $e$ whose deletion results in two trees with taxon sets $A$ and $B$, respectively.
 Such a split will be denoted by $A|B$ and we say that it is induced by edge $e$.
 Given a subset $S$ of the set of taxa $X$, the \emph{most recent common ancestor} $mrca(S)$ of $S$ is the internal node with lowest rank that is ancestor of all taxa in $S$. \todo{OK?}
-In particular, for a single taxon $x \in X$, $mrca(\{x\})$ is the parent of $x$ and will be denoted by $parent(x)$.
-We write $mrca_T(S)$ to emphasise that we consider the most recent common ancestor of set $S$ in tree $T$.
+In particular, for a single taxon $x \in X$, $\mrca(\{x\})$ is the parent of $x$ and will be denoted by $\parent(x)$.
+We write $\mrca_T(S)$ to emphasise that we consider the most recent common ancestor of set $S$ in tree $T$.
 Two trees are called \emph{isomorphic} if the underlying rooted phylogenetic trees are isomorphic and the isomorphism preserves ranks of the nodes.
 
 Now we are ready to define the tree space that is the subject of study of this paper, the $\rnni$ graph.
