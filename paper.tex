@@ -52,7 +52,8 @@
 \end{abstract}
 
 
-\section{Introduction}
+% All papers have this section so no need for this heading -- let's wait until a journal pushes us to put it back :)
+%\section{Introduction}
 
 %Introduce RNNI as ranked nearest neighbour interchange space, only ultrametric trees considered (extension could be mentioned in the end)
 
@@ -66,10 +67,14 @@ Unless is explicit, we follow these textbooks in our terminology.
 
 \section{Definitions}
 
-A \emph{rooted binary phylogenetic tree} on a set $X$ is a pair $(t, \Phi)$ where $t$ is a rooted binary tree with leaf set $\mathcal{L}(t)$ and $\Phi:X \to \mathcal{L}(T)$ a bijective mapping. \todo{do we need to define leaves and internal nodes, child, parent, subtree, cherry(defined below)?}
+A \emph{rooted binary phylogenetic tree} on a set $X$ is a pair $(T, \Phi)$ where $T$ is a rooted binary tree with leaf set $\mathcal{L}(T)$ and $\Phi:X \to \mathcal{L}(T)$ a bijective mapping.
+\todo{do we need to define leaves and internal nodes, child, parent, subtree, cherry(defined below)?
+AG: Only if we use those terms.
+Can we use something like a glossary to automatically know what terminology we need to introduce?}
 From now on, we assume $X = \{1,\ldots,n\}$ for a fixed number $n \in \mathbb N$ of leaves.
-Within this paper we study \emph{ranked trees} that are determined by a pair consisting of a rooted binary phylogenetic tree $(t, \Phi)$ on $X = \{1, \ldots, n\}$ for $n \in \mathbb N$, and a rank function.
-A \emph{rank function} on $t$ maps the vertex set of $t$ onto the set $\{0,\ldots,n-1\}$ such that all leaves are assigned rank $0$ and each internal node has rank greater than its children.
+
+In this paper we study \emph{ranked trees} that are determined by a pair consisting of a rooted binary phylogenetic tree $(T, \Phi)$ on $X = \{1, \ldots, n\}$ for $n \in \mathbb N$, and a rank function.
+A \emph{rank function} on $T$ maps the vertex set of $T$ onto the set $\{0,\ldots,n-1\}$ such that all leaves are assigned rank $0$ and each internal node has rank greater than its children.
 The rank of a node $v$ in a ranked tree will be denoted by $rank(v)$ or $rank_T(v)$ if it is not obvious that we consider tree $T$.
 For simplicity of notation we use the term \emph{tree} instead instead of ranked tree.
 
