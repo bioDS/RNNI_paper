@@ -12,6 +12,7 @@
 \usepackage{algorithmic}
 \usepackage{todonotes}
 \usepackage{enumitem}
+\usepackage[misc]{ifsym}
 \usepackage[foot]{amsaddr}
 \usepackage[hidelinks]{hyperref}
 \usepackage[style=authoryear,ibidtracker=false,uniquename=false,giveninits=true,terseinits=true,maxbibnames=5,backend=biber]{biblatex}
@@ -36,11 +37,14 @@
 
 \title{The Ranked Nearest Neighbour Interchange space}
 \date{\today}
-\author{Lena Collienne}
+\author{Lena Collienne\textsuperscript{1}}
 \email{lena.collienne@postgrad.otago.ac.nz}
-\author{Alex Gavryushkin}
+\address{\textsuperscript{1}Department of Computer Science, University of Otago, New Zealand}
+\author{Mareike Fischer\textsuperscript{2}}
+\email{email@mareikefischer.de}
+\address{\textsuperscript{2}Institute for Mathematics and Inofrmatics, University of Greifswald, Germany}
+\author{Alex Gavryushkin\textsuperscript{1, \Letter}}
 \email{alex@biods.org}
-\address{Department of Computer Science, University of Otago, New Zealand}
 
 
 \begin{document}
@@ -78,11 +82,10 @@ A \emph{rank function} on $T$ maps the vertex set of $T$ onto the set $\{0,\ldot
 The rank of a node $v$ in a ranked tree will be denoted by $rank(v)$ or $rank_T(v)$ if it is not obvious that we consider tree $T$.
 For simplicity of notation we use the term \emph{tree} instead instead of ranked tree.
 
-Furthermore, we will identify leaves by their labels and might call them \emph{taxa} (singular: \emph{taxon}).
-For a tree $T$ a subtree consisting of an internal node with both children being leaves is called a \emph{cherry}.
-An edge $e$ that has no leaf as child is an \emph{internal edge} and we say an edge $e=(u,v)$ has \emph{length} $l$ if $|rank(v) - rank(u)| = l$.
-Each internal node $v$ gives a \emph{cluster} $C$ that is the set of taxa descending from this node. \todo{OK?}
-We then say that $v$ induces the cluster $C$.
+We will identify leaves with their labels and also call them \emph{taxa} (singular: \emph{taxon}) following the systematic biology tradition.
+For a tree $T$, a subtree consisting of an internal node with both children being leaves is called a \emph{cherry}.
+An edge $e$ that has no leaf as a child is called an \emph{internal edge} and we say an edge $e=(u,v)$ has \emph{length} $l$ if $|rank(v) - rank(u)| = l$.
+Each internal node $v$ can be uniquely identified by its \emph{cluster} $C$, which is the set of taxa descending from the node.
 Note that all trees on $n$ taxa share the cluster $\{1,\ldots,n\}$ induced by the root.
 A \emph{split} is a bipartition of the taxon set $X$ into sets $A,B$ such that there is an edge $e$ whose deletion results in two trees with taxon sets $A$ and $B$, respectively.
 Such a split will be denoted by $A|B$ and we say that it is induced by edge $e$.
