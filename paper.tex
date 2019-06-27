@@ -125,8 +125,14 @@ A set $\mathbb S$ of trees is called \emph{convex} if for all pairs of trees $T,
 \section{Geometry of $\rnni$}
 
 This paper is an advance towards the general goal of understanding the geometry of the $\rnni$ space.
+%TODO
+In this section, we...
 
-Algorithm~\ref{alg:find_path} computes paths between pairs of trees in $\rnni$ and will be a central tool for our investigation of shortest paths in $\rnni$.
+We now present an efficient algorithm (Algorithm~\ref{alg:find_path}) for computing paths between pairs of trees in $\rnni$.
+This algorithm will be a central tool for our investigation of shortest paths in $\rnni$.
+
+%TODO
+The idea of the algorithm is the following...
 
 \begin{algorithm}[H]
 \caption{FIND\_PATH($T,R$)}
@@ -145,14 +151,16 @@ Algorithm~\ref{alg:find_path} computes paths between pairs of trees in $\rnni$ a
 \end{algorithmic}
 \end{algorithm}
 
-\todo{figure of an example? Brief explanation what algorithm does?}
-
+\todo{This text comes out of the blue.
+Generally, before going into explanations like this it's a good idea to say what's ahead.}
 One can easily prove that there is always exactly one $\rnni$ move on $T$ that decreases the rank of $mrca_T(C)$ as in line~\ref{alg:line:move_set_down} of Algorithm~\ref{alg:find_path}.
 It follows that Algorithm~\ref{alg:find_path} returns a path in $\rnni$ for any pair of trees $T,R$.
+\todo{This should have been stated before, where you say what is going on.}
 Moreover, it gives an upper bound for the diameter of $\rnni$, which improves the one given in \autocite{Gavryushkin2017}:
 
 \begin{lemma}
-    It is $\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$.
+%TODO: here and generally, I prefer introducing definitions like this as you go but it's the matter of preference so up to you.
+$\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$, where $\Delta$ is...
 \end{lemma}
 
 \begin{proof}
