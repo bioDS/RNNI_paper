@@ -82,28 +82,34 @@ Can we use something like a glossary to automatically know what terminology we n
 From now on, we assume $X = \{1,\ldots,n\}$ for a fixed number $n \in \mathbb N$ of leaves.
 
 In this paper we study \emph{ranked trees} that are determined by a pair consisting of a rooted binary phylogenetic tree $(T, \Phi)$ on $X = \{1, \ldots, n\}$ for $n \in \mathbb N$, and a rank function.
+In the literature ranked trees are often referred to as labelled history in the context of coalescent trees.
+The following notion differs from the definition of ranks in that context, since we do not use negative integers as ranks.
 A \emph{rank function} on $T$ maps the vertex set of $T$ onto the set $\{0,\ldots,n-1\}$ such that all leaves are assigned rank $0$ and each internal node has rank greater than its children.
 The rank of a node $v$ in a ranked tree will be denoted by $\rank(v)$ or $\rank_T(v)$ if it is not obvious that we consider tree $T$.
 For simplicity of notation we use the term \emph{tree} instead instead of ranked tree.
 
 We will identify leaves with their labels and also call them \emph{taxa} (singular: \emph{taxon}) following the systematic biology tradition.
-For a tree $T$, a subtree consisting of an internal node with both children being leaves is called a \emph{cherry}.
-An edge $e$ that has no leaf as a child is called an \emph{internal edge} and we say an edge $e=(u,v)$ has \emph{length} $l$ if $|\rank(v) - \rank(u)| = l$.
-Each internal node $v$ can be uniquely identified by its \emph{cluster} $C$, which is the set of taxa descending from the node.
+For a tree $T$, a pair of taxa adjacent to a common internal node called a \emph{cherry}.
+All nodes that are no leafs are called \emph{internal nodes} and edges $(u,v)$ are \emph{internal edge}, if both $u$ and $v$ are internal nodes.
+Our definition of ranked tree leads to a natural characterisation of edge lengths within ranked trees:
+integer $l$ denotes the \emph{length} of an edge $e=(u,v)$ if $|\rank(v) - \rank(u)| = l$.
+Each node $v$ can be uniquely identified by its \emph{cluster} $C$, which is the set of taxa descending from the node.
 We also say that $v$ \emph{induces} the cluster $C$.
 Note that all trees on $n$ taxa share the cluster $\{1,\ldots,n\}$ induced by the root.
 A \emph{split} is a bipartition of the taxon set $X$ into sets $A,B$ such that there is an edge $e$ whose deletion results in two trees with taxon sets $A$ and $B$, respectively.
 Such a split will be denoted by $A|B$ and we say that it is \emph{induced} by edge $e$.
-Given a subset $S$ of the set of taxa $X$, the \emph{most recent common ancestor} of $S$, denoted by $\mrca(S)$, is the internal node of the lowest rank that is ancestral to all the taxa in $S$.
+Given a subset $S$ of the set of taxa $X$, the \emph{most recent common ancestor} (also known as \emph{least common ancestor}) of $S$, denoted by $\mrca(S)$, is the internal node of the lowest rank that is ancestral to all the taxa in $S$.
 In particular, for a single taxon $x \in X$, $\mrca(\{x\})$ is the \emph{parent} of $x$ and will be denoted by $\parent(x)$.
 We write $\mrca_T(S)$ to emphasise that we consider the most recent common ancestor of set $S$ in tree $T$.
 Two trees are called \emph{isomorphic} if the underlying rooted phylogenetic trees are isomorphic and the isomorphism preserves ranks of the nodes.
 
 Now we are ready to define the tree space which is the subject of study in this paper, the $\rnni$ graph.
+Note that we will define the $\rnni$ graph on ultrametric trees where all leaves have the same rank $0$, and therefore refers to the $\rnniu$ graph as introduced in \autocite{Gavryushkin2017}.
 The vertex set of the \emph{$\rnni$ graph} is given by the set of all ranked trees on $n$ taxa.
 We introduce two types of operations (\emph{$\rnni$ moves}) connecting trees $T$ and $R$ in this graph by an edge:
 A swap of the ranks of two internal nodes ($x$ and $y$) of subsequent ranks ($|\rank(x) - \rank(y)| = 1$) is called a \emph{rank move}.
 We say that trees $T$ and $R$ are \emph{connected} by an \emph{$\nni$ move} move if there exist internal edges $e$ in $T$ and $f$ in $R$ both of length one such that the graphs obtained by shrinking $e$ and $f$ to internal nodes are isomorphic.
+The above definition follows \autocite{Gavryushkin2017} and is equivalent to the common definition of $\nni$ operations as given in \autocite{Steel2016-ye}.
 Trees that are connected by either a rank move or an $\nni$ move are called \emph{$\rnni$ neighbours} or \emph{adjacent in} $\rnni$.
 Note that thus defined $\rnni$ graph is a metric space with the standard shortest-path distance.
 
@@ -563,7 +569,7 @@ The number of caterpillar trees with distance $\Delta(\rnni)$ from a given cater
 \caption{MAX\_DISTANCE\_TREE($T$)}
 \label{alg:max_dist_tree}
 \begin{algorithmic}[1]
-	\STATE $R$ only contains cherry taxa $(a,b)$ of $T$ and has internal node with rank $n-1$
+	\STATE $R$ only contains cherry taxa $a, b$ of $T$ and has internal node with rank $n-1$
     \STATE In list $L$ all taxa $\{1,\ldots,n\}\setminus\{a,b\}$ are sorted such that the ranks of their parents in $T$ do not decrease
 	\FOR {taxon $a$ in $L$}
 		\STATE Add an internal node as parent of $a$ on any edge in $R$ such that the new internal node has rank one less than the previously lowest internal node
