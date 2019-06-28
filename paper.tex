@@ -179,12 +179,16 @@ Lemma~\ref{lemma:distance_delete_taxon} is central for some of the following pro
 \end{lemma}
 
 \begin{proof}
-    On every path from $T$ to $R$ there are at least $|rank_T(parent(n+1)) - rank_R(parent(n+1))|$ $\rnni$ moves that change the rank of $parent(n+1)$ because each $\rnni$ move can change the rank of an internal node by at most one.
-    In particular, this holds for a shortest path $p$ from $T$ to $R$.
-    Furthermore, deleting taxon $n+1$ and its parent $p_{n+1}$ from all trees on $p$ results in a path $p|_n$ from $T|_n$ to $R|_n$.
-    All moves that do not involve $p_{n+1}$ can be performed the same way and those that involved $p_{n+1}$ are just left out.
-    We thus have a path $p|_n$ from $T|_n$ to $R|_n$ that has at least $|rank_T(parent(n+1)) - rank_R(parent(n+1))|$ $\rnni$ moves less than $p$, which results in $|p|_n| \leq d(T,R) - |rank_T(parent(n+1)) - rank_R(parent(n+1))|$.
-    \todo{Is this proof sufficient? Otherwise: induction}
+    Let $p$ be a shortest path from tree $T$ to $R$ and $p|_n$ the path resulting from deleting taxon $n+1$ from all trees on $p$.
+    This new path $p|_n$ is then a path from $T$ to $R$.
+    Showing that at least $\delta := |rank_T(parent(n+1)) - rank_R(parent(n+1))|$ $\rnni$ moves are deleted from $p$ to receive $p|_n$ results in $d(T|_n,R|_n) \leq |p|_n| \leq |p| - \delta = d(T,R) -\delta$ which proves the lemma.
+    By the following two observations one can easily see that this claim is true, indeed:
+    The rank of an internal node $v$ only changes within an $\rnni$ move if this move is a rank move of $v$ with another node or an $\nni$ move on an edge incident to $v$.
+    Furthermore, any $\rnni$ move can change the rank of an internal node by at most one.
+    Applying this to $parent(n+1)$ and knowing that the rank of this node differs by $\delta$ between $T$ and $R$ proves that $d(T|_n, R|_n) \leq d(T,R) - \delta$.
+
+    % Alternative: Induction:
+    %
     % Induction on $k = d(T,R)$:
     %
     % Basis($k = 1$):
