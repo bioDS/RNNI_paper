@@ -20,7 +20,6 @@
 \addbibresource{lit.bib}
 
 \newcommand{\np}{\mathcal{NP}}
-
 \newcommand{\parent}{\mathrm{parent}}
 \newcommand{\mrca}{\mathrm{mrca}}
 \newcommand{\rank}{\mathrm{rank}}
@@ -35,6 +34,7 @@
 \newtheorem{conjecture}[definition]{Conjecture}
 \newtheorem{lemma}[definition]{Lemma}
 \newtheorem{corollary}[definition]{Corollary}
+\newtheorem{proposition}[definition]{Proposition}
 
 \graphicspath{{figures/}}
 
@@ -85,21 +85,17 @@ In this paper we study \emph{ranked trees} that are determined by a pair consist
 In the literature ranked trees are often referred to as labelled history in the context of coalescent trees.
 The following notion differs from the definition of ranks in that context, since we do not use negative integers as ranks.
 A \emph{rank function} on $T$ maps the vertex set of $T$ onto the set $\{0,\ldots,n-1\}$ such that all leaves are assigned rank $0$ and each internal node has rank greater than its children.
-The rank of a node $v$ in a ranked tree will be denoted by $\rank(v)$ or $\rank_T(v)$ if it is not obvious that we consider tree $T$.
+The rank of a node $v$ in a ranked tree will be denoted by $\rank(v)$.
 For simplicity of notation we use the term \emph{tree} instead instead of ranked tree.
 
 We will identify leaves with their labels and also call them \emph{taxa} (singular: \emph{taxon}) following the systematic biology tradition.
-For a tree $T$, a pair of taxa adjacent to a common internal node called a \emph{cherry}.
 All nodes that are no leafs are called \emph{internal nodes} and edges $(u,v)$ are \emph{internal edge}, if both $u$ and $v$ are internal nodes.
 Our definition of ranked tree leads to a natural characterisation of edge lengths within ranked trees:
 integer $l$ denotes the \emph{length} of an edge $e=(u,v)$ if $|\rank(v) - \rank(u)| = l$.
-Each node $v$ can be uniquely identified by its \emph{cluster} $C$, which is the set of taxa descending from the node.
+Each node $v$ can be uniquely identified by its \emph{cluster} $C$, which is the set of taxa descending from the node. \todo{move cluster+mrca to alg:find\_path}
 We also say that $v$ \emph{induces} the cluster $C$.
 Note that all trees on $n$ taxa share the cluster $\{1,\ldots,n\}$ induced by the root.
-A \emph{split} is a bipartition of the taxon set $X$ into sets $A,B$ such that there is an edge $e$ whose deletion results in two trees with taxon sets $A$ and $B$, respectively.
-Such a split will be denoted by $A|B$ and we say that it is \emph{induced} by edge $e$.
 Given a subset $S$ of the set of taxa $X$, the \emph{most recent common ancestor} (also known as \emph{least common ancestor}) of $S$, denoted by $\mrca(S)$, is the internal node of the lowest rank that is ancestral to all the taxa in $S$.
-In particular, for a single taxon $x \in X$, $\mrca(\{x\})$ is the \emph{parent} of $x$ and will be denoted by $\parent(x)$.
 We write $\mrca_T(S)$ to emphasise that we consider the most recent common ancestor of set $S$ in tree $T$.
 Two trees are called \emph{isomorphic} if the underlying rooted phylogenetic trees are isomorphic and the isomorphism preserves ranks of the nodes.
 
@@ -123,10 +119,6 @@ Note that thus defined $\rnni$ graph is a metric space with the standard shortes
 \todo{label of taxa in figure shouldn't be numbers}
 
 The following definitions are less standard and required for the results obtained in this paper.
-If every internal node of a tree $T$ has at least one child that is a leaf, $T$ is called a \emph{caterpillar tree}.
-If $p$ is a path only consisting of caterpillar trees we call it \emph{caterpillar path}.
-For two caterpillar trees $T$ and $R$ a \emph{shortest caterpillar path} is a caterpillar path that is shortest among all caterpillar paths between $T$ and $R$.
-The length of such a shortest caterpillar path is called \emph{caterpillar distance} and denoted by $d_c(T,R)$.
 A set $\mathbb S$ of trees is called \emph{convex} if for all pairs of trees $T,R \in \mathbb S$, there exists a shortest path from $T$ to $R$ such that every tree on $p$ is element of $\mathbb S$.
 
 %If needed: diameter, radius (in the corresponding chapter?), induced triplet (in that chapter?)
@@ -151,7 +143,7 @@ The idea of the algorithm is the following...
 	\STATE $\hat{T} := T$
 	\STATE $p := (T)$
 	\FOR {$i = 1, \dots, n-2$}
-		\STATE Let $C$ be the cluster node $v$ in $R$ with $\rank(v) = i$
+		\STATE Let $C$ be the cluster induced by node $v$ in $R$ with $\rank(v) = i$
 		\WHILE {$\rank(\mrca_{\hat{T}}(C))>i$}
 			\STATE Update $\hat{T}$: Decrease $\rank(\mrca_{\hat{T}}(C))$ by an $\rnni$ move \label{alg:line:move_set_down}
 			\STATE $p = p+\hat{T}$
@@ -169,8 +161,7 @@ It follows that Algorithm~\ref{alg:find_path} returns a path in $\rnni$ for any 
 Moreover, it gives an upper bound for the diameter of $\rnni$, which improves the one given in \autocite{Gavryushkin2017}:
 
 \begin{lemma}
-%TODO: here and generally, I prefer introducing definitions like this as you go but it's the matter of preference so up to you.
-$\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$, where $\Delta$ is...
+    $\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$, where $\Delta(G)$ denotes the diameter of graph $G$.
 \end{lemma}
 
 \begin{proof}
@@ -181,47 +172,51 @@ $\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$, where $\Delta$ is...
 
 Lemma~\ref{lemma:distance_delete_taxon} is central for some of the following proofs using induction.
 
+Central for the following inductive proofs is the comparison of the length of a shortest paths $p$ on trees on $n+1$ taxa with a path on $n$ taxa induced by $p$.
+The following lemma bounds the length of these induced paths utilising the rank differences of certain internal nodes between start and end tree of $p$.
+Henceforth the notion $\parent(x)$ refers to the internal node that is parent of taxon $x$.
+
 \begin{lemma}
     Let $T$ and $R$ be two trees on $n+1$ taxa.
-    Let $T|_n$ and $R|_n$ be these trees restricted to $n$ taxa, i.e. the same taxon $n+1$ is deleted from both trees $T$ and $R$.
-    Then it is $d(T|_n, R|_n) \leq d(T,R) - |\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))|$.
+    Let $T{\big|}_n$ and $R{\big|}_n$ be these trees restricted to taxa $1, \ldots, n$, i.e. taxon $n+1$ is deleted from $T$ and $R$ and the thereby arising node of degree two is suppressed.
+    Then it is $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - \delta$ where $\delta:= |\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))|$ is the rank difference of the parent of taxon $x$ between trees $T$ and $R$.
     \label{lemma:distance_delete_taxon}
 \end{lemma}
 
 \begin{proof}
-    Let $p$ be a shortest path from tree $T$ to $R$ and $p|_n$ the path resulting from deleting taxon $n+1$ from all trees on $p$.
-    This new path $p|_n$ is then a path from $T$ to $R$.
-    Showing that at least $\delta := |\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))|$ $\rnni$ moves are deleted from $p$ to receive $p|_n$ results in $d(T|_n,R|_n) \leq |p|_n| \leq |p| - \delta = d(T,R) -\delta$ which proves the lemma.
+    Let $p$ be a shortest path from tree $T$ to $R$ and $p{\big|}_n$ the path resulting from deleting taxon $n+1$ from all trees on $p$.
+    This new path $p{\big|}_n$ is then a path from $T$ to $R$.
+    Showing that at least $\delta$ $\rnni$ moves are deleted from $p$ to receive $p{\big|}_n$ results in $d(T{\big|}_n,R{\big|}_n) \leq |p{\big|}_n| \leq |p| - \delta = d(T,R) -\delta$ which proves the lemma.
     By the following two observations one can easily see that this claim is true, indeed:
     The rank of an internal node $v$ only changes within an $\rnni$ move if this move is a rank move of $v$ with another node or an $\nni$ move on an edge incident to $v$.
     Furthermore, any $\rnni$ move can change the rank of an internal node by at most one.
-    Applying this to $\parent(n+1)$ and knowing that the rank of this node differs by $\delta$ between $T$ and $R$ proves that $d(T|_n, R|_n) \leq d(T,R) - \delta$.
+    Applying this to $\parent(n+1)$ and knowing that the rank of this node differs by $\delta$ between $T$ and $R$ proves that $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - \delta$.
 
     % Alternative: Induction:
     %
     % Induction on $k = d(T,R)$:
     %
     % Basis($k = 1$):
-    % If rank of $\parent(n+1)$ changes between $T$ and $R$, it is $d(T|_n, R|_n) = 0$ and $|\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))| = 1$ and therefore, $d(T|_n, R|_n) = 0 \leq 1 - 1 = d(T,R) - |\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))|$.
-    % If on the other hand the rank of $\parent(n+1}$ does not change between $T$ and $R$, it is $d(T|_n, R|_n) = d(T,R) = 1$ and $|r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})| = 1$ and therefore, $d(T|_n, R|_n) = 1 \leq 1 - 0 = d(T,R) - |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$.
+    % If rank of $\parent(n+1)$ changes between $T$ and $R$, it is $d(T{\big|}_n, R{\big|}_n) = 0$ and $|\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))| = 1$ and therefore, $d(T{\big|}_n, R{\big|}_n) = 0 \leq 1 - 1 = d(T,R) - |\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))|$.
+    % If on the other hand the rank of $\parent(n+1}$ does not change between $T$ and $R$, it is $d(T{\big|}_n, R{\big|}_n) = d(T,R) = 1$ and $|r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})| = 1$ and therefore, $d(T{\big|}_n, R{\big|}_n) = 1 \leq 1 - 0 = d(T,R) - |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$.
     %
     % Step($k \to k+1$):
     % Let $T$ and $R$ be trees on $n+1$ taxa with distance $d(T,R) = k$.
     % Let $R'$ be the last tree on a shortest path from $T$ to $R$, i.e. $d(T,R') = k$.
-    % We can apply the induction hypothesis on $T$ and $R'$ and see that $d(T|_n, R'|_n) \leq d(T, R') - |r_{T}(\parent(n+1}) - r_{R'}(\parent(n+1})| := k - m$.
+    % We can apply the induction hypothesis on $T$ and $R'$ and see that $d(T{\big|}_n, R'{\big|}_n) \leq d(T, R') - |r_{T}(\parent(n+1}) - r_{R'}(\parent(n+1})| := k - m$.
     % Now we differ two cases:
     % \begin{enumerate}
     %     \item $\parent(n+1}$ changes its rank between $R$ and $R'$ or is affected by the $\nni$ move is performed between $R$ and $R'$.
     %
-    %     Then the trees $R|_n$ and $R'|_n$ are equal. \todo{Is this obivous?}
-    %     Therefore, it is $d(T|_n,R|_n) = d(T|_n, R'|_n) \leq k - m$.
+    %     Then the trees $R{\big|}_n$ and $R'{\big|}_n$ are equal. \todo{Is this obivous?}
+    %     Therefore, it is $d(T{\big|}_n,R{\big|}_n) = d(T{\big|}_n, R'{\big|}_n) \leq k - m$.
     %     It is either $|r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})| = m+1$, $|r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})| = m$, or $|r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})| = m-1$.
-    %     In either case, we have $d(T|_n,R|_n) = d(T|_n, R'|_n) \leq k - m = (k+1) - (m+1) \leq d(T, R) - |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$.
+    %     In either case, we have $d(T{\big|}_n,R{\big|}_n) = d(T{\big|}_n, R'{\big|}_n) \leq k - m = (k+1) - (m+1) \leq d(T, R) - |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$.
     %
     %     \item $\parent(n+1}$ has same rank in $R$ and $R'$.
     %
-    %     In this case it is $d(T|_n,R|_n) \leq d(T|_n,R'|_n) + d(R'|_n, R|_n) \leq d(T|_n, R'|_n) + 1 \leq (k-m)+ 1$.
-    %     It also follows that $|r_{T}(\parent(n+1}) - r_{R'}(\parent(n+1})| = |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$ and therefore, we can conclude $d(T|_n,R|_n) \leq k-m+1 = k+1-m = d(T,R) -  |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$.
+    %     In this case it is $d(T{\big|}_n,R{\big|}_n) \leq d(T{\big|}_n,R'{\big|}_n) + d(R'{\big|}_n, R{\big|}_n) \leq d(T{\big|}_n, R'{\big|}_n) + 1 \leq (k-m)+ 1$.
+    %     It also follows that $|r_{T}(\parent(n+1}) - r_{R'}(\parent(n+1})| = |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$ and therefore, we can conclude $d(T{\big|}_n,R{\big|}_n) \leq k-m+1 = k+1-m = d(T,R) -  |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$.
     % \end{enumerate}
 \end{proof}
 
@@ -238,8 +233,18 @@ Using the same arguments as in the proof of Lemma~\ref{lemma:distance_delete_tax
 \subsection{The set of caterpillar trees}
 \label{section:caterpillar_convex}
 
-The set of caterpillar trees is of interested in $\rnni$ because shortest paths between such trees in $\rnni$ differ from those in classical $\nni$ space.
+In this section we restrict our attention to the set of \emph{caterpillar trees} where each internal node has at least one child that is a leaf.
+This type of tree is of particular interest in $\rnni$ because shortest paths between such trees in $\rnni$ differ from those in classical $\nni$ space.
+This in combination with the importance of caterpillar trees in the proof of $\np$-hardness of $\nni$ distances in \autocite{jiang2000} suggests that understanding the geometry of paths between caterpillar trees helps investigating the complexity of computing $\rnni$ distances.
+Following notations will facilitate the study of shortest paths between caterpillar trees.
+A path $p$ between two caterpillar trees $T$ and $R$ that only consists of caterpillar trees is called \emph{caterpillar path}.
+If $p$ is shortest among all caterpillar paths between these trees we call it \emph{shortest caterpillar path}, and the length of $p$ will be denoted by $d_c(T,R)$ and is called \emph{caterpillar distance}.
+
+%TODO
+We are now going to....
+
 Since $\nni$ moves in $\rnni$ are only allowed on edges of length one, the structure of shortest paths between caterpillar trees is different in $\nni$ and $\rnni$ as it is pointed out in Figure~\ref{fig:NNI_vs_RNNI}.
+
 
 \begin{figure}[H]
 	\centering
@@ -296,16 +301,16 @@ Lemma~\ref{lemma:caterpillar_dist=diameter} regards caterpillar trees with dista
     Let $T, R$ be trees on $n+1$ taxa with caterpillar distance $\frac{(n-1)(n-2)}{2}$.
     Therefore, each of the $\frac{(n-1)(n-2)}{2}$ pairs of taxa that is considered when running modified Bubble Sort algorithm \todo{name} to compute a path $p$ from $R$ to $T$ exchanges.
     From this we can conclude that taxon $n+1$, whose parent has highest rank in $T$, is part of the cherry of $R$.
-    Let us consider the trees $T|_n$ to $R|_n$ that result from $T$ and $R$ by deleting taxon $n+1$.
-    Bubble Sort \todo{name} computes a path from $T|_n$ to $R|_n$ that contains the same exchanges of taxa as $p$, except for the $n-1$ first ones on $p$ that involve taxon $n+1$.
-    Hence, the caterpillar distance is $d_c(T|_n, R|_n) = \frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2}$.
-    So we can apply the induction hypothesis on $T|_n$ and $R|_n$ and know that $d(T|_n,R|_n) = \frac{(n-1)(n-2)}{2}$.
+    Let us consider the trees $T{\big|}_n$ to $R{\big|}_n$ that result from $T$ and $R$ by deleting taxon $n+1$.
+    Bubble Sort \todo{name} computes a path from $T{\big|}_n$ to $R{\big|}_n$ that contains the same exchanges of taxa as $p$, except for the $n-1$ first ones on $p$ that involve taxon $n+1$.
+    Hence, the caterpillar distance is $d_c(T{\big|}_n, R{\big|}_n) = \frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2}$.
+    So we can apply the induction hypothesis on $T{\big|}_n$ and $R{\big|}_n$ and know that $d(T{\big|}_n,R{\big|}_n) = \frac{(n-1)(n-2)}{2}$.
 
-    According to Lemma~\ref{lemma:distance_delete_taxon}, the distance between $T|_n$ and $R|_n$ is at least $d(T|_n, R|_n) \leq d(T,R) - |\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))|$.
+    According to Lemma~\ref{lemma:distance_delete_taxon}, the distance between $T{\big|}_n$ and $R{\big|}_n$ is at least $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - |\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))|$.
     We also know $|\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))| = n-1$
     Suppose, contrary to our claim, that there is a path from $T$ to $R$ of length less than $\Delta(\rnniu_{n+1}) = \frac{n(n-1)}{2}$.
-    By the above, it follows that $d(T|_n, R|_n) \leq d(T,R) - |\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))| < \frac{n(n-1)}{2} - (n-1) < \frac{(n-1)(n-2)}{2}$.
-    Since this is a contradiction to $d(T|_n, R|_n) = \frac{(n-1)(n-2)}{2}$, it is proven that $d(T,R) = \frac{n(n-1)}{2} $.
+    By the above, it follows that $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - |\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))| < \frac{n(n-1)}{2} - (n-1) < \frac{(n-1)(n-2)}{2}$.
+    Since this is a contradiction to $d(T{\big|}_n, R{\big|}_n) = \frac{(n-1)(n-2)}{2}$, it is proven that $d(T,R) = \frac{n(n-1)}{2} $.
 
 \end{proof}
 
@@ -480,17 +485,21 @@ When proving Theorem~\ref{thm:split_nni}, \autocite{Li1996} gives an example of 
 The clusters given by the two nodes adjacent to the root are $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$ in both trees $T$ and $R$.
 Between these there is a shortest path in $\nni$ where at first $T$ is transformed to a tree $T'$ with $n$ cherries where each cherry contains one taxon of $\{1, \ldots, n\}$ and one taxon of $\{n+1, \ldots, 2n\}$.
 Afterwards, $T'$ is transformed to a tree $R'$ still containing the same cherries as $T'$ but in a way that resolving all these cherries of $R'$ results in $R$.
-For proving that this path is shorter than any path preserving the clusters $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$, the fact that $d_{\nni}(R,R') = d_{\nni}(T|_{\{1, \ldots, n\}}, R|_{\{1, \ldots, n\}})$ where $T|_{\{1, \ldots, n\}}$ and $R|_{\{1, \ldots, n\}}$ are $T$ and $R$ restricted to taxa $\{1,\ldots,n\}$, respectively, is being used.
+For proving that this path is shorter than any path preserving the clusters $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$, the fact that $d_{\nni}(R,R') = d_{\nni}(T{\big|}_{\{1, \ldots, n\}}, R{\big|}_{\{1, \ldots, n\}})$ where $T{\big|}_{\{1, \ldots, n\}}$ and $R{\big|}_{\{1, \ldots, n\}}$ are $T$ and $R$ restricted to taxa $\{1,\ldots,n\}$, respectively, is being used.
 However, this does not work in $\rnni$.
 Introducing new cherries means introducing new internal nodes with new ranks.
 Since there are lots of rank moves needed for an $\rnni$ path similar to the shortest $\nni$ path presented above, the path in $\rnni$ that breaks the clusters $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$ is no shortest path.
 % How do we assign the ranks to the new cherry nodes?
-% We could either create a path where $R$ and $R'$ have distance equal to $d_{\rnni}(T|_{\{1, \ldots, n\}}, R|_{\{n+1, \ldots, 2n\}})$ and have a lot of additional rank moves before and after that part OR
+% We could either create a path where $R$ and $R'$ have distance equal to $d_{\rnni}(T{\big|}_{\{1, \ldots, n\}}, R{\big|}_{\{n+1, \ldots, 2n\}})$ and have a lot of additional rank moves before and after that part OR
 % Build $R$ and $R'$ that contain all the cherries within the least number of moves possible (3n-3) and having a longer path between $R$ and $R'$.
 % Also anything in between these two options is possible. Are we able to disprove every option??
 
 
-Since the example given in \autocite{Li1996} that proves Theorem~\ref{thm:split_nni} in $\nni$ does not work in $\rnni$, the following conjecture was raised \autocite{Gavryushkin2017}.
+Since the example given in \autocite{Li1996} that proves Theorem~\ref{thm:split_nni} in $\nni$ does not work in $\rnni$, a contrary statement was conjectured in \autocite{Gavryushkin2017}.
+For understanding this conjecture it is important to realise the connection between edges in a tree and bipartitions of the taxon set of that tree.
+By deleting an edge $e$ of a tree $T$ one receives two trees on taxon sets $A$ and $B$ such that $\{A,B\}$ is a partition of the taxon set of $T$.
+Note that each edge induces such a bipartition, often written as $A|B$, and that both edges incident to the root of a tree induce the same partition.
+As these partitions are commonly referred to as \emph{splits}, the following conjecture was named \emph{Split Theorem} in \autocite{Gavryushkin2017}.
 
 \begin{conjecture}[Split Theorem]
 	For the $\rnni$ graph the following statement holds:
@@ -498,7 +507,7 @@ Since the example given in \autocite{Li1996} that proves Theorem~\ref{thm:split_
 	\label{split_theorem}
 \end{conjecture}
 
-Instead of using the notion of clusters as we do within this paper, the Split Theorem considers splits of the taxon set $X$.
+
 However, we found a simple counterexample to this conjecture:
 
 \begin{figure}[H]
@@ -511,7 +520,7 @@ However, we found a simple counterexample to this conjecture:
 
 Since the counterexample in Figure~\ref{splitthm_counterexample} clearly shows that the version of the Split Theorem stated in \autocite{Gavryushkin2017} does not hold, we will now claim an alternative to this conjecture, the \emph{Cluster Theorem}.
 Within the Cluster Theorem we are considering clusters instead of splits.
-This is motivated by the fact that rooted phylogenetic trees can uniquely be represented by sets of clusters \autocite{steel2016}, but not by sets of splits as they cannot define the position of the root.
+This is motivated by the fact that rooted phylogenetic trees can uniquely be represented by sets of clusters \autocite{Steel2016-ye}, but not by sets of splits as they cannot define the position of the root.
 Moreover, a ranked tree can be uniquely determined by ordering the set of clusters increasingly according to the ranks of the internal nodes inducing those clusters.
 
 % \begin{conjecture}[Weak Split Theorem]
