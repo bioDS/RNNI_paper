@@ -102,7 +102,7 @@ Two trees are called \emph{isomorphic} if the underlying rooted phylogenetic tre
 Now we are ready to define the tree space which is the subject of study in this paper, the $\rnni$ graph.
 The vertex set of the \emph{$\rnni$ graph} is given by the set of all ranked trees on $n$ taxa.
 We introduce two types of operations (\emph{$\rnni$ moves}) connecting trees $T$ and $R$ in this graph by an edge:
-A swap of the ranks of two internal nodes ($x$ and $y$) of subsequent ranks (|\rank(x) - \rank(y)| = 1) is called a \emph{rank move}.
+A swap of the ranks of two internal nodes ($x$ and $y$) of subsequent ranks ($|\rank(x) - \rank(y)| = 1$) is called a \emph{rank move}.
 We say that trees $T$ and $R$ are \emph{connected} by an \emph{$\nni$ move} move if there exist internal edges $e$ in $T$ and $f$ in $R$ both of length one such that the graphs obtained by shrinking $e$ and $f$ to internal nodes are isomorphic.
 Trees that are connected by either a rank move or an $\nni$ move are called \emph{$\rnni$ neighbours} or \emph{adjacent in} $\rnni$.
 Note that thus defined $\rnni$ graph is a metric space with the standard shortest-path distance.
@@ -219,6 +219,15 @@ Lemma~\ref{lemma:distance_delete_taxon} is central for some of the following pro
     % \end{enumerate}
 \end{proof}
 
+%Following Proposition might not be needed(?)
+
+Related to Lemma~\ref{lemma:distance_delete_taxon} is Proposition~\ref{proposition:lower_bound_distance} which provides a lower bound for the distance of two trees.
+Using the same arguments as in the proof of Lemma~\ref{lemma:distance_delete_taxon}, it easily follows that the rank difference of parents of any taxon in two trees gives such a bound.
+
+\begin{proposition}
+    Given trees $T$ and $R$ with taxon $x$ that fulfils $|\rank_T(\parent(x)) - \rank_R(\parent(x))| = k$, it follows $d(T,R) \geq k$.
+    \label{proposition:lower_bound_distance}
+\end{proposition}
 
 \subsection{The set of caterpillar trees}
 \label{section:caterpillar_convex}
