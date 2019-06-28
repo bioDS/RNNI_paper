@@ -20,6 +20,10 @@
 \addbibresource{lit.bib}
 
 \newcommand{\np}{\mathcal{NP}}
+
+\newcommand{\parent}{\mathrm{parent}}
+\newcommand{\mrca}{\mathrm{mrca}}
+\newcommand{\rank}{\mathrm{rank}}
 \newcommand{\nni}{\mathrm{NNI}}
 \newcommand{\rnni}{\mathrm{RNNI}}
 \newcommand{\rnniu}{\mathrm{RNNIu}}
@@ -79,7 +83,7 @@ From now on, we assume $X = \{1,\ldots,n\}$ for a fixed number $n \in \mathbb N$
 
 In this paper we study \emph{ranked trees} that are determined by a pair consisting of a rooted binary phylogenetic tree $(T, \Phi)$ on $X = \{1, \ldots, n\}$ for $n \in \mathbb N$, and a rank function.
 A \emph{rank function} on $T$ maps the vertex set of $T$ onto the set $\{0,\ldots,n-1\}$ such that all leaves are assigned rank $0$ and each internal node has rank greater than its children.
-The rank of a node $v$ in a ranked tree will be denoted by $rank(v)$ or $rank_T(v)$ if it is not obvious that we consider tree $T$.
+The rank of a node $v$ in a ranked tree will be denoted by $\rank(v)$ or $\rank_T(v)$ if it is not obvious that we consider tree $T$.
 For simplicity of notation we use the term \emph{tree} instead instead of ranked tree.
 
 We will identify leaves with their labels and also call them \emph{taxa} (singular: \emph{taxon}) following the systematic biology tradition.
@@ -91,7 +95,7 @@ Note that all trees on $n$ taxa share the cluster $\{1,\ldots,n\}$ induced by th
 A \emph{split} is a bipartition of the taxon set $X$ into sets $A,B$ such that there is an edge $e$ whose deletion results in two trees with taxon sets $A$ and $B$, respectively.
 Such a split will be denoted by $A|B$ and we say that it is \emph{induced} by edge $e$.
 Given a subset $S$ of the set of taxa $X$, the \emph{most recent common ancestor} of $S$, denoted by $\mrca(S)$, is the internal node of the lowest rank that is ancestral to all the taxa in $S$.
-In particular, for a single taxon $x \in X$, $\mrca(\{x\})$ is the parent of $x$ and will be denoted by $\parent(x)$.
+In particular, for a single taxon $x \in X$, $\mrca(\{x\})$ is the \emph{parent} of $x$ and will be denoted by $\parent(x)$.
 We write $\mrca_T(S)$ to emphasise that we consider the most recent common ancestor of set $S$ in tree $T$.
 Two trees are called \emph{isomorphic} if the underlying rooted phylogenetic trees are isomorphic and the isomorphism preserves ranks of the nodes.
 
@@ -106,7 +110,7 @@ Note that thus defined $\rnni$ graph is a metric space with the standard shortes
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{RNNI}
-	\caption{Four trees connected by edges in the $\rnni$ graph. A rank move of $mrca(\{1,2\})$ and $mrca(\{3,4\})$ and all $\nni$ moves on the edge highlighted in red are illustrated}
+	\caption{Four trees connected by edges in the $\rnni$ graph. A rank move of $\mrca(\{1,2\})$ and $\mrca(\{3,4\})$ and all $\nni$ moves on the edge highlighted in red are illustrated}
 	\label{fig:RNNI}
 \end{figure}
 
@@ -141,9 +145,9 @@ The idea of the algorithm is the following...
 	\STATE $\hat{T} := T$
 	\STATE $p := (T)$
 	\FOR {$i = 1, \dots, n-2$}
-		\STATE Let $C$ be the cluster node $v$ in $R$ with $rank(v) = i$
-		\WHILE {$rank(mrca_{\hat{T}}(C))>i$}
-			\STATE Update $\hat{T}$: Decrease $rank(mrca_{\hat{T}}(C))$ by an $\rnni$ move \label{alg:line:move_set_down}
+		\STATE Let $C$ be the cluster node $v$ in $R$ with $\rank(v) = i$
+		\WHILE {$\rank(\mrca_{\hat{T}}(C))>i$}
+			\STATE Update $\hat{T}$: Decrease $\rank(\mrca_{\hat{T}}(C))$ by an $\rnni$ move \label{alg:line:move_set_down}
 			\STATE $p = p+\hat{T}$
 		\ENDWHILE
 	\ENDFOR
@@ -153,7 +157,7 @@ The idea of the algorithm is the following...
 
 \todo{This text comes out of the blue.
 Generally, before going into explanations like this it's a good idea to say what's ahead.}
-One can easily prove that there is always exactly one $\rnni$ move on $T$ that decreases the rank of $mrca_T(C)$ as in line~\ref{alg:line:move_set_down} of Algorithm~\ref{alg:find_path}.
+One can easily prove that there is always exactly one $\rnni$ move on $T$ that decreases the rank of $\mrca_T(C)$ as in line~\ref{alg:line:move_set_down} of Algorithm~\ref{alg:find_path}.
 It follows that Algorithm~\ref{alg:find_path} returns a path in $\rnni$ for any pair of trees $T,R$.
 \todo{This should have been stated before, where you say what is going on.}
 Moreover, it gives an upper bound for the diameter of $\rnni$, which improves the one given in \autocite{Gavryushkin2017}:
@@ -165,7 +169,7 @@ $\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$, where $\Delta$ is...
 
 \begin{proof}
     Let us consider the maximum length of a path given by Algorithm~\ref{alg:find_path}.
-    In worst case each of the $n-2$ clusters $C$ induced by internal nodes of $R$ with ranks $i = 1, \dots, n-2$, requires $n-1-i$ $\rnni$ moves to move $mrca(C)$ down in $\hat{T}$.
+    In worst case each of the $n-2$ clusters $C$ induced by internal nodes of $R$ with ranks $i = 1, \dots, n-2$, requires $n-1-i$ $\rnni$ moves to move $\mrca(C)$ down in $\hat{T}$.
 	Hence, the maximum length of a path computed by that algorithm for any pair of trees is less or equal to $\sum\limits_{i = 1}^{n-2} i = \frac{(n-2)(n-1)}{2}$.
 \end{proof}
 
@@ -174,44 +178,44 @@ Lemma~\ref{lemma:distance_delete_taxon} is central for some of the following pro
 \begin{lemma}
     Let $T$ and $R$ be two trees on $n+1$ taxa.
     Let $T|_n$ and $R|_n$ be these trees restricted to $n$ taxa, i.e. the same taxon $n+1$ is deleted from both trees $T$ and $R$.
-    Then it is $d(T|_n, R|_n) \leq d(T,R) - |rank_T(parent(n+1)) - rank_R(parent(n+1))|$.
+    Then it is $d(T|_n, R|_n) \leq d(T,R) - |\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))|$.
     \label{lemma:distance_delete_taxon}
 \end{lemma}
 
 \begin{proof}
     Let $p$ be a shortest path from tree $T$ to $R$ and $p|_n$ the path resulting from deleting taxon $n+1$ from all trees on $p$.
     This new path $p|_n$ is then a path from $T$ to $R$.
-    Showing that at least $\delta := |rank_T(parent(n+1)) - rank_R(parent(n+1))|$ $\rnni$ moves are deleted from $p$ to receive $p|_n$ results in $d(T|_n,R|_n) \leq |p|_n| \leq |p| - \delta = d(T,R) -\delta$ which proves the lemma.
+    Showing that at least $\delta := |\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))|$ $\rnni$ moves are deleted from $p$ to receive $p|_n$ results in $d(T|_n,R|_n) \leq |p|_n| \leq |p| - \delta = d(T,R) -\delta$ which proves the lemma.
     By the following two observations one can easily see that this claim is true, indeed:
     The rank of an internal node $v$ only changes within an $\rnni$ move if this move is a rank move of $v$ with another node or an $\nni$ move on an edge incident to $v$.
     Furthermore, any $\rnni$ move can change the rank of an internal node by at most one.
-    Applying this to $parent(n+1)$ and knowing that the rank of this node differs by $\delta$ between $T$ and $R$ proves that $d(T|_n, R|_n) \leq d(T,R) - \delta$.
+    Applying this to $\parent(n+1)$ and knowing that the rank of this node differs by $\delta$ between $T$ and $R$ proves that $d(T|_n, R|_n) \leq d(T,R) - \delta$.
 
     % Alternative: Induction:
     %
     % Induction on $k = d(T,R)$:
     %
     % Basis($k = 1$):
-    % If rank of $parent(n+1)$ changes between $T$ and $R$, it is $d(T|_n, R|_n) = 0$ and $|rank_T(parent(n+1)) - rank_R(parent(n+1))| = 1$ and therefore, $d(T|_n, R|_n) = 0 \leq 1 - 1 = d(T,R) - |rank_T(parent(n+1)) - rank_R(parent(n+1))|$.
-    % If on the other hand the rank of $parent(n+1}$ does not change between $T$ and $R$, it is $d(T|_n, R|_n) = d(T,R) = 1$ and $|r_{T}(parent(n+1}) - r_{R}(parent(n+1})| = 1$ and therefore, $d(T|_n, R|_n) = 1 \leq 1 - 0 = d(T,R) - |r_{T}(parent(n+1}) - r_{R}(parent(n+1})|$.
+    % If rank of $\parent(n+1)$ changes between $T$ and $R$, it is $d(T|_n, R|_n) = 0$ and $|\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))| = 1$ and therefore, $d(T|_n, R|_n) = 0 \leq 1 - 1 = d(T,R) - |\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))|$.
+    % If on the other hand the rank of $\parent(n+1}$ does not change between $T$ and $R$, it is $d(T|_n, R|_n) = d(T,R) = 1$ and $|r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})| = 1$ and therefore, $d(T|_n, R|_n) = 1 \leq 1 - 0 = d(T,R) - |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$.
     %
     % Step($k \to k+1$):
     % Let $T$ and $R$ be trees on $n+1$ taxa with distance $d(T,R) = k$.
     % Let $R'$ be the last tree on a shortest path from $T$ to $R$, i.e. $d(T,R') = k$.
-    % We can apply the induction hypothesis on $T$ and $R'$ and see that $d(T|_n, R'|_n) \leq d(T, R') - |r_{T}(parent(n+1}) - r_{R'}(parent(n+1})| := k - m$.
+    % We can apply the induction hypothesis on $T$ and $R'$ and see that $d(T|_n, R'|_n) \leq d(T, R') - |r_{T}(\parent(n+1}) - r_{R'}(\parent(n+1})| := k - m$.
     % Now we differ two cases:
     % \begin{enumerate}
-    %     \item $parent(n+1}$ changes its rank between $R$ and $R'$ or is affected by the $\nni$ move is performed between $R$ and $R'$.
+    %     \item $\parent(n+1}$ changes its rank between $R$ and $R'$ or is affected by the $\nni$ move is performed between $R$ and $R'$.
     %
     %     Then the trees $R|_n$ and $R'|_n$ are equal. \todo{Is this obivous?}
     %     Therefore, it is $d(T|_n,R|_n) = d(T|_n, R'|_n) \leq k - m$.
-    %     It is either $|r_{T}(parent(n+1}) - r_{R}(parent(n+1})| = m+1$, $|r_{T}(parent(n+1}) - r_{R}(parent(n+1})| = m$, or $|r_{T}(parent(n+1}) - r_{R}(parent(n+1})| = m-1$.
-    %     In either case, we have $d(T|_n,R|_n) = d(T|_n, R'|_n) \leq k - m = (k+1) - (m+1) \leq d(T, R) - |r_{T}(parent(n+1}) - r_{R}(parent(n+1})|$.
+    %     It is either $|r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})| = m+1$, $|r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})| = m$, or $|r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})| = m-1$.
+    %     In either case, we have $d(T|_n,R|_n) = d(T|_n, R'|_n) \leq k - m = (k+1) - (m+1) \leq d(T, R) - |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$.
     %
-    %     \item $parent(n+1}$ has same rank in $R$ and $R'$.
+    %     \item $\parent(n+1}$ has same rank in $R$ and $R'$.
     %
     %     In this case it is $d(T|_n,R|_n) \leq d(T|_n,R'|_n) + d(R'|_n, R|_n) \leq d(T|_n, R'|_n) + 1 \leq (k-m)+ 1$.
-    %     It also follows that $|r_{T}(parent(n+1}) - r_{R'}(parent(n+1})| = |r_{T}(parent(n+1}) - r_{R}(parent(n+1})|$ and therefore, we can conclude $d(T|_n,R|_n) \leq k-m+1 = k+1-m = d(T,R) -  |r_{T}(parent(n+1}) - r_{R}(parent(n+1})|$.
+    %     It also follows that $|r_{T}(\parent(n+1}) - r_{R'}(\parent(n+1})| = |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$ and therefore, we can conclude $d(T|_n,R|_n) \leq k-m+1 = k+1-m = d(T,R) -  |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$.
     % \end{enumerate}
 \end{proof}
 
@@ -242,7 +246,7 @@ With this observation we can provide an algorithm for computing shortest caterpi
 
 Following the observations above, only the moves for the first three positions of a sequence with Bubble Sort need to be adapted for the computation of shortest caterpillar paths.
 Let us consider the first three elements $a,b,c$ which appear in this order in a sequence representing a caterpillar tree on a caterpillar path between trees $T$ and $R$.
-If the rank of $parent(c)$ is higher than the ranks of $parent(a)$ and $parent(b)$ in $R$, there are no swaps needed for these taxa.
+If the rank of $\parent(c)$ is higher than the ranks of $\parent(a)$ and $\parent(b)$ in $R$, there are no swaps needed for these taxa.
 If just one of the two taxa $a$ and $b$ is on the other side of $c$ in $R$, this one swaps position with $c$ in the sequence.
 But if both $a$ and $b$ are on the other side of $c$ in $R$, the one that has the parent with highest rank of all these three taxa in $R$ swaps with $c$ at first.
 This makes sure that there is no additional swap of $a$ and $b$ needed on the path to $R$.
@@ -282,10 +286,10 @@ Lemma~\ref{lemma:caterpillar_dist=diameter} regards caterpillar trees with dista
     Hence, the caterpillar distance is $d_c(T|_n, R|_n) = \frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2}$.
     So we can apply the induction hypothesis on $T|_n$ and $R|_n$ and know that $d(T|_n,R|_n) = \frac{(n-1)(n-2)}{2}$.
 
-    According to Lemma~\ref{lemma:distance_delete_taxon}, the distance between $T|_n$ and $R|_n$ is at least $d(T|_n, R|_n) \leq d(T,R) - |rank_T(parent(n+1)) - rank_R(parent(n+1))|$.
-    We also know $|rank_T(parent(n+1)) - rank_R(parent(n+1))| = n-1$
+    According to Lemma~\ref{lemma:distance_delete_taxon}, the distance between $T|_n$ and $R|_n$ is at least $d(T|_n, R|_n) \leq d(T,R) - |\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))|$.
+    We also know $|\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))| = n-1$
     Suppose, contrary to our claim, that there is a path from $T$ to $R$ of length less than $\Delta(\rnniu_{n+1}) = \frac{n(n-1)}{2}$.
-    By the above, it follows that $d(T|_n, R|_n) \leq d(T,R) - |rank_T(parent(n+1)) - rank_R(parent(n+1))| < \frac{n(n-1)}{2} - (n-1) < \frac{(n-1)(n-2)}{2}$.
+    By the above, it follows that $d(T|_n, R|_n) \leq d(T,R) - |\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))| < \frac{n(n-1)}{2} - (n-1) < \frac{(n-1)(n-2)}{2}$.
     Since this is a contradiction to $d(T|_n, R|_n) = \frac{(n-1)(n-2)}{2}$, it is proven that $d(T,R) = \frac{n(n-1)}{2} $.
 
 \end{proof}
@@ -380,7 +384,7 @@ Following the results of section~\ref{section:caterpillar_convex} one can direct
 % 	\end{figure}
 %
 % 	\textbf{NNI move:}
-% 	Let there be an $\nni$ move on an edge $(int_x, int_y)$ where $rank(int_x) < rank(int_y)$ as in Figure~\ref{fig:nni_moves}.
+% 	Let there be an $\nni$ move on an edge $(int_x, int_y)$ where $\rank(int_x) < \rank(int_y)$ as in Figure~\ref{fig:nni_moves}.
 %
 % 	\begin{figure}[H]
 % 		\centering
@@ -392,7 +396,7 @@ Following the results of section~\ref{section:caterpillar_convex} one can direct
 %
 % 	The nodes incident to the edge after the $\nni$ move are labelled by $int_x$ and $int_y$ as well.
 % 	By default, the node that has lower rank than the other one is labelled by $int_x$, the other one by $int_y$.
-% 	But if $int_x$ is no ancestor of $x$ or $int_y$ is no ancestor of $y$, we swap the labels of the two new nodes, such that $rank(int_x) > rank(int_y)$.
+% 	But if $int_x$ is no ancestor of $x$ or $int_y$ is no ancestor of $y$, we swap the labels of the two new nodes, such that $\rank(int_x) > \rank(int_y)$.
 % 	An example of an $\nni$ move and the new labelling is provided in Figure~\ref{fig:nni_example_internal_label}.
 %
 % 	\begin{figure}[H]
@@ -408,7 +412,7 @@ Following the results of section~\ref{section:caterpillar_convex} one can direct
 % 	We proceed to show that $int_x$ and $int_y$ are ancestors of $x$ and $y$ after an $\nni$ move as described above, respectively.
 % 	If $x$ stays in the subtree rooted in the lower node of $e$, this does obviously hold.
 % 	We now turn to the case that $x$ is not in the subtree rooted in the lower node of $e$ after the $\nni$ move.
-% 	Then the labels of the two internal nodes change such that $rank(int_x) > rank(int_y)$.
+% 	Then the labels of the two internal nodes change such that $\rank(int_x) > \rank(int_y)$.
 % 	This makes sure that $int_x$ is an ancestor of $x$.
 % 	Thus, it remains to prove that $int_y$ is ancestor of $y$.
 % 	In particular, we need to show that $y$ is not in the same subtree $A$ as $x$, whose root has the node labelled by $int_x$ as parent before and after the $\nni$ move.
