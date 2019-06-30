@@ -92,11 +92,6 @@ We will identify leaves with their labels and also call them \emph{taxa} (singul
 All nodes that are no leafs are called \emph{internal nodes} and edges $(u,v)$ are \emph{internal edge}, if both $u$ and $v$ are internal nodes.
 Our definition of ranked tree leads to a natural characterisation of edge lengths within ranked trees:
 integer $l$ denotes the \emph{length} of an edge $e=(u,v)$ if $|\rank(v) - \rank(u)| = l$.
-Each node $v$ can be uniquely identified by its \emph{cluster} $C$, which is the set of taxa descending from the node. \todo{move cluster+mrca to alg:find\_path}
-We also say that $v$ \emph{induces} the cluster $C$.
-Note that all trees on $n$ taxa share the cluster $\{1,\ldots,n\}$ induced by the root.
-Given a subset $S$ of the set of taxa $X$, the \emph{most recent common ancestor} (also known as \emph{least common ancestor}) of $S$, denoted by $\mrca(S)$, is the internal node of the lowest rank that is ancestral to all the taxa in $S$.
-We write $\mrca_T(S)$ to emphasise that we consider the most recent common ancestor of set $S$ in tree $T$.
 Two trees are called \emph{isomorphic} if the underlying rooted phylogenetic trees are isomorphic and the isomorphism preserves ranks of the nodes.
 
 Now we are ready to define the tree space which is the subject of study in this paper, the $\rnni$ graph.
@@ -121,9 +116,6 @@ Note that thus defined $\rnni$ graph is a metric space with the standard shortes
 The following definitions are less standard and required for the results obtained in this paper.
 A set $\mathbb S$ of trees is called \emph{convex} if for all pairs of trees $T,R \in \mathbb S$, there exists a shortest path from $T$ to $R$ such that every tree on $p$ is element of $\mathbb S$.
 
-%If needed: diameter, radius (in the corresponding chapter?), induced triplet (in that chapter?)
-
-
 \section{Geometry of $\rnni$}
 
 This paper is an advance towards the general goal of understanding the geometry of the $\rnni$ space.
@@ -134,7 +126,20 @@ We now present an efficient algorithm (Algorithm~\ref{alg:find_path}) for comput
 This algorithm will be a central tool for our investigation of shortest paths in $\rnni$.
 
 %TODO
-The idea of the algorithm is the following...
+The idea of the algorithm is described in the following.
+Each node $v$ of a tree defines a \emph{cluster} $C$, which is the set of taxa descending from the $v$.
+We then say that $v$ \emph{induces} the cluster $C$.
+Note that the list of all clusters of a tree, if sorted increasingly according to the rank of the corresponding nodes, uniquely defines that tree.
+For computing a path from trees $T$ to $R$, we consider clusters $C_1, \ldots, C_{n-1}$ of $R$ where $C_i$ is induced by the node with rank $i$ for $i = 1, \ldots, n-1$.
+The so-called \emph{trivial clusters} that are induced by leaves and the root are the same in every tree and do therefore not need to be changed on any path between two trees.
+Therefore, the list of clusters $C_1, \ldots, C_{n-1}$, which is ordered increasingly according to the ranks of the corresponding nodes, uniquely defines $R$.
+Algorithm~\ref{alg:find_path} starts at tree $\hat{T} = T$ and constructs a path where the clusters of $R$ are constructed from bottom to top, using following procedure:
+For each $C_i$, find the \emph{most recent common ancestor} $\mrca_{\hat{T}}{C_i}$ (also known as \emph{least common ancestor}) of $C_i$ in current tree $\hat{T}$, that is the internal node with lowest rank that is ancestral to all the taxa in $C_i$.
+Update $\hat{T}$ by decreasing the rank of $\mrca_{\hat{T}}{C_i}$ by an $\rnni$ move until it has the same rank $i$ as in $R$. \todo{Do we need to explain why there is always an $\rnni$ move that moves the $\mrca$ down?}
+Since we consider the clusters of $R$ such that the ranks of the corresponding internal nodes in $R$ increase, $\mrca_{\hat{T}}{C_i}$ is the parent of cluster $C_i$ in $\hat{T}$ after these $\rnni$ moves.
+Thus, repeating this procedure for all clusters of $R$ results in a path between any pair of tress $T, R$, indeed.
+
+\todo{Keep the Pseudo-Code?}
 
 \begin{algorithm}[H]
 \caption{FIND\_PATH($T,R$)}
@@ -153,12 +158,8 @@ The idea of the algorithm is the following...
 \end{algorithmic}
 \end{algorithm}
 
-\todo{This text comes out of the blue.
-Generally, before going into explanations like this it's a good idea to say what's ahead.}
-One can easily prove that there is always exactly one $\rnni$ move on $T$ that decreases the rank of $\mrca_T(C)$ as in line~\ref{alg:line:move_set_down} of Algorithm~\ref{alg:find_path}.
-It follows that Algorithm~\ref{alg:find_path} returns a path in $\rnni$ for any pair of trees $T,R$.
-\todo{This should have been stated before, where you say what is going on.}
-Moreover, it gives an upper bound for the diameter of $\rnni$, which improves the one given in \autocite{Gavryushkin2017}:
+This algorithm gives an upper bound for the diameter of $\rnni$, which improves the one given in \autocite{Gavryushkin2017}.
+Later we will see that this bound is tight.
 
 \begin{lemma}
     $\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$, where $\Delta(G)$ denotes the diameter of graph $G$.
