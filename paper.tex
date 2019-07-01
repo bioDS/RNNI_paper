@@ -28,6 +28,7 @@
 \newcommand{\rnniu}{\mathrm{RNNIu}}
 \newcommand{\tbr}{\mathrm{TBR}}
 \newcommand{\rspr}{\mathrm{rSPR}}
+\newcommand{\csort}{\textsc{Caterpillar Sort}}
 
 \newtheorem{definition}{Definition}
 \newtheorem{theorem}[definition]{Theorem}
@@ -263,12 +264,13 @@ Indeed, we are going to prove Theorem~\ref{thm:caterpillar_convex} within this s
 Note that this is not true for the $\nni$ space, which is clear from the example in Figure~\ref{fig:NNI_vs_RNNI}.
 
 One can see caterpillar trees as sequences of taxa, ordered non-decreasing according to the ranks of their parents.
-$\nni$ moves between caterpillar trees, which are the only possible $\rnni$ moves between caterpillar trees, coincide with exchanges of two neighboured elements in the sequence.
+$\nni$ moves between caterpillar trees, which are the only possible $\rnni$ moves between those trees, coincide with exchanges of two neighboured elements in the sequence.
 In these sequences the first two taxa are somehow equivalent since they build the unique cherry.
 $\nni$ moves that change the cherry of a tree refer to exchanges of the first or the second element with the third element of the sequence while exchanges of the first two elements do not change the corresponding tree.
-With this observation we can provide an algorithm for computing shortest caterpillar paths by a simple modification of the commonly known \emph{Bubble Sort} algorithm \autocite{knuth1997}:
+With this observation we can provide an algorithm for computing shortest caterpillar paths by a simple modification of the commonly known \emph{Bubble Sort} algorithm \autocite{knuth1997}.
+Throughout this paper this algorithm will be called $\csort$.
 
-Following the observations above, only the moves for the first three positions of a sequence with Bubble Sort need to be adapted for the computation of shortest caterpillar paths.
+Following the observations above, only swaps of the first three elements of a sequence with Bubble Sort need to be adapted for the computation of shortest caterpillar paths.
 Let us consider the first three elements $a,b,c$ which appear in this order in a sequence representing a caterpillar tree on a caterpillar path between trees $T$ and $R$.
 If the rank of $\parent(c)$ is higher than the ranks of $\parent(a)$ and $\parent(b)$ in $R$, there are no swaps needed for these taxa.
 If just one of the two taxa $a$ and $b$ is on the other side of $c$ in $R$, this one swaps position with $c$ in the sequence.
@@ -287,7 +289,7 @@ Lemma~\ref{lemma:caterpillar_dist=diameter} regards caterpillar trees with dista
 \begin{proof}
     Let $T$ and $R$ be caterpillar trees.
     Let us first prove that if $d(T,R) = \frac{(n-1)(n-2)}{2}$, it follows $d_c(T,R) = \frac{(n-1)(n-2)}{2}$.
-    This easily follows from the modified Bubble Sort algorithm. \todo{name?}
+    This easily follows from algorithm $\csort$:
     In each loop $i=1, \ldots, n-2$ of the algorithm there can be at most $n-1-i$ exchanges of taxa.
     It follows that the maximum length of a path computed by this algorithm is $\sum\limits_{k=1}^{n-2} k = \frac{(n-1)(n-2)}{2}$.
     Since there cannot be a caterpillar path shorter than $\frac{(n-1)(n-2)}{2}$ if it is $d(T,R) = \frac{(n-1)(n-2)}{2}$, it follows $d_c(T,R) = \Delta(\rnniu)$.
@@ -303,10 +305,10 @@ Lemma~\ref{lemma:caterpillar_dist=diameter} regards caterpillar trees with dista
     Induction step: $n \to n+1$\\
     Induction hypothesis: For trees $T, R$ on $n$ taxa it is $d(T, R) = \frac{n(n-1)}{2}$.\\
     Let $T, R$ be trees on $n+1$ taxa with caterpillar distance $\frac{(n-1)(n-2)}{2}$.
-    Therefore, each of the $\frac{(n-1)(n-2)}{2}$ pairs of taxa that is considered when running modified Bubble Sort algorithm \todo{name} to compute a path $p$ from $R$ to $T$ exchanges.
+    Therefore, each of the $\frac{(n-1)(n-2)}{2}$ pairs of taxa that is considered when running $\csort$ to compute a path $p$ from $R$ to $T$ exchanges.
     From this we can conclude that taxon $n+1$, whose parent has highest rank in $T$, is part of the cherry of $R$.
     Let us consider the trees $T{\big|}_n$ to $R{\big|}_n$ that result from $T$ and $R$ by deleting taxon $n+1$.
-    Bubble Sort \todo{name} computes a path from $T{\big|}_n$ to $R{\big|}_n$ that contains the same exchanges of taxa as $p$, except for the $n-1$ first ones on $p$ that involve taxon $n+1$.
+    $\csort$ computes a path from $T{\big|}_n$ to $R{\big|}_n$ that contains the same exchanges of taxa as $p$, except for the $n-1$ first ones on $p$ that involve taxon $n+1$.
     Hence, the caterpillar distance is $d_c(T{\big|}_n, R{\big|}_n) = \frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2}$.
     So we can apply the induction hypothesis on $T{\big|}_n$ and $R{\big|}_n$ and know that $d(T{\big|}_n,R{\big|}_n) = \frac{(n-1)(n-2)}{2}$.
 
@@ -332,7 +334,7 @@ Lemma~\ref{lemma:caterpillar_dist=diameter} regards caterpillar trees with dista
     Induction step: $l+1 \to l$\\
     Induction hypothesis: For each pair of caterpillar trees with caterpillar distance $l+1$ there is a shortest path between these trees that only consists of caterpillar trees, which means that the distance between these trees is $l+1$.
     Let $T$ and $R$ be caterpillar trees with caterpillar distance $l$.
-    Since $l < \frac{(n-1)(n-2)}{2}$, there is one loop $k$ in the caterpillar path from $R$ to $T$ that is given by the Bubble Sort algorithm \todo{name} where less than $n-2-k$ pairs taxa swap positions.
+    Since $l < \frac{(n-1)(n-2)}{2}$, there is one loop $k$ in the caterpillar path from $R$ to $T$ that is given $\csort$ where less than $n-2-k$ pairs taxa swap positions.
     It follows that there is a taxon $a$ that has parent with rank $n-2-k$ in $T$ and does not need to move all the way up starting at the cherry in loop $k$.
     Let $b$ be the taxon whose parent has rank one less than the parent of $a$ in the tree at the beginning of loop number $k$.
     We can assume without loss of generality that loop $k$ is the first loop in which the number of swaps is not maximal.
@@ -359,7 +361,7 @@ Following the results of section~\ref{section:caterpillar_convex} one can direct
 \begin{proof}
 	Let $T = (( \dots (n,1)2)\dots)n-1)$ and $R = (( \dots (n,n-1)n-2)\dots)1)$.
     According to Theorem~\ref{thm:caterpillar_convex}, there is a shortest path between $T$ and $R$ that is a caterpillar path.
-    We can compute a shortest caterpillar path by using the modified version of Bubble Sort as explained above. \todo{Do we want to name this algorithm?}
+    We can compute a shortest caterpillar path by using $\csort$ as explained above.
     When running this algorithm on $T$ and $R$, taxon $i$ swaps $n-1-i$ times with its right neighbour.
     Therefore, the length of a shortest caterpillar path is $\sum\limits_{i=1}^{n-1}(n-1-i) = \sum\limits_{i=0}^{n-2}i = \frac{(n-1)(n-2)}{2}$.
 \end{proof}
@@ -566,7 +568,7 @@ Furthermore, triplets do not represent ranked trees uniquely as they do not cont
 
 \begin{proof}
     % Insert the proof here
-    Fix $T = (\ldots(1,2) \ldots ,n)$, use induction on $n$ and bubble sort (taxon $n$ must be in cherry of $R$ if distance is max).
+    Fix $T = (\ldots(1,2) \ldots ,n)$, use induction on $n$ and $\csort$ (taxon $n$ must be in cherry of $R$ if distance is max).
 \end{proof}
 
 \begin{conjecture}
