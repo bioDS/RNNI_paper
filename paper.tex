@@ -357,14 +357,15 @@ Lemma~\ref{lemma:caterpillar_dist=diameter} regards caterpillar trees with dista
 \subsection{Diameter}
 \label{section:diameter}
 
-Following the results of section~\ref{section:caterpillar_convex} one can directly improve this result by giving the exact diameter of the $\rnni$ graph.
+With the results of Section~\ref{section:caterpillar_convex} we can easily provide the exact diameter of the $\rnni$ graph and hence, improve the bounds for the diameter given in \autocite{Gavryushkin2017}.
+Moreover, we can conclude from Lemma~\ref{lemma:caterpillar_diameter} that the maximum distance computed by Algorithm~\ref{alg:find_path} equals the diameter of $\rnni$.
+This quality of the algorithm suggests that it gives reasonable estimates of distances.
+For further details on the quality of that algorithm we refer the reader to Section~\ref{section:computation}.
 
 \begin{lemma}
 	There are two caterpillar trees in $\rnniu$ with distance $\frac{(n-1)(n-2))}{2}$.
-	\label{conj:caterpillar_diameter}
+	\label{lemma:caterpillar_diameter}
 \end{lemma}
-
-\todo{This is already an implication of the results above. Shall we still keep a subsection for Diameter? In case we find something about the radius, this could be added here.}
 
 \begin{proof}
 	Let $T = (( \dots (n,1)2)\dots)n-1)$ and $R = (( \dots (n,n-1)n-2)\dots)1)$.
