@@ -29,6 +29,7 @@
 \newcommand{\tbr}{\mathrm{TBR}}
 \newcommand{\rspr}{\mathrm{rSPR}}
 \newcommand{\csort}{\textsc{Caterpillar Sort}}
+\newcommand{\findpath}{\textsc{FindPath}}
 
 \newtheorem{definition}{Definition}
 \newtheorem{theorem}[definition]{Theorem}
@@ -118,6 +119,7 @@ The following definitions are less standard and required for the results obtaine
 A set $\mathbb S$ of trees is called \emph{convex} if for all pairs of trees $T,R \in \mathbb S$, there exists a shortest path from $T$ to $R$ such that every tree on $p$ is element of $\mathbb S$.
 
 \section{Geometry of $\rnni$}
+\label{section:geometry}
 
 This paper is an advance towards the general goal of understanding the geometry of the $\rnni$ space.
 In this section we are investigating the geometry by analysing the structure of shortest paths in $\rnni$.
@@ -128,8 +130,9 @@ This distinguishes $\rnni$ from $\nni$ where this does not hold.
 One further result, presented in Section~\ref{section:diameter}, directly following from the proof of Theorem~\ref{thm:caterpillar_convex}, is the diameter of $\rnni$.
 Finally, we disprove the so-called Split Theorem, conjectured in \autocite{Gavryushkin2017}, and formulate an alternative version of it, the Cluster Theorem (Section~\ref{section:split_theorem}).
 
-We now present an efficient algorithm (Algorithm~\ref{alg:find_path}) for computing paths between pairs of trees in $\rnni$.
-This algorithm will be a central tool for our investigation of shortest paths in $\rnni$.
+We now present an efficient algorithm for computing paths between pairs of trees in $\rnni$.
+Throughout this paper we will denote this algorithm by $\findpath$.
+We will see that it becomes a central tool for our investigation of shortest paths.
 
 The idea of the algorithm is described in the following.
 Each node $v$ of a tree defines a \emph{cluster} $C$, which is the set of taxa descending from the $v$.
@@ -138,35 +141,17 @@ Note that the list of all clusters of a tree, if sorted increasingly according t
 For computing a path from trees $T$ to $R$, we consider clusters $C_1, \ldots, C_{n-1}$ of $R$ where $C_i$ is induced by the node with rank $i$ for $i = 1, \ldots, n-1$.
 The so-called \emph{trivial clusters} that are induced by leaves and the root are the same in every tree and do therefore not need to be changed on any path between two trees.
 Therefore, the list of clusters $C_1, \ldots, C_{n-1}$, which is ordered increasingly according to the ranks of the corresponding nodes, uniquely defines $R$.
-Algorithm~\ref{alg:find_path} starts at tree $\hat{T} = T$ and constructs a path where the clusters of $R$ are constructed from bottom to top, using following procedure:
+Starting at tree $\hat{T} = T$, $\findpath$ constructs a path where the clusters of $R$ are constructed from bottom to top, using following procedure:
 For each $C_i$, find the \emph{most recent common ancestor} $\mrca_{\hat{T}}{C_i}$ (also known as \emph{least common ancestor}) of $C_i$ in current tree $\hat{T}$, that is the internal node with lowest rank that is ancestral to all the taxa in $C_i$.
 Update $\hat{T}$ by decreasing the rank of $\mrca_{\hat{T}}{C_i}$ by an $\rnni$ move until it has the same rank $i$ as in $R$. \todo{Do we need to explain why there is always an $\rnni$ move that moves the $\mrca$ down?}
 Since we consider the clusters of $R$ such that the ranks of the corresponding internal nodes in $R$ increase, $\mrca_{\hat{T}}{C_i}$ is the parent of cluster $C_i$ in $\hat{T}$ after these $\rnni$ moves.
 Thus, repeating this procedure for all clusters of $R$ results in a path between any pair of tress $T, R$, indeed.
-
-\todo{Keep the Pseudo-Code?}
-
-\begin{algorithm}[H]
-\caption{FIND\_PATH($T,R$)}
-\label{alg:find_path}
-\begin{algorithmic}[1]
-	\STATE $\hat{T} := T$
-	\STATE $p := (T)$
-	\FOR {$i = 1, \dots, n-2$}
-		\STATE Let $C$ be the cluster induced by node $v$ in $R$ with $\rank(v) = i$
-		\WHILE {$\rank(\mrca_{\hat{T}}(C))>i$}
-			\STATE Update $\hat{T}$: Decrease $\rank(\mrca_{\hat{T}}(C))$ by an $\rnni$ move \label{alg:line:move_set_down}
-			\STATE $p = p+\hat{T}$
-		\ENDWHILE
-	\ENDFOR
-	\RETURN $p$
-\end{algorithmic}
-\end{algorithm}
+Further details, including pseudo-code for $\findpath$, can be found in Section~\ref{section:computation_findpath}.
 
 This algorithm gives an upper bound for the diameter of $\rnni$, which improves the one given in \autocite{Gavryushkin2017}.
 Later we will see that this bound is tight.
-However, we don't know how good Algorithm~\ref{alg:find_path} distances in $\rnni$.
-More details can be found in Section~\ref{section:computation}
+However, we don't know how good $\findpath$ approximates distances in $\rnni$. \todo{Can we say something about the approximation ratio?}
+More details can be found in Section~\ref{section:computation}.
 
 \begin{lemma}
     $\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$, where $\Delta(G)$ denotes the diameter of graph $G$.
@@ -283,7 +268,7 @@ If the rank of $\parent(c)$ is higher than the ranks of $\parent(a)$ and $\paren
 If just one of the two taxa $a$ and $b$ is on the other side of $c$ in $R$, this one swaps position with $c$ in the sequence.
 But if both $a$ and $b$ are on the other side of $c$ in $R$, the one that has the parent with highest rank of all these three taxa in $R$ swaps with $c$ at first.
 This makes sure that there is no additional swap of $a$ and $b$ needed on the path to $R$.
-\todo{Pseudo-Code for algorithm?}
+\todo{Do we need to explain Bubble Sort?}
 
 Lemma~\ref{lemma:caterpillar_dist=diameter} regards caterpillar trees with distance $\frac{(n-1)(n-2)}{2}$ and will be needed for proving the convexity of the set of caterpillar trees in $\rnni$.
 
@@ -358,8 +343,8 @@ Lemma~\ref{lemma:caterpillar_dist=diameter} regards caterpillar trees with dista
 \label{section:diameter}
 
 With the results of Section~\ref{section:caterpillar_convex} we can easily provide the exact diameter of the $\rnni$ graph and hence, improve the bounds for the diameter given in \autocite{Gavryushkin2017}.
-Moreover, we can conclude from Lemma~\ref{lemma:caterpillar_diameter} that the maximum distance computed by Algorithm~\ref{alg:find_path} equals the diameter of $\rnni$.
-This quality of the algorithm suggests that it gives reasonable estimates of distances.
+Moreover, we can conclude from Lemma~\ref{lemma:caterpillar_diameter} that the maximum distance computed by algorithm $\findpath$, which was dicussed introduced above, equals the diameter of $\rnni$.
+This suggests that it gives reasonable estimates of distances.
 For further details on the quality of that algorithm we refer the reader to Section~\ref{section:computation}.
 
 \begin{lemma}
@@ -474,6 +459,7 @@ For further details on the quality of that algorithm we refer the reader to Sect
 
 \subsection{Split Theorem}
 \label{section:split_theorem}
+\todo{Split or Cluster?}
 
 Within this section we will make a further step towards understanding the complexity of computing shortest paths in $\rnni$.
 Since the problem of computing distances in the most common tree spaces as $\nni$ \autocite{jiang2000}, $\rspr$ \autocite{Bordewich2005}, or $\tbr$ \autocite{allen2001subtree} is known to be $\np$-hard, it would be desirable to find a tree space that is less complex.
@@ -577,6 +563,51 @@ Furthermore, the example used in $\rnni$ to show that there are trees that share
 
 \section{Computational results}
 \label{section:computation}
+
+In \autocite{Gavryushkin2017} an efficient algorithm for computing the $\rnni$ graph has been introduced.
+We implemented this algorithm and could produce the graph for trees with up to $8$ taxa.
+This enables us to compute exact distances between trees of this size.
+It is in particular possible to compare the exact distances with distances we receive from algorithms we introduced previously and to verify the Cluster Theorem, which was raised in Section~\ref{section:split_theorem}, for small trees.
+All algorithms have been implemented with Python and are available online. \todo{link?}
+
+\subsection{Algorithm $\findpath$}
+\label{section:computation_findpath}
+
+In Section~\ref{section:geometry} we introduced the algorithm $\findpath$ for computing paths between arbitrary trees in $\rnni$.
+Therefore, we can use it as approximation for distances in $\rnni$.
+In this section we are providing pseudo-code for $\findpath$ (Algorithm~\ref{alg:find_path}) to provide further insights.
+We implemented and tested this algorithm for trees on up to $k$ taxa, for which it gives the exact $\rnni$ distance. \todo{$k = ?$}
+Furthermore, we saw in Section~\ref{section:diameter} that the maximum distance computed by $\findpath$ for an arbitrary pair of trees equals the diameter of $\rnni$.
+Thus, if the distance between two trees equals the diameter, $\findpath$ computes the correct distance.
+
+\begin{algorithm}[H]
+\caption{$\findpath$($T,R$)}
+\label{alg:find_path}
+\begin{algorithmic}[1]
+	\STATE $\hat{T} := T$
+	\STATE $p := (T)$
+	\FOR {$i = 1, \dots, n-2$}
+		\STATE Let $C$ be the cluster induced by node $v$ in $R$ with $\rank(v) = i$
+		\WHILE {$\rank(\mrca_{\hat{T}}(C))>i$}
+			\STATE Update $\hat{T}$: Decrease $\rank(\mrca_{\hat{T}}(C))$ by an $\rnni$ move \label{alg:line:move_set_down}
+			\STATE $p = p+\hat{T}$
+		\ENDWHILE
+	\ENDFOR
+	\RETURN $p$
+\end{algorithmic}
+\end{algorithm}
+
+
+\subsection{Connecting Computations and Proofs}
+\todo{How shall we structure this?}
+
+In Section~\ref{section:caterpillar_convex} we already indicated that computing distances between trees in $\rnni$ by using the algorithms introduced in previous sections has been important for understanding shortest paths.
+Moreover, these algorithm, in particular $\findpath$ and $\csort$, also became a substantial part of some of the in Section~\ref{section:geometry}.
+
+We can also substantiate the Cluster Theorem, which remains to be a conjecture, by proving it computationally for up to $k$ taxa. \todo{k=?, do we provide implementation?}
+Together with the analytical results of the previous section, this strongly supports our claim that the Cluster Theorem is true.
+
+%Max Distance Trees Algorithm (+ connection to MRCA algorithm)
 
 \section{Ideas}
 \todo{Which ideas do we want to keep? Shall this become an 'open problems/future work' section?}
