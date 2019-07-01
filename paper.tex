@@ -125,7 +125,6 @@ In this section, we...
 We now present an efficient algorithm (Algorithm~\ref{alg:find_path}) for computing paths between pairs of trees in $\rnni$.
 This algorithm will be a central tool for our investigation of shortest paths in $\rnni$.
 
-%TODO
 The idea of the algorithm is described in the following.
 Each node $v$ of a tree defines a \emph{cluster} $C$, which is the set of taxa descending from the $v$.
 We then say that $v$ \emph{induces} the cluster $C$.
@@ -237,15 +236,20 @@ Using the same arguments as in the proof of Lemma~\ref{lemma:distance_delete_tax
 In this section we restrict our attention to the set of \emph{caterpillar trees} where each internal node has at least one child that is a leaf.
 This type of tree is of particular interest in $\rnni$ because shortest paths between such trees in $\rnni$ differ from those in classical $\nni$ space.
 This in combination with the importance of caterpillar trees in the proof of $\np$-hardness of $\nni$ distances in \autocite{jiang2000} suggests that understanding the geometry of paths between caterpillar trees helps investigating the complexity of computing $\rnni$ distances.
-Following notations will facilitate the study of shortest paths between caterpillar trees.
+In particular, we are going to prove that one can always find a shortest path between two caterpillar trees that contains caterpillar trees only, meaning that the set of caterpillar trees is convex in $\rnni$.
+We discovered this by computing caterpillar paths using an algorithm to compute shortest paths within the set of caterpillar trees and comparing the results with shortest path in $\rnni$.
+This algorithm will be explained in detail later in this section, after demonstrating why finding shortest paths between caterpillar trees builds the basis for understanding the difference between $\nni$ and $\rnni$.
+Further details on our computational results can be found in section~\ref{computation}.
+
+Before we start analysing shortest paths between caterpillar trees, we introduce further notations.
 A path $p$ between two caterpillar trees $T$ and $R$ that only consists of caterpillar trees is called \emph{caterpillar path}.
 If $p$ is shortest among all caterpillar paths between these trees we call it \emph{shortest caterpillar path}, and the length of $p$ will be denoted by $d_c(T,R)$ and is called \emph{caterpillar distance}.
 
-%TODO
-We are now going to....
-
-Since $\nni$ moves in $\rnni$ are only allowed on edges of length one, the structure of shortest paths between caterpillar trees is different in $\nni$ and $\rnni$ as it is pointed out in Figure~\ref{fig:NNI_vs_RNNI}.
-
+Let us compare shortest paths between caterpillar trees in $\nni$ with those in $\rnni$.
+The essential difference is that building a cherry and moving it may give a path that is shorter than a path where the taxa move separately in $\nni$ as it is illustrated out in Figure~\ref{fig:NNI_vs_RNNI}.
+There is only one move needed in $\nni$ to build and resolve a cherry, respectively, while the number of moves for moving the cherry is the same as for moving a single taxon.
+However, in $\rnni$ space, there are additional rank moves needed for the internal node of the cherry before an $\nni$ move resolves it, because $\nni$ moves are only allowed on edges of length one in $\rnni$.
+Therefore, a path where taxa move separately and no second cherry is built, is shortest in $\rnni$.
 
 \begin{figure}[H]
 	\centering
@@ -254,11 +258,10 @@ Since $\nni$ moves in $\rnni$ are only allowed on edges of length one, the struc
 	\label{fig:NNI_vs_RNNI}
 \end{figure}
 
-This observation already suggests that there is always a caterpillar path that is shortest path between two arbitrary caterpillar trees in $\rnni$.
-Indeed, our aim for this section is to prove Theorem~\ref{thm:caterpillar_convex} which states that the set of caterpillar trees is convex in $\rnni$.
+The above observation already suggests that there is always a caterpillar path that is shortest path between two arbitrary caterpillar trees in $\rnni$.
+Indeed, we are going to prove Theorem~\ref{thm:caterpillar_convex} within this section, which states that the set of caterpillar trees is convex in $\rnni$.
 Note that this is not true for the $\nni$ space, which is clear from the example in Figure~\ref{fig:NNI_vs_RNNI}.
 
-% Shall we mention the data structure we use (list of sets) - this might be useful to see the connection to the partition lattice.
 One can see caterpillar trees as sequences of taxa, ordered non-decreasing according to the ranks of their parents.
 $\nni$ moves between caterpillar trees, which are the only possible $\rnni$ moves between caterpillar trees, coincide with exchanges of two neighboured elements in the sequence.
 In these sequences the first two taxa are somehow equivalent since they build the unique cherry.
@@ -543,6 +546,7 @@ Moreover, a ranked tree can be uniquely determined by ordering the set of cluste
 Note that the trees $T, R$ of counterexample~\ref{splitthm_counterexample} share the same set of induced splits, but have distinct sets of clusters.
 Furthermore, the example used in $\rnni$ to show that there are trees that share splits that are not present on any shortest path between these trees can be used to prove that the Cluster Theorem does not hold in $\nni$.
 
+\section{Computational results}
 
 \section{Ideas}
 \todo{Which ideas do we want to keep? Shall this become an 'open problems/future work' section?}
