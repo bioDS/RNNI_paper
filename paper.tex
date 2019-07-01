@@ -475,37 +475,54 @@ For further details on the quality of that algorithm we refer the reader to Sect
 \subsection{Split Theorem}
 \label{section:split_theorem}
 
-%Shall we put this bit into the introduction?
-It is natural to try to relate the $\rnni$ graph to the $\nni$ as we already did in previous sections.
-Since computing distances in tree spaces is a main issue in most commonly known tree spaces as $\nni$ \autocite{jiang2000}, $\rspr$ \autocite{Bordewich2005}, or $\tbr$ \autocite{allen2001subtree} is $\np$-hard, it would be desirable to find a tree space that is less complex.
+Within this section we will make a further step towards understanding the complexity of computing shortest paths in $\rnni$.
+Since the problem of computing distances in the most common tree spaces as $\nni$ \autocite{jiang2000}, $\rspr$ \autocite{Bordewich2005}, or $\tbr$ \autocite{allen2001subtree} is known to be $\np$-hard, it would be desirable to find a tree space that is less complex.
 However, it is not known whether computing distances in $\rnni$ is $\np$-hard or not.
 The natural approach to solve this question is to compare $\rnni$ and $\nni$ graph to see whether the reason that $\nni$ is $\np$-hard transfers to $\rnni$.
+In this section we will consider an important example of shortest paths in $\nni$ that build the key of the proof of its $\np$-hardness.
+Afterwards we see that this example cannot transferred to $\rnni$ which is why the so-called Split Theorem, which generalises the example, has been conjectured in \autocite{Gavryushkin2017}.
+However, we present a counterexample disproving the Split Theorem (Conjecture~\ref{conjecture:split_theorem}) in its original version and claiming the Cluster Theorem (Conjecture~\ref{conjecture:cluster_theorem}) as alternative version.
 
 The proof of NP-completeness of $\nni$ in \autocite{jiang2000} is based on the fact that following theorem holds in $\nni$.
 
 \begin{theorem}
 	There are trees $T,R$ in $\nni$ sharing a cluster which is not shared by any intermediate tree on any shortest path from $T$ to $R$.
 	\label{thm:split_nni}
+    %The formulation of this lemma is a bit different in Li1996.
+    %However, the lemma as stated here follows directly from Li1996.
 \end{theorem}
 
 \begin{proof}
 	See \autocite{Li1996}.
 \end{proof}
 
-The proof presented in \autocite{Li1996} for Theorem~\ref{thm:split_nni} does not work for $\rnni$.
-
-%This part is mainly for myself, not sure whether it is important to have it in the paper
-\todo{Shall we keep this explanation? The problem is that the $\rnni$ path depends on the assignment of ranks to the cherries produced on the path}
-The counterexample presented in \autocite{Li1996} works in $\nni$ because of the following:
-When proving Theorem~\ref{thm:split_nni}, \autocite{Li1996} gives an example of two trees $T$ and $R$ on $2n$ taxa that consist of two caterpillar trees each that share the root as parent.
+In the proof presented in \autocite{Li1996} for Theorem~\ref{thm:split_nni} an example of two trees that share a cluster but have no shortest path that preserves this cluster is given.
+The reason that this proof does not work for $\rnni$ is similar to the reason that caterpillar trees are convex in $\rnni$, but not in $\nni$.
+Both trees $T$ and $R$ in the example of \autocite{Li1996} have $2n$ taxa and consist of two caterpillar trees that share the root as parent.
 The clusters given by the two nodes adjacent to the root are $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$ in both trees $T$ and $R$.
-Between these there is a shortest path in $\nni$ where at first $T$ is transformed to a tree $T'$ with $n$ cherries where each cherry contains one taxon of $\{1, \ldots, n\}$ and one taxon of $\{n+1, \ldots, 2n\}$.
+There is a shortest path in $\nni$ where at first $T$ is transformed to a tree $T'$ with $n$ cherries where each cherry contains one taxon of $\{1, \ldots, n\}$ and one taxon of $\{n+1, \ldots, 2n\}$.
 Afterwards, $T'$ is transformed to a tree $R'$ still containing the same cherries as $T'$ but in a way that resolving all these cherries of $R'$ results in $R$.
 For proving that this path is shorter than any path preserving the clusters $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$, the fact that $d_{\nni}(R,R') = d_{\nni}(T{\big|}_{\{1, \ldots, n\}}, R{\big|}_{\{1, \ldots, n\}})$ where $T{\big|}_{\{1, \ldots, n\}}$ and $R{\big|}_{\{1, \ldots, n\}}$ are $T$ and $R$ restricted to taxa $\{1,\ldots,n\}$, respectively, is being used.
 However, this does not work in $\rnni$.
-Introducing new cherries means introducing new internal nodes with new ranks.
-Since there are lots of rank moves needed for an $\rnni$ path similar to the shortest $\nni$ path presented above, the path in $\rnni$ that breaks the clusters $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$ is no shortest path.
-% How do we assign the ranks to the new cherry nodes?
+Similar to what we observed in the example depicted in Figure~\ref{fig:NNI_vs_RNNI}, there are lots of additional rank moves needed on a similar path in $\rnni$.
+Therefore, a path where the two caterpillar trees are sorted separately, is shorter in $\rnni$.
+\todo{(1) Do we want this explanation?
+(2) If yes, is this explanation sufficient (we never say how we assign ranks to $T$ and $R$)?}
+
+
+
+% \todo{Shall we keep this explanation? The problem is that the $\rnni$ path depends on the assignment of ranks to the cherries produced on the path}
+% The counterexample presented in \autocite{Li1996} works in $\nni$ because of the following:
+% When proving Theorem~\ref{thm:split_nni}, \autocite{Li1996} gives an example of two trees $T$ and $R$ on $2n$ taxa that consist of two caterpillar trees each that share the root as parent.
+% The clusters given by the two nodes adjacent to the root are $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$ in both trees $T$ and $R$.
+% Between these there is a shortest path in $\nni$ where at first $T$ is transformed to a tree $T'$ with $n$ cherries where each cherry contains one taxon of $\{1, \ldots, n\}$ and one taxon of $\{n+1, \ldots, 2n\}$.
+% Afterwards, $T'$ is transformed to a tree $R'$ still containing the same cherries as $T'$ but in a way that resolving all these cherries of $R'$ results in $R$.
+% For proving that this path is shorter than any path preserving the clusters $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$, the fact that $d_{\nni}(R,R') = d_{\nni}(T{\big|}_{\{1, \ldots, n\}}, R{\big|}_{\{1, \ldots, n\}})$ where $T{\big|}_{\{1, \ldots, n\}}$ and $R{\big|}_{\{1, \ldots, n\}}$ are $T$ and $R$ restricted to taxa $\{1,\ldots,n\}$, respectively, is being used.
+% However, this does not work in $\rnni$.
+% Introducing new cherries means introducing new internal nodes with new ranks.
+% Since there are lots of rank moves needed for an $\rnni$ path similar to the shortest $\nni$ path presented above, the path in $\rnni$ that breaks the clusters $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$ is no shortest path.
+
+% ^How do we assign the ranks to the new cherry nodes?
 % We could either create a path where $R$ and $R'$ have distance equal to $d_{\rnni}(T{\big|}_{\{1, \ldots, n\}}, R{\big|}_{\{n+1, \ldots, 2n\}})$ and have a lot of additional rank moves before and after that part OR
 % Build $R$ and $R'$ that contain all the cherries within the least number of moves possible (3n-3) and having a longer path between $R$ and $R'$.
 % Also anything in between these two options is possible. Are we able to disprove every option??
@@ -520,7 +537,7 @@ As these partitions are commonly referred to as \emph{splits}, the following con
 \begin{conjecture}[Split Theorem]
 	For the $\rnni$ graph the following statement holds:
 	If a partition of leaves given by an edge is present in two trees $T$ and $R$ then the partition is presented in every tree on every shortest path between $T$ and $R$.
-	\label{split_theorem}
+	\label{conjecture:split_theorem}
 \end{conjecture}
 
 
@@ -552,7 +569,7 @@ Moreover, a ranked tree can be uniquely determined by ordering the set of cluste
 \begin{conjecture}[Cluster Theorem]
 	For the $\rnni$ graph the following statement holds:
 	if two trees $T$ and $R$ contain the same cluster $C$, then $C$ is present as cluster in every tree on every shortest path between $T$ and $R$.
-	\label{cluster_theorem}
+	\label{conjecture:cluster_theorem}
 \end{conjecture}
 
 Note that the trees $T, R$ of counterexample~\ref{splitthm_counterexample} share the same set of induced splits, but have distinct sets of clusters.
