@@ -120,8 +120,13 @@ A set $\mathbb S$ of trees is called \emph{convex} if for all pairs of trees $T,
 \section{Geometry of $\rnni$}
 
 This paper is an advance towards the general goal of understanding the geometry of the $\rnni$ space.
-%TODO
-In this section, we...
+In this section we are investigating the geometry by analysing the structure of shortest paths in $\rnni$.
+We will start by presenting an algorithm for computing paths in $\rnni$ (Algorithm~\ref{alg:find_path}) that turns out to be an essential tool for our studies.
+Using this algorithm, we are able to prove that there is always a shortest path between two caterpillar trees that only consists of caterpillar trees (Theorem~\ref{thm:caterpillar_convex}) in Section~\ref{section:caterpillar_convex}.
+In other words, the set of caterpillar trees is convex in $\rnni$.
+This distinguishes $\rnni$ from $\nni$ where this does not hold.
+One further result, presented in Section~\ref{section:diameter}, directly following from the proof of Theorem~\ref{thm:caterpillar_convex}, is the diameter of $\rnni$.
+Finally, we disprove the so-called Split Theorem, conjectured in \autocite{Gavryushkin2017}, and formulate an alternative version of it, the Cluster Theorem (Section~\ref{section:split_theorem}).
 
 We now present an efficient algorithm (Algorithm~\ref{alg:find_path}) for computing paths between pairs of trees in $\rnni$.
 This algorithm will be a central tool for our investigation of shortest paths in $\rnni$.
@@ -160,6 +165,8 @@ Thus, repeating this procedure for all clusters of $R$ results in a path between
 
 This algorithm gives an upper bound for the diameter of $\rnni$, which improves the one given in \autocite{Gavryushkin2017}.
 Later we will see that this bound is tight.
+However, we don't know how good Algorithm~\ref{alg:find_path} distances in $\rnni$.
+More details can be found in Section~\ref{section:computation}
 
 \begin{lemma}
     $\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$, where $\Delta(G)$ denotes the diameter of graph $G$.
@@ -240,7 +247,7 @@ This in combination with the importance of caterpillar trees in the proof of $\n
 In particular, we are going to prove that one can always find a shortest path between two caterpillar trees that contains caterpillar trees only, meaning that the set of caterpillar trees is convex in $\rnni$.
 We discovered this by computing caterpillar paths using an algorithm to compute shortest paths within the set of caterpillar trees and comparing the results with shortest path in $\rnni$.
 This algorithm will be explained in detail later in this section, after demonstrating why finding shortest paths between caterpillar trees builds the basis for understanding the difference between $\nni$ and $\rnni$.
-Further details on our computational results can be found in section~\ref{computation}.
+Further details on our computational results can be found in Section~\ref{section:computation}.
 
 Before we start analysing shortest paths between caterpillar trees, we introduce further notations.
 A path $p$ between two caterpillar trees $T$ and $R$ that only consists of caterpillar trees is called \emph{caterpillar path}.
@@ -348,6 +355,7 @@ Lemma~\ref{lemma:caterpillar_dist=diameter} regards caterpillar trees with dista
 
 
 \subsection{Diameter}
+\label{section:diameter}
 
 Following the results of section~\ref{section:caterpillar_convex} one can directly improve this result by giving the exact diameter of the $\rnni$ graph.
 
@@ -464,6 +472,7 @@ Following the results of section~\ref{section:caterpillar_convex} one can direct
 % \end{proof}
 
 \subsection{Split Theorem}
+\label{section:split_theorem}
 
 %Shall we put this bit into the introduction?
 It is natural to try to relate the $\rnni$ graph to the $\nni$ as we already did in previous sections.
@@ -549,7 +558,7 @@ Note that the trees $T, R$ of counterexample~\ref{splitthm_counterexample} share
 Furthermore, the example used in $\rnni$ to show that there are trees that share splits that are not present on any shortest path between these trees can be used to prove that the Cluster Theorem does not hold in $\nni$.
 
 \section{Computational results}
-\label{computation}
+\label{section:computation}
 
 \section{Ideas}
 \todo{Which ideas do we want to keep? Shall this become an 'open problems/future work' section?}
