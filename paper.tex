@@ -326,7 +326,8 @@ Lemma~\ref{lemma:caterpillar_dist=diameter} regards caterpillar trees with dista
     Induction step: $l+1 \to l$\\
     Induction hypothesis: For each pair of caterpillar trees with caterpillar distance $l+1$ there is a shortest path between these trees that only consists of caterpillar trees, which means that the distance between these trees is $l+1$.
     Let $T$ and $R$ be caterpillar trees with caterpillar distance $l$.
-    Since $l < \frac{(n-1)(n-2)}{2}$, there is one loop $k$ in the caterpillar path from $R$ to $T$ that is given $\csort$ where less than $n-2-k$ pairs taxa swap positions.
+    We consider the shortest caterpillar path computed by $\csort$.
+    Since $l < \frac{(n-1)(n-2)}{2}$, there is one loop $k$ when running $\csort$ where less than $n-2-k$ pairs taxa swap positions.
     It follows that there is a taxon $a$ that has parent with rank $n-2-k$ in $T$ and does not need to move all the way up starting at the cherry in loop $k$.
     Let $b$ be the taxon whose parent has rank one less than the parent of $a$ in the tree at the beginning of loop number $k$.
     We can assume without loss of generality that loop $k$ is the first loop in which the number of swaps is not maximal.
