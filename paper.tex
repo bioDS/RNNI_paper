@@ -97,12 +97,12 @@ integer $l$ denotes the \emph{length} of an edge $e=(u,v)$ if $|\rank(v) - \rank
 Two trees are called \emph{isomorphic} if the underlying rooted phylogenetic trees are isomorphic and the isomorphism preserves ranks of the nodes.
 
 Now we are ready to define the tree space which is the subject of study in this paper, the $\rnni$ graph.
-Note that we will define the $\rnni$ graph on ultrametric trees where all leaves have the same rank $0$, and therefore refers to the $\rnniu$ graph as introduced in \autocite{Gavryushkin2017}.
+Note that we will define the $\rnni$ graph on ultrametric trees where all leaves have the same rank $0$, and therefore refers to the $\rnniu$ graph as introduced in \autocite{Gavryushkin2018-ol}.
 The vertex set of the \emph{$\rnni$ graph} is given by the set of all ranked trees on $n$ taxa.
 We introduce two types of operations (\emph{$\rnni$ moves}) connecting trees $T$ and $R$ in this graph by an edge:
 A swap of the ranks of two internal nodes ($x$ and $y$) of subsequent ranks ($|\rank(x) - \rank(y)| = 1$) is called a \emph{rank move}.
 We say that trees $T$ and $R$ are \emph{connected} by an \emph{$\nni$ move} move if there exist internal edges $e$ in $T$ and $f$ in $R$ both of length one such that the graphs obtained by shrinking $e$ and $f$ to internal nodes are isomorphic.
-The above definition follows \autocite{Gavryushkin2017} and is equivalent to the common definition of $\nni$ operations as given in \autocite{Steel2016-ye}.
+The above definition follows \autocite{Gavryushkin2018-ol} and is equivalent to the common definition of $\nni$ operations as given in \autocite{Steel2016-ye}.
 Trees that are connected by either a rank move or an $\nni$ move are called \emph{$\rnni$ neighbours} or \emph{adjacent in} $\rnni$.
 Note that thus defined $\rnni$ graph is a metric space with the standard shortest-path distance.
 
@@ -128,7 +128,7 @@ Using this algorithm, we are able to prove that there is always a shortest path 
 In other words, the set of caterpillar trees is convex in $\rnni$.
 This distinguishes $\rnni$ from $\nni$ where this does not hold.
 One further result, presented in Section~\ref{section:diameter}, directly following from the proof of Theorem~\ref{thm:caterpillar_convex}, is the diameter of $\rnni$.
-Finally, we disprove the so-called Split Theorem, conjectured in \autocite{Gavryushkin2017}, and formulate an alternative version of it, the Cluster Theorem (Section~\ref{section:split_theorem}).
+Finally, we disprove the so-called Split Theorem, conjectured in \autocite{Gavryushkin2018-ol}, and formulate an alternative version of it, the Cluster Theorem (Section~\ref{section:split_theorem}).
 
 We now present an efficient algorithm for computing paths between pairs of trees in $\rnni$.
 Throughout this paper we will denote this algorithm by $\findpath$.
@@ -148,7 +148,7 @@ Since we consider the clusters of $R$ such that the ranks of the corresponding i
 Thus, repeating this procedure for all clusters of $R$ results in a path between any pair of tress $T, R$, indeed.
 Further details, including pseudo-code for $\findpath$, can be found in Section~\ref{section:computation_findpath}.
 
-This algorithm gives an upper bound for the diameter of $\rnni$, which improves the one given in \autocite{Gavryushkin2017}.
+This algorithm gives an upper bound for the diameter of $\rnni$, which improves the one given in \autocite{Gavryushkin2018-ol}.
 Later we will see that this bound is tight.
 However, we don't know how good $\findpath$ approximates distances in $\rnni$. \todo{Can we say something about the approximation ratio?}
 More details can be found in Section~\ref{section:computation}.
@@ -228,7 +228,7 @@ Using the same arguments as in the proof of Lemma~\ref{lemma:distance_delete_tax
 
 In this section we restrict our attention to the set of \emph{caterpillar trees} where each internal node has at least one child that is a leaf.
 This type of tree is of particular interest in $\rnni$ because shortest paths between such trees in $\rnni$ differ from those in classical $\nni$ space.
-This in combination with the importance of caterpillar trees in the proof of $\np$-hardness of $\nni$ distances in \autocite{jiang2000} suggests that understanding the geometry of paths between caterpillar trees helps investigating the complexity of computing $\rnni$ distances.
+This in combination with the importance of caterpillar trees in the proof of $\np$-hardness of $\nni$ distances in \autocite{Dasgupta2000-xa} suggests that understanding the geometry of paths between caterpillar trees helps investigating the complexity of computing $\rnni$ distances.
 In particular, we are going to prove that one can always find a shortest path between two caterpillar trees that contains caterpillar trees only, meaning that the set of caterpillar trees is convex in $\rnni$.
 We discovered this by computing caterpillar paths using an algorithm to compute shortest paths within the set of caterpillar trees and comparing the results with shortest path in $\rnni$.
 This algorithm will be explained in detail later in this section, after demonstrating why finding shortest paths between caterpillar trees builds the basis for understanding the difference between $\nni$ and $\rnni$.
@@ -259,7 +259,7 @@ One can see caterpillar trees as sequences of taxa, ordered non-decreasing accor
 $\nni$ moves between caterpillar trees, which are the only possible $\rnni$ moves between those trees, coincide with exchanges of two neighboured elements in the sequence.
 In these sequences the first two taxa are somehow equivalent since they build the unique cherry.
 $\nni$ moves that change the cherry of a tree refer to exchanges of the first or the second element with the third element of the sequence while exchanges of the first two elements do not change the corresponding tree.
-With this observation we can provide an algorithm for computing shortest caterpillar paths by a simple modification of the commonly known \emph{Bubble Sort} algorithm \autocite{knuth1997}.
+With this observation we can provide an algorithm for computing shortest caterpillar paths by a simple modification of the commonly known \emph{Bubble Sort} algorithm \autocite{Knuth1997-pi}.
 Throughout this paper this algorithm will be called $\csort$.
 
 Following the observations above, only swaps of the first three elements of a sequence with Bubble Sort need to be adapted for the computation of shortest caterpillar paths.
@@ -332,7 +332,7 @@ Lemma~\ref{lemma:caterpillar_dist=diameter} regards caterpillar trees with dista
     Let $b$ be the taxon whose parent has rank one less than the parent of $a$ in the tree at the beginning of loop number $k$.
     We can assume without loss of generality that loop $k$ is the first loop in which the number of swaps is not maximal.
     It follows that $a$ and $b$ must be neighboured taxa in $R$.
-    Let us no consider caterpillar tree $R'$ resulting from $R$ by exchanging taxa $a$ and $b$.
+    Let us now consider caterpillar tree $R'$ resulting from $R$ by exchanging taxa $a$ and $b$.
     It is clear that $R'$ has caterpillar distance $d_c(T,R') = d_c(T,R) + 1 = l+1$ to $T$ and moreover, $d(R,R') = 1$.
     Hence we can apply the induction hypothesis on $T$ and $R'$ and see that $d(T,R') = l+1$.
     If it were $d(T,R) < l$, we would have $d(T,R') \leq d(T,R) + d(R,R') < l + 1$ which contradicts the induction hypothesis.
@@ -343,7 +343,7 @@ Lemma~\ref{lemma:caterpillar_dist=diameter} regards caterpillar trees with dista
 \subsection{Diameter}
 \label{section:diameter}
 
-With the results of Section~\ref{section:caterpillar_convex} we can easily provide the exact diameter of the $\rnni$ graph and hence, improve the bounds for the diameter given in \autocite{Gavryushkin2017}.
+With the results of Section~\ref{section:caterpillar_convex} we can easily provide the exact diameter of the $\rnni$ graph and hence, improve the bounds for the diameter given in \autocite{Gavryushkin2018-ol}.
 Moreover, we can conclude from Lemma~\ref{lemma:caterpillar_diameter} that the maximum distance computed by algorithm $\findpath$, which was dicussed introduced above, equals the diameter of $\rnni$.
 This suggests that it gives reasonable estimates of distances.
 For further details on the quality of that algorithm we refer the reader to Section~\ref{section:computation}.
@@ -463,29 +463,29 @@ For further details on the quality of that algorithm we refer the reader to Sect
 \todo{Split or Cluster?}
 
 Within this section we will make a further step towards understanding the complexity of computing shortest paths in $\rnni$.
-Since the problem of computing distances in the most common tree spaces as $\nni$ \autocite{jiang2000}, $\rspr$ \autocite{Bordewich2005}, or $\tbr$ \autocite{allen2001subtree} is known to be $\np$-hard, it would be desirable to find a tree space that is less complex.
+Since the problem of computing distances in the most common tree spaces as $\nni$ \autocite{Dasgupta2000-xa}, $\rspr$ \autocite{Bordewich2005}, or $\tbr$ \autocite{Allen2001-ky} is known to be $\np$-hard, it would be desirable to find a tree space that is less complex.
 However, it is not known whether computing distances in $\rnni$ is $\np$-hard or not.
 The natural approach to solve this question is to compare $\rnni$ and $\nni$ graph to see whether the reason that $\nni$ is $\np$-hard transfers to $\rnni$.
 In this section we will consider an important example of shortest paths in $\nni$ that build the key of the proof of its $\np$-hardness.
-Afterwards we see that this example cannot transferred to $\rnni$ which is why the so-called Split Theorem, which generalises the example, has been conjectured in \autocite{Gavryushkin2017}.
+Afterwards we see that this example cannot transferred to $\rnni$ which is why the so-called Split Theorem, which generalises the example, has been conjectured in \autocite{Gavryushkin2018-ol}.
 However, we present a counterexample disproving the Split Theorem (Conjecture~\ref{conjecture:split_theorem}) in its original version and claiming the Cluster Theorem (Conjecture~\ref{conjecture:cluster_theorem}) as alternative version.
 
-The proof of NP-completeness of $\nni$ in \autocite{jiang2000} is based on the fact that following theorem holds in $\nni$.
+The proof of NP-completeness of $\nni$ in \autocite{Dasgupta2000-xa} is based on the fact that following theorem holds in $\nni$.
 
 \begin{theorem}
 	There are trees $T,R$ in $\nni$ sharing a cluster which is not shared by any intermediate tree on any shortest path from $T$ to $R$.
 	\label{thm:split_nni}
-    %The formulation of this lemma is a bit different in Li1996.
-    %However, the lemma as stated here follows directly from Li1996.
+    %The formulation of this lemma is a bit different in Li1996-zw.
+    %However, the lemma as stated here follows directly from Li1996-zw.
 \end{theorem}
 
 \begin{proof}
-	See \autocite{Li1996}.
+	See \autocite{Li1996-zw}.
 \end{proof}
 
-In the proof presented in \autocite{Li1996} for Theorem~\ref{thm:split_nni} an example of two trees that share a cluster but have no shortest path that preserves this cluster is given.
+In the proof presented in \autocite{Li1996-zw} for Theorem~\ref{thm:split_nni} an example of two trees that share a cluster but have no shortest path that preserves this cluster is given.
 The reason that this proof does not work for $\rnni$ is similar to the reason that caterpillar trees are convex in $\rnni$, but not in $\nni$.
-Both trees $T$ and $R$ in the example of \autocite{Li1996} have $2n$ taxa and consist of two caterpillar trees that share the root as parent.
+Both trees $T$ and $R$ in the example of \autocite{Li1996-zw} have $2n$ taxa and consist of two caterpillar trees that share the root as parent.
 The clusters given by the two nodes adjacent to the root are $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$ in both trees $T$ and $R$.
 There is a shortest path in $\nni$ where at first $T$ is transformed to a tree $T'$ with $n$ cherries where each cherry contains one taxon of $\{1, \ldots, n\}$ and one taxon of $\{n+1, \ldots, 2n\}$.
 Afterwards, $T'$ is transformed to a tree $R'$ still containing the same cherries as $T'$ but in a way that resolving all these cherries of $R'$ results in $R$.
@@ -499,8 +499,8 @@ Therefore, a path where the two caterpillar trees are sorted separately, is shor
 
 
 % \todo{Shall we keep this explanation? The problem is that the $\rnni$ path depends on the assignment of ranks to the cherries produced on the path}
-% The counterexample presented in \autocite{Li1996} works in $\nni$ because of the following:
-% When proving Theorem~\ref{thm:split_nni}, \autocite{Li1996} gives an example of two trees $T$ and $R$ on $2n$ taxa that consist of two caterpillar trees each that share the root as parent.
+% The counterexample presented in \autocite{Li1996-zw} works in $\nni$ because of the following:
+% When proving Theorem~\ref{thm:split_nni}, \autocite{Li1996-zw} gives an example of two trees $T$ and $R$ on $2n$ taxa that consist of two caterpillar trees each that share the root as parent.
 % The clusters given by the two nodes adjacent to the root are $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$ in both trees $T$ and $R$.
 % Between these there is a shortest path in $\nni$ where at first $T$ is transformed to a tree $T'$ with $n$ cherries where each cherry contains one taxon of $\{1, \ldots, n\}$ and one taxon of $\{n+1, \ldots, 2n\}$.
 % Afterwards, $T'$ is transformed to a tree $R'$ still containing the same cherries as $T'$ but in a way that resolving all these cherries of $R'$ results in $R$.
@@ -515,11 +515,11 @@ Therefore, a path where the two caterpillar trees are sorted separately, is shor
 % Also anything in between these two options is possible. Are we able to disprove every option??
 
 
-Since the example given in \autocite{Li1996} that proves Theorem~\ref{thm:split_nni} in $\nni$ does not work in $\rnni$, a contrary statement was conjectured in \autocite{Gavryushkin2017}.
+Since the example given in \autocite{Li1996-zw} that proves Theorem~\ref{thm:split_nni} in $\nni$ does not work in $\rnni$, a contrary statement was conjectured in \autocite{Gavryushkin2018-ol}.
 For understanding this conjecture it is important to realise the connection between edges in a tree and bipartitions of the taxon set of that tree.
 By deleting an edge $e$ of a tree $T$ one receives two trees on taxon sets $A$ and $B$ such that $\{A,B\}$ is a partition of the taxon set of $T$.
 Note that each edge induces such a bipartition, often written as $A|B$, and that both edges incident to the root of a tree induce the same partition.
-As these partitions are commonly referred to as \emph{splits}, the following conjecture was named \emph{Split Theorem} in \autocite{Gavryushkin2017}.
+As these partitions are commonly referred to as \emph{splits}, the following conjecture was named \emph{Split Theorem} in \autocite{Gavryushkin2018-ol}.
 
 \begin{conjecture}[Split Theorem]
 	For the $\rnni$ graph the following statement holds:
@@ -538,7 +538,7 @@ However, we found a simple counterexample to this conjecture:
 	\label{splitthm_counterexample}
 \end{figure}
 
-Since the counterexample in Figure~\ref{splitthm_counterexample} clearly shows that the version of the Split Theorem stated in \autocite{Gavryushkin2017} does not hold, we will now claim an alternative to this conjecture, the \emph{Cluster Theorem}.
+Since the counterexample in Figure~\ref{splitthm_counterexample} clearly shows that the version of the Split Theorem stated in \autocite{Gavryushkin2018-ol} does not hold, we will now claim an alternative to this conjecture, the \emph{Cluster Theorem}.
 Within the Cluster Theorem we are considering clusters instead of splits.
 This is motivated by the fact that rooted phylogenetic trees can uniquely be represented by sets of clusters \autocite{Steel2016-ye}, but not by sets of splits as they cannot define the position of the root.
 Moreover, a ranked tree can be uniquely determined by ordering the set of clusters increasingly according to the ranks of the internal nodes inducing those clusters.
@@ -565,7 +565,7 @@ Furthermore, the example used in $\rnni$ to show that there are trees that share
 \section{Computational results}
 \label{section:computation}
 
-In \autocite{Gavryushkin2017} an efficient algorithm for computing the $\rnni$ graph has been introduced.
+In \autocite{Gavryushkin2018-ol} an efficient algorithm for computing the $\rnni$ graph has been introduced.
 We implemented this algorithm and could produce the graph for trees with up to $8$ taxa.
 This enables us to compute exact distances between trees of this size.
 It is in particular possible to compare the exact distances with distances we receive from algorithms we introduced previously and to verify the Cluster Theorem, which was raised in Section~\ref{section:split_theorem}, for small trees.
