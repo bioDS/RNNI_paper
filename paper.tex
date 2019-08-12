@@ -91,7 +91,7 @@ The rank of a node $v$ in a ranked tree will be denoted by $\rank(v)$.
 For simplicity of notation we use the term \emph{tree} instead instead of ranked tree.
 
 We will identify leaves with their labels and also call them \emph{taxa} (singular: \emph{taxon}) following the systematic biology tradition.
-All nodes that are no leafs are called \emph{internal nodes} and edges $(u,v)$ are \emph{internal edge}, if both $u$ and $v$ are internal nodes.
+All nodes that are no leafs are called \emph{internal nodes} and an edge $(u,v)$ is an \emph{internal edge}, if both $u$ and $v$ are internal nodes.
 Our definition of ranked tree leads to a natural characterisation of edge lengths within ranked trees:
 integer $l$ denotes the \emph{length} of an edge $e=(u,v)$ if $|\rank(v) - \rank(u)| = l$.
 Two trees are called \emph{isomorphic} if the underlying rooted phylogenetic trees are isomorphic and the isomorphism preserves ranks of the nodes.
@@ -123,7 +123,7 @@ A set $\mathbb S$ of trees is called \emph{convex} if for all pairs of trees $T,
 
 This paper is an advance towards the general goal of understanding the geometry of the $\rnni$ space.
 In this section we are investigating the geometry by analysing the structure of shortest paths in $\rnni$.
-We will start by presenting an algorithm for computing paths in $\rnni$ (Algorithm~\ref{alg:find_path}) that turns out to be an essential tool for our studies.
+We will start by presenting an algorithm for computing paths in $\rnni$ ($\findpath$) that turns out to be an essential tool for our studies.
 Using this algorithm, we are able to prove that there is always a shortest path between two caterpillar trees that only consists of caterpillar trees (Theorem~\ref{thm:caterpillar_convex}) in Section~\ref{section:caterpillar_convex}.
 In other words, the set of caterpillar trees is convex in $\rnni$.
 This distinguishes $\rnni$ from $\nni$ where this does not hold.
@@ -134,17 +134,18 @@ We now present an efficient algorithm for computing paths between pairs of trees
 Throughout this paper we will denote this algorithm by $\findpath$.
 We will see that it becomes a central tool for our investigation of shortest paths.
 
-The idea of the algorithm is described in the following.
-Each node $v$ of a tree defines a \emph{cluster} $C$, which is the set of taxa descending from the $v$.
-We then say that $v$ \emph{induces} the cluster $C$.
+Before introducing the idea of this algorithm, we need further definitions.
+Each node $v$ of a tree defines a \emph{cluster} $C$, which is the set of taxa descending from $v$.
+We then say that $v$ \emph{induces} $C$.
+\emph{Trivial clusters} are clusters induced by leaves and the root of a tree.
 Note that the list of all clusters of a tree, if sorted increasingly according to the rank of the corresponding nodes, uniquely defines that tree.
-For computing a path from trees $T$ to $R$, we consider clusters $C_1, \ldots, C_{n-1}$ of $R$ where $C_i$ is induced by the node with rank $i$ for $i = 1, \ldots, n-1$.
-The so-called \emph{trivial clusters} that are induced by leaves and the root are the same in every tree and do therefore not need to be changed on any path between two trees.
-Therefore, the list of clusters $C_1, \ldots, C_{n-1}$, which is ordered increasingly according to the ranks of the corresponding nodes, uniquely defines $R$.
+For computing a path from trees $T$ to $R$ we consider clusters $C_1, \ldots, C_{n-1}$ of $R$ where $C_i$ is induced by the node with rank $i$ for $i = 1, \ldots, n-1$.
+Trivial clusters do not need to be changed on any path between two trees which is why they are not considered in the algorithm.
+This list $C_1, \ldots, C_{n-1}$ of clusters, which is ordered increasingly according to the ranks of their corresponding nodes, uniquely defines $R$.
 Starting at tree $\hat{T} = T$, $\findpath$ constructs a path where the clusters of $R$ are constructed from bottom to top, using following procedure:
-For each $C_i$, find the \emph{most recent common ancestor} $\mrca_{\hat{T}}{C_i}$ (also known as \emph{least common ancestor}) of $C_i$ in current tree $\hat{T}$, that is the internal node with lowest rank that is ancestral to all the taxa in $C_i$.
-Update $\hat{T}$ by decreasing the rank of $\mrca_{\hat{T}}{C_i}$ by an $\rnni$ move until it has the same rank $i$ as in $R$. \todo{Do we need to explain why there is always an $\rnni$ move that moves the $\mrca$ down?}
-Since we consider the clusters of $R$ such that the ranks of the corresponding internal nodes in $R$ increase, $\mrca_{\hat{T}}{C_i}$ is the parent of cluster $C_i$ in $\hat{T}$ after these $\rnni$ moves.
+For each $C_i$, find the \emph{most recent common ancestor} $\mrca_{\hat{T}}(C_i)$ (also known as \emph{least common ancestor}) of $C_i$ in current tree $\hat{T}$, that is the internal node with lowest rank that is ancestral to all the taxa in $C_i$.
+Update $\hat{T}$ by decreasing the rank of $\mrca_{\hat{T}}(C_i)$ with an $\rnni$ move until it has the same rank $i$ as in $R$. \todo{Do we need to explain why there is always an $\rnni$ move that moves the $\mrca$ down?}
+Since we consider the clusters of $R$ such that the ranks of the corresponding internal nodes in $R$ increase, $\mrca_{\hat{T}}(C_i)$ is the parent of cluster $C_i$ in $\hat{T}$ after these $\rnni$ moves.
 Thus, repeating this procedure for all clusters of $R$ results in a path between any pair of tress $T, R$, indeed.
 Further details, including pseudo-code for $\findpath$, can be found in Section~\ref{section:computation_findpath}.
 
@@ -154,18 +155,18 @@ However, we don't know how good $\findpath$ approximates distances in $\rnni$. \
 More details can be found in Section~\ref{section:computation}.
 
 \begin{lemma}
-    $\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$, where $\Delta(G)$ denotes the diameter of graph $G$.
+    $\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$, where $\Delta(G) = \max\limits_{u,v \in V(G)}d(u,v)$ denotes the diameter of graph $G$.
 \end{lemma}
 
 \begin{proof}
-    Let us consider the maximum length of a path given by Algorithm~\ref{alg:find_path}.
-    In worst case each of the $n-2$ clusters $C$ induced by internal nodes of $R$ with ranks $i = 1, \dots, n-2$, requires $n-1-i$ $\rnni$ moves to move $\mrca(C)$ down in $\hat{T}$.
+    Let us consider the maximum length of a path computed by $\findpath$.
+    In worst case each of the $n-2$ clusters $C$ induced by internal nodes of $R$ with rank $i = 1, \dots, n-2$, requires $n-1-i$ $\rnni$ operations to move $\mrca(C)$ down in $\hat{T}$.
 	Hence, the maximum length of a path computed by that algorithm for any pair of trees is less or equal to $\sum\limits_{i = 1}^{n-2} i = \frac{(n-2)(n-1)}{2}$.
 \end{proof}
 
-Lemma~\ref{lemma:distance_delete_taxon} is central for some of the following proofs using induction.
+Lemma~\ref{lemma:distance_delete_taxon} is important for some of the following proofs using induction.
 
-Central for the following inductive proofs is the comparison of the length of a shortest paths $p$ on trees on $n+1$ taxa with a path on $n$ taxa induced by $p$.
+In most of the following inductive proofs the length of a shortest paths $p$ on trees on $n+1$ taxa is compared with a path on $n$ taxa induced by $p$.
 The following lemma bounds the length of these induced paths utilising the rank differences of certain internal nodes between start and end tree of $p$.
 Henceforth the notion $\parent(x)$ refers to the internal node that is parent of taxon $x$.
 
@@ -181,7 +182,7 @@ Henceforth the notion $\parent(x)$ refers to the internal node that is parent of
     This new path $p{\big|}_n$ is then a path from $T$ to $R$.
     Showing that at least $\delta$ $\rnni$ moves are deleted from $p$ to receive $p{\big|}_n$ results in $d(T{\big|}_n,R{\big|}_n) \leq |p{\big|}_n| \leq |p| - \delta = d(T,R) -\delta$ which proves the lemma.
     By the following two observations one can easily see that this claim is true, indeed:
-    The rank of an internal node $v$ only changes within an $\rnni$ move if this move is a rank move of $v$ with another node or an $\nni$ move on an edge incident to $v$.
+    The rank of an internal node $v$ only changes within an $\rnni$ move if this move is a rank move of $v$ or an $\nni$ move on an edge incident to $v$.
     Furthermore, any $\rnni$ move can change the rank of an internal node by at most one.
     Applying this to $\parent(n+1)$ and knowing that the rank of this node differs by $\delta$ between $T$ and $R$ proves that $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - \delta$.
 
@@ -216,7 +217,7 @@ Henceforth the notion $\parent(x)$ refers to the internal node that is parent of
 %Following Proposition might not be needed(?)
 
 Related to Lemma~\ref{lemma:distance_delete_taxon} is Proposition~\ref{proposition:lower_bound_distance} which provides a lower bound for the distance of two trees.
-Using the same arguments as in the proof of Lemma~\ref{lemma:distance_delete_taxon}, it easily follows that the rank difference of parents of any taxon in two trees gives such a bound.
+Using the same arguments as in the proof of Lemma~\ref{lemma:distance_delete_taxon}, it easily follows that the rank difference of parents of the same taxon but in two different trees gives such a bound.
 
 \begin{proposition}
     Given trees $T$ and $R$ with taxon $x$ that fulfils $|\rank_T(\parent(x)) - \rank_R(\parent(x))| = k$, it follows $d(T,R) \geq k$.
@@ -668,8 +669,6 @@ Furthermore, triplets do not represent ranked trees uniquely as they do not cont
     % Insert the proof here
     Fix $T = (\ldots(1,2) \ldots ,n)$, use induction on $n$ and $\csort$ (taxon $n$ must be in cherry of $R$ if distance is max).
 \end{proof}
-
-If this conjecture is true, we have that $\Delta(\rnni) = rad(\rnni)$.
 
 According to Algorithm~\ref{alg:max_dist_tree}, the number of trees with maximum distance to a given tree $T$ depends on the number of cherries of $T$ and the ranks of their internal nodes.
 For caterpillar trees it is $(n-1)!$.
