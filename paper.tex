@@ -366,10 +366,10 @@ Notice that we by Lemma~\ref{lemma:diameter_bound} $\frac{(n-1)(n-2)}{2}$ is the
 \subsection{Diameter}
 \label{section:diameter}
 
-With the results of Section~\ref{section:caterpillar_convex} we can easily provide the exact diameter of the $\rnni$ graph and hence, improve the bounds for the diameter given in \autocite{Gavryushkin2018-ol}.
-Moreover, we can conclude from Lemma~\ref{lemma:caterpillar_diameter} that the maximum distance computed by algorithm $\findpath$, which was dicussed introduced above, equals the diameter of $\rnni$.
-This suggests that it gives reasonable estimates of distances.
-For further details on the quality of that algorithm we refer the reader to Section~\ref{section:computation}.
+With the results of Section~\ref{section:caterpillar_convex} we can easily provide the exact diameter of the $\rnni$ graph and hence improve the bounds for the diameter given in \autocite{Gavryushkin2018-ol}.
+Moreover, we can conclude from Lemma~\ref{lemma:caterpillar_diameter} that the maximum distance computed by algorithm $\findpath$, introduced in Section~\ref{section:geometry}, equals the diameter of $\rnni$.
+This suggests that this algorithm computes reasonable estimates of distances.
+For further details on $\findpath$ we refer the reader to Section~\ref{section:computation}.
 
 \begin{lemma}
 	There are two caterpillar trees in $\rnniu$ with distance $\frac{(n-1)(n-2))}{2}$.
@@ -379,8 +379,8 @@ For further details on the quality of that algorithm we refer the reader to Sect
 \begin{proof}
 	Let $T = (( \dots (n,1)2)\dots)n-1)$ and $R = (( \dots (n,n-1)n-2)\dots)1)$.
     According to Theorem~\ref{thm:caterpillar_convex}, there is a shortest path between $T$ and $R$ that is a caterpillar path.
-    We can compute a shortest caterpillar path by using $\csort$ as explained above.
-    When running this algorithm on $T$ and $R$, taxon $i$ swaps $n-1-i$ times with its right neighbour.
+    We can compute a shortest caterpillar path by using $\csort$ as explained in Section~\ref{section:caterpillar_convex}.
+    When running this algorithm on $T$ and $R$, each taxon $i$ ($i \in \{1, \ldots, n\}$) swaps $n-1-i$ times with its right neighbour.
     Therefore, the length of a shortest caterpillar path is $\sum\limits_{i=1}^{n-1}(n-1-i) = \sum\limits_{i=0}^{n-2}i = \frac{(n-1)(n-2)}{2}$.
 \end{proof}
 
