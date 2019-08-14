@@ -27,7 +27,7 @@
 \newcommand{\rnni}{\mathrm{RNNI}}
 \newcommand{\rnniu}{\mathrm{RNNIu}}
 \newcommand{\tbr}{\mathrm{TBR}}
-\newcommand{\rspr}{\mathrm{rSPR}}
+\newcommand{\spr}{\mathrm{SPR}}
 \newcommand{\csort}{\textsc{Caterpillar Sort}}
 \newcommand{\findpath}{\textsc{FindPath}}
 
@@ -486,14 +486,16 @@ For further details on $\findpath$ we refer the reader to Section~\ref{section:c
 \todo{Split or Cluster?}
 
 Within this section we will make a further step towards understanding the complexity of computing shortest paths in $\rnni$.
-Since the problem of computing distances in the most common tree spaces as $\nni$ \autocite{Dasgupta2000-xa}, $\rspr$ \autocite{Bordewich2005}, or $\tbr$ \autocite{Allen2001-ky} is known to be $\np$-hard, it would be desirable to find a tree space that is less complex.
-However, it is not known whether computing distances in $\rnni$ is $\np$-hard or not.
-The natural approach to solve this question is to compare $\rnni$ and $\nni$ graph to see whether the reason that $\nni$ is $\np$-hard transfers to $\rnni$.
-In this section we will consider an important example of shortest paths in $\nni$ that build the key of the proof of its $\np$-hardness.
-Afterwards we see that this example cannot transferred to $\rnni$ which is why the so-called Split Theorem, which generalises the example, has been conjectured in \autocite{Gavryushkin2018-ol}.
+Since the problem of computing distances in the most common tree spaces as $\nni$ \autocite{Dasgupta2000-xa}, rooted $\spr$ \autocite{Bordewich2005-nx}, or $\tbr$ \autocite{Allen2001-ky} is known to be $\np$-hard, it is desirable to find a tree space that is less complex.
+So far it is not known whether computing distances in $\rnni$ is $\np$-hard or not.
+The natural approach to solve this question is to compare $\rnni$ and $\nni$ graph to see whether the proof of $\np$-hardness of $\nni$ can be transferred to $\rnni$.
+Within this section we will explain why this is not the case.
+Therefore we consider an example of shortest paths in $\nni$ that builds the key of the proof of its $\np$-hardness.
+We will see that this example cannot be transferred to $\rnni$.
+Following this, we will introduce the so-called Split Theorem, which generalises that example, and has been conjectured in \autocite{Gavryushkin2018-ol}.
 However, we present a counterexample disproving the Split Theorem (Conjecture~\ref{conjecture:split_theorem}) in its original version and claiming the Cluster Theorem (Conjecture~\ref{conjecture:cluster_theorem}) as alternative version.
 
-The proof of NP-completeness of $\nni$ in \autocite{Dasgupta2000-xa} is based on the fact that following theorem holds in $\nni$.
+The proof of NP-completeness of $\nni$ in \autocite{Dasgupta2000-xa} is based on the fact that Theorem~\ref{thm:split_nni} holds for $\nni$.
 
 \begin{theorem}
 	There are trees $T,R$ in $\nni$ sharing a cluster which is not shared by any intermediate tree on any shortest path from $T$ to $R$.
@@ -532,17 +534,17 @@ Therefore, a path where the two caterpillar trees are sorted separately, is shor
 % Introducing new cherries means introducing new internal nodes with new ranks.
 % Since there are lots of rank moves needed for an $\rnni$ path similar to the shortest $\nni$ path presented above, the path in $\rnni$ that breaks the clusters $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$ is no shortest path.
 
-% ^How do we assign the ranks to the new cherry nodes?
+% ^How do we assign ranks to the new cherry nodes?
 % We could either create a path where $R$ and $R'$ have distance equal to $d_{\rnni}(T{\big|}_{\{1, \ldots, n\}}, R{\big|}_{\{n+1, \ldots, 2n\}})$ and have a lot of additional rank moves before and after that part OR
 % Build $R$ and $R'$ that contain all the cherries within the least number of moves possible (3n-3) and having a longer path between $R$ and $R'$.
 % Also anything in between these two options is possible. Are we able to disprove every option??
 
 
 Since the example given in \autocite{Li1996-zw} that proves Theorem~\ref{thm:split_nni} in $\nni$ does not work in $\rnni$, a contrary statement was conjectured in \autocite{Gavryushkin2018-ol}.
-For understanding this conjecture it is important to realise the connection between edges in a tree and bipartitions of the taxon set of that tree.
+For understanding this conjecture it is important to realise the connection between edges in a tree and so-called splits, which are bipartitions of the taxon set of that tree:
 By deleting an edge $e$ of a tree $T$ one receives two trees on taxon sets $A$ and $B$ such that $\{A,B\}$ is a partition of the taxon set of $T$.
 Note that each edge induces such a bipartition, often written as $A|B$, and that both edges incident to the root of a tree induce the same partition.
-As these partitions are commonly referred to as \emph{splits}, the following conjecture was named \emph{Split Theorem} in \autocite{Gavryushkin2018-ol}.
+Since these partitions are commonly referred to as \emph{splits}, the following conjecture was named \emph{Split Theorem} in \autocite{Gavryushkin2018-ol}.
 
 \begin{conjecture}[Split Theorem]
 	For the $\rnni$ graph the following statement holds:
@@ -550,21 +552,20 @@ As these partitions are commonly referred to as \emph{splits}, the following con
 	\label{conjecture:split_theorem}
 \end{conjecture}
 
-
-However, we found a simple counterexample to this conjecture:
+However, we found a simple counterexample to this conjecture, provided in Figure~\ref{fig:splitthm_counterexample}.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{splitthm_counterexample}
 	\caption{The split $123|45$ is present in $T$ and $R$, but the path at the top is a shortest path where none of the trees contains this split.
-    However, this split is maintained on the path at the bottom that is a shortest path as well.}
-	\label{splitthm_counterexample}
+    However, this split is maintained on the path at the bottom, which is a shortest path as well.}
+	\label{fig:splitthm_counterexample}
 \end{figure}
 
-Since the counterexample in Figure~\ref{splitthm_counterexample} clearly shows that the version of the Split Theorem stated in \autocite{Gavryushkin2018-ol} does not hold, we will now claim an alternative to this conjecture, the \emph{Cluster Theorem}.
+Since the counterexample in Figure~\ref{fig:splitthm_counterexample} shows that the version of the Split Theorem stated in \autocite{Gavryushkin2018-ol} does not hold, we will now claim an alternative to this conjecture, the \emph{Cluster Theorem} (Conjecture~\ref{conjecture:cluster_theorem}).
 Within the Cluster Theorem we are considering clusters instead of splits.
 This is motivated by the fact that rooted phylogenetic trees can uniquely be represented by sets of clusters \autocite{Steel2016-ye}, but not by sets of splits as they cannot define the position of the root.
-Moreover, a ranked tree can be uniquely determined by ordering the set of clusters increasingly according to the ranks of the internal nodes inducing those clusters.
+Moreover, a ranked tree can be uniquely determined by ordering the clusters such that the ranks of the internal nodes inducing those clusters increase.
 
 % \begin{conjecture}[Weak Split Theorem]
 % 	For $\rnni$ graph the following statement holds:
@@ -582,8 +583,8 @@ Moreover, a ranked tree can be uniquely determined by ordering the set of cluste
 	\label{conjecture:cluster_theorem}
 \end{conjecture}
 
-Note that the trees $T, R$ of counterexample~\ref{splitthm_counterexample} share the same set of induced splits, but have distinct sets of clusters.
-Furthermore, the example used in $\rnni$ to show that there are trees that share splits that are not present on any shortest path between these trees can be used to prove that the Cluster Theorem does not hold in $\nni$.
+Note that trees $T$ and $R$ of counterexample~\ref{fig:splitthm_counterexample} induce the same set of splits, but have distinct clusters.
+Furthermore, this counterexample can be used to prove that the Cluster Theorem does not hold in $\nni$.
 
 \section{Computational results}
 \label{section:computation}
