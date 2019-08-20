@@ -590,9 +590,9 @@ Furthermore, this counterexample can be used to prove that the Cluster Theorem d
 \label{section:computation}
 
 In \autocite{Gavryushkin2018-ol} an efficient algorithm for computing the $\rnni$ graph has been introduced.
-We implemented this algorithm and could produce the graph for trees with up to $8$ taxa.
+We implemented this algorithm and could produce the graph for trees with up to $8$ taxa. \todo{Shall we say more about the algorithm here?}
 This enables us to compute exact distances between trees of this size.
-It is in particular possible to compare the exact distances with distances we receive from algorithms we introduced previously and to verify the Cluster Theorem, which was raised in Section~\ref{section:split_theorem}, for small trees.
+In particular, this enables us to compare exact distances with distances we receive from algorithms introduced in previous sections and to verify the Cluster Theorem, which was raised in Section~\ref{section:split_theorem}, for small trees.
 All algorithms have been implemented with Python and are available online. \todo{link?}
 
 \subsection{Algorithm $\findpath$}
@@ -622,9 +622,7 @@ We implemented and tested this algorithm for trees on up to $k$ taxa, for which 
 
 Recall that the Section~\ref{section:diameter} revealed that the maximum distance computed by $\findpath$ for an arbitrary pair of trees equals the diameter of $\rnni$.
 Thus, if the distance between two trees equals the diameter, $\findpath$ computes the correct distance.
-Note that central for proving the convexity of the set of caterpillar trees in Section~\ref{section:caterpillar_convex} was Lemma~\ref{lemma:caterpillar_dist=diameter}.
-We therefore aim to find a property for any pair of trees, not only caterpillar trees, with maximum distance $\Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
-Following algorithm $\findpath$, we claim following conjecture:
+Following this observation, we claim following conjecture:
 
 \begin{conjecture}
     Let $T$ and $R$ be two trees.
@@ -632,9 +630,18 @@ Following algorithm $\findpath$, we claim following conjecture:
     \label{conjecture:findpath_maxdist_correct}
 \end{conjecture}
 
-Provided Conjecture~\ref{conjecture:findpath_maxdist_correct} holds, there is a simple algorithm for computing a tree $R$ with maximum distance from any given tree $T$.
+Besides the diameter, the \emph{radius} of a graph $G$, which is defined by $rad(G) =  \min\limits_u \max\limits_v d(u,v)$ is a further interesting property of a graph.
+In Conjecture~\ref{conjecture:radius} we claim that the radius of $\rnni$ equals its diameter.
+Algorithm~\ref{alg:max_dist_tree} suggests this, since it computes for an arbitrary input tree $T$ a caterpillar tree $R$ with distance $d(T,R) = \frac{(n-1)(n-2)}{2}$ for $n \leq k$. \todo{$k = ?$, check computationally (or prove this -> see conjecture below)}
+
+\begin{conjecture}
+    It is $rad(\rnni) = \Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
+    \label{conjecture:radius}
+\end{conjecture}
+
+
 %TODO
-%Explain this algorithm, not only Pseudo-Code!
+%Explain the following algorithm, not only Pseudo-Code!
 
 \begin{algorithm}[H]
 \caption{MAX\_DISTANCE\_TREE($T$)}
@@ -643,24 +650,20 @@ Provided Conjecture~\ref{conjecture:findpath_maxdist_correct} holds, there is a 
 	\STATE $R$ only contains cherry taxa $a, b$ of $T$ and has internal node with rank $n-1$
     \STATE In list $L$ all taxa $\{1,\ldots,n\}\setminus\{a,b\}$ are sorted such that the ranks of their parents in $T$ do not decrease
 	\FOR {taxon $a$ in $L$}
-		\STATE Add an internal node as parent of $a$ on any edge in $R$ such that the new internal node has rank one less than the previously lowest internal node
+		\STATE Add an internal node as parent of $a$ on an edge in $R$ such that the new internal node has rank one less than the previously lowest internal node and $R$ is a caterpillar tree
 	\ENDFOR
 	\RETURN $R$
 \end{algorithmic}
 \end{algorithm}
 
-\begin{lemma}
-    Let $T$ and $R$ be trees.
+\begin{conjecture}
+    Let $T$ be an arbitrary tree and $R$ a caterpillar tree.
     Algorithm~\ref{alg:find_path} ($\findpath$) gives a path of length $\frac{(n-1)(n-2)}{2}$ between $T$ and $R$ if, and only if, $R$ can be generated from $T$ by applying Algorithm~\ref{alg:max_dist_tree}.
-    \label{lemma:max_dist_lemmas_equivalence}
-\end{lemma}
-
-According to Lemma~\ref{lemma:max_dist_lemmas_equivalence}, Conjecture~\ref{conjecture:findpath_maxdist_correct} is equivalence to the conjecture that two trees have maximum distance if, and only if, one can be obtained from the other by applying Algorithm~\ref{alg:max_dist_tree}.
+    \label{conjecture:max_dist_caterpillar}
+\end{conjecture}
 
 %TODO
-%proof (short explanation)
-
-If Conjecture~\ref{conjecture:findpath_maxdist_correct} is correct, it directly would follow that the radius of $\rnni$ is $rad(\rnni) = \Delta(\rnni) = \frac{(n-1)(n-2)}{2}$, where $rad(G) = \min\limits_u \max\limits_v d(u,v)$ for graph $G$ and nodes $u$ and $v$ in $G$.
+%prove this conjecture! (<= would be sufficient for the conjecture above!)
 
 \subsection{Connecting Computations and Proofs}
 \todo{How shall we structure this?}
