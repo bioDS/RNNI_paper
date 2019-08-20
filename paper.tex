@@ -386,6 +386,7 @@ For further details on $\findpath$ we refer the reader to Section~\ref{section:c
 
 \begin{corollary}
     It is $\Delta(\rnniu) = \frac{(n-1)(n-2)}{2}$.
+    \label{corollary:diameter}
 \end{corollary}
 
 %Do we need this?
@@ -631,14 +632,7 @@ Following this observation, we claim following conjecture:
 \end{conjecture}
 
 Besides the diameter, the \emph{radius} of a graph $G$, which is defined by $rad(G) =  \min\limits_u \max\limits_v d(u,v)$ is a further interesting property of a graph.
-In Conjecture~\ref{conjecture:radius} we claim that the radius of $\rnni$ equals its diameter.
-Algorithm~\ref{alg:max_dist_tree} suggests this, since it computes for an arbitrary input tree $T$ a caterpillar tree $R$ with distance $d(T,R) = \frac{(n-1)(n-2)}{2}$ for $n \leq k$. \todo{$k = ?$, check computationally (or prove this -> see conjecture below)}
-
-\begin{conjecture}
-    It is $rad(\rnni) = \Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
-    \label{conjecture:radius}
-\end{conjecture}
-
+We will use Algorithm~\ref{alg:max_dist_tree} to show that in $\rnni$ the radius equals the diameter.
 
 %TODO
 %Explain the following algorithm, not only Pseudo-Code!
@@ -650,20 +644,48 @@ Algorithm~\ref{alg:max_dist_tree} suggests this, since it computes for an arbitr
 	\STATE $R$ only contains cherry taxa $a, b$ of $T$ and has internal node with rank $n-1$
     \STATE In list $L$ all taxa $\{1,\ldots,n\}\setminus\{a,b\}$ are sorted such that the ranks of their parents in $T$ do not decrease
 	\FOR {taxon $a$ in $L$}
-		\STATE Add an internal node as parent of $a$ on an edge in $R$ such that the new internal node has rank one less than the previously lowest internal node and $R$ is a caterpillar tree
+		\STATE Add an internal node as parent of $a$ on an edge in $R$ such that the new internal node has rank one less than the previously lowest internal node
 	\ENDFOR
 	\RETURN $R$
 \end{algorithmic}
 \end{algorithm}
 
-\begin{conjecture}
-    Let $T$ be an arbitrary tree and $R$ a caterpillar tree.
-    Algorithm~\ref{alg:find_path} ($\findpath$) gives a path of length $\frac{(n-1)(n-2)}{2}$ between $T$ and $R$ if, and only if, $R$ can be generated from $T$ by applying Algorithm~\ref{alg:max_dist_tree}.
-    \label{conjecture:max_dist_caterpillar}
-\end{conjecture}
+\begin{lemma}
+    Let $T$ be a caterpillar tree.
+    A tree $R$ that is computed by applying Algorithm~\ref{alg:max_dist_tree} on $R$ has distance $d(T,R) = \Delta(\rnni)$ to $T$.
+    \label{lemma:max_dist_caterpillar}
+\end{lemma}
 
-%TODO
-%prove this conjecture! (<= would be sufficient for the conjecture above!)
+\begin{proof}
+    Recall that with Corollary~\ref{corollary:diameter} we know that $\Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
+    Within this proof we assume, without loss of generality, that it is $T = (( \dots (1,2)3)\dots)n)$
+    We prove the lemma by induction on the number of taxa $n$.
+
+    Induction basis: $n = 3$\\
+    Algorithm~\ref{alg:max_dist_tree} computes either $R = ((1,3),2)$ or $R'= ((2,3),1)$ when applied to $T = ((1,2),3)$.
+    Since it is $d(T,R) = d(T,R') = 1 = \Delta(\rnni_3)$, the lemma is true for trees on $n=3$ taxa.
+
+    Induction step: $n \to n+1$\\
+    Induction hypothesis: For a caterpillar tree $T$ on $n$ taxa Algorithm~\ref{alg:max_dist_tree} computes a tree $R$ with distance $d(T,R) = \frac{(n-1)(n-2)}{2}$.\\
+    Let us now  assume that $T$ is a tree on $n+1$ taxa.
+    In the list $L$ produced in Algorithm~\ref{alg:max_dist_tree}, when applied to $T$, taxon $n+1$ is the last one.
+    Hence $n+1$ is added to $R$ in the last step and therefore, it is in the lowest cherry of $R$ and has parent with rank $1$.
+    Because the parent of $n+1$ has rank $n$ in $T$, we can conclude from Lemma~\ref{lemma:distance_delete_taxon} that for $T$ and $R$ restricted to taxa $1,\ldots,n$ it holds: $d(T|_n,R|_n) \leq d(T,R) - (n-1)$.
+    It is easy to see that $R|_n$ can be received from $T|_n$ by applying Algorithm~\ref{alg:max_dist_tree}.
+    So we can follow from the induction hypothesis and Lemma~\ref{lemma:distance_delete_taxon} that it is $d(T,R) \geq d(T|_n,R|_n) + (n-1) = \frac{(n-1)(n-2)}{2} = \frac{n(n-1)}{2}$, which concludes the proof of the lemma.
+\end{proof}
+
+In Algorithm~\ref{alg:max_dist_tree} it is not uniquely determined, where a new taxon is added to the already existing tree.
+Instead, the attachment branch can be randomly chosen with the only restriction being that the rank of the new node needs to be below the ranks of already existing internal nodes.
+This is the reason why one can receive every tree topology on $n$ taxa when applying Algorithm~\ref{alg:max_dist_tree} onto a caterpillar tree.
+And because permuting the labels of the trees does not change the distance, there is for every tree $R$ on $n$ taxa a caterpillar tree $T$ with distance $d(T,R) = \Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
+This gives us Corollary~\ref{corollary:radius}.
+
+\begin{corollary}
+    The radius of the $\rnni$ graph is $rad(\rnni) = \Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
+    \label{corollary:radius}
+\end{corollary}
+
 
 \subsection{Connecting Computations and Proofs}
 \todo{How shall we structure this?}
