@@ -373,7 +373,7 @@ Let us first consider the diameter of the $\rnni$ graph.
 With the results of Section~\ref{section:caterpillar_convex} is not hard to see that is $\Delta(\rnni) = \frac{(n-1)(n-2))}{2}$ as it is stated in Corollary~\ref{corollary:diameter}.
 
 \begin{lemma}
-	There are two caterpillar trees in $\rnniu$ with distance $\frac{(n-1)(n-2))}{2}$.
+	There are two caterpillar trees in $\rnniu$ with distance $\frac{(n-1)(n-2)}{2}$.
 	\label{lemma:caterpillar_diameter}
 \end{lemma}
 
@@ -393,7 +393,7 @@ With the results of Section~\ref{section:caterpillar_convex} is not hard to see 
 We now proceed to show that the radius of the $\rnni$ graph equals its diameter.
 For this aim an algorithm for constructing a tree $R$ with distance $\Delta(\rnni)$ from a given caterpillar tree $T$ will be used.
 This algorithm will be called $\mdtree$ (Maximum Distance Tree).
-We will prove that a tree $R = \mdtree(T)$ has distance $d(T,R) = \Delta(\rnni)$ to $T$ if $T$ is a caterpillar tree, after introducing the algorithm.
+After introducing this algorithm, we will prove that a tree $R = \mdtree(T)$ has distance $d(T,R) = \Delta(\rnni)$ to $T$ if $T$ is a caterpillar tree.
 
 $\mdtree$ works as follows:
 At first, all taxa of $T$ are sorted in a list $L$ such that the ranks of their parents are non-decreasing.
@@ -647,18 +647,19 @@ Furthermore, this counterexample can be used to prove that the Cluster Theorem d
 \label{section:computation}
 
 In \autocite{Gavryushkin2018-ol} an efficient algorithm for computing the $\rnni$ graph has been introduced.
-We implemented this algorithm and could produce the graph for trees with up to $8$ taxa. \todo{Shall we say more about the algorithm here?}
-This enables us to compute exact distances between trees of this size.
-In particular, this enables us to compare exact distances with distances we receive from algorithms introduced in previous sections and to verify the Cluster Theorem, which was raised in Section~\ref{section:split_theorem}, for small trees.
+We implemented this algorithm, which produces the graph for trees with up to $8$ taxa in reasonable time. \todo{Shall we say more about the algorithm here? + running time (in hours/minutes) on which computer?}
+This enables us to compute exact distances between trees with up to $8$ taxa.
+In particular, comparing exact distances with approximations as introduced in previous sections and verifying the Cluster Theorem of Section~\ref{section:split_theorem} can now be for small trees.
 All algorithms have been implemented with Python and are available online. \todo{link?}
+In the following, further details about the implementation of algorithms $\findpath$ and $\mdtree$ as well as a description of how to prove the Cluster Theorem will be given.
 
 \subsection{Algorithm $\findpath$}
 \label{section:computation_findpath}
 
 In Section~\ref{section:geometry} we introduced the algorithm $\findpath$ for computing paths between arbitrary trees in $\rnni$.
-Therefore, we can use it as approximation for distances in $\rnni$.
-In this section we are providing pseudo-code for $\findpath$ (Algorithm~\ref{alg:find_path}) to provide further insights.
-We implemented and tested this algorithm for trees on up to $k$ taxa, for which it gives the exact $\rnni$ distance. \todo{$k = ?$}
+Therefore, it approximates distances in $\rnni$.
+In this section we are providing pseudocode for $\findpath$ (Algorithm~\ref{alg:find_path}) to provide further insights.
+We implemented and tested this algorithm for trees on up to $k$ taxa, for which it gives the exact $\rnni$ distance. \todo{$k = ?$, How exactly did we test it?}
 
 \begin{algorithm}[H]
 \caption{$\findpath$($T,R$)}
@@ -688,11 +689,17 @@ Notice that one direction of the conjecture is already known to be true, it only
     \label{conjecture:findpath_maxdist_correct}
 \end{conjecture}
 
-In order to find the radius of the $\rnni$ graph, the algorithm $\mdtree$ has been introduced in Section~\ref{section:diameter}.
+\subsection{Algorithm $\mdtree$}
+\label{section:computation_mdtree}
+
+For finding the radius of the $\rnni$ graph, algorithm $\mdtree$ has been introduced in Section~\ref{section:diameter}.
 It computes a tree $R$ with distance $\Delta(\rnni)$ from a given caterpillar tree, as it has been proven in Lemma~\ref{lemma:max_dist_caterpillar}.
 Algorithm~\ref{alg:max_dist_tree} provides the pseudocode for this algorithm.
-It is important to note that $\mdtree$ can not only be applied onto caterpillar trees, as it is done in section~\ref{section:diameter}, but to any arbitrary tree.
+It is important to note that $\mdtree$ can not only be applied onto caterpillar trees, as it is done in Section~\ref{section:diameter}, but to any arbitrary tree.
 However, it does not necessarily produce a tree with maximum distance from a given tree.
+
+%TODO
+% Shall we give an example where the distance is not max or simulate trees and compute histogram of distances approximated by $\findpath$?
 
 \begin{algorithm}[H]
 \caption{$\mdtree(T)$}
@@ -707,19 +714,29 @@ However, it does not necessarily produce a tree with maximum distance from a giv
 \end{algorithmic}
 \end{algorithm}
 
+\subsection{Cluster Theorem}
+\label{section:computation_cluster_theorem}
 
+%TODO
+%How much detail do we need? Shall we have this as separate section or is it sufficient to mention that we checked the cluster theorem for up to $k$ taxa?
 
+For proving the Cluster Theorem as stated in Conjecture~\ref{conjecture:cluster_theorem} for small trees, we implemented the algorithm for computing the $\rnni$ graph as stated above.
+If the graph is computed, one can get distances by using algorithms such as Floyd-Warshall~\autocite{Floyd1962-ew} or Dijkstra~\autocite{Dijkstra1959-ph}.
+However, the large number of vertices in $\rnni$ is an obstacle when it comes to computing distances.
+For instance the Floyd-Warshall algorithm needs to save a matrix containing all pairwise distances of vertices in the graph, which needs space quadratic in the number of vertices.
+Since there are $\frac{n!(n-1)!}{2^{n-1}}$ vertices in the $\rnni$ graph~\autocite{Gavryushkin2018-ol}, we already run out of space when considering $7$ taxa.
+Therefore, we cannot simply use this algorithm to compute all distances in $\rnni$.
+Instead of this we compute distances between certain pairs of trees and use the symmetry of $\rnni$ to draw conclusions about the remaining distances.
 
-\subsection{Connecting Computations and Proofs}
-\todo{How shall we structure this?}
+In the following we describe how the Cluster Theorem has computationally been proven for small trees.
+For this aim only a restricted subset of trees in $\rnni$ needs to be considered, that is trees that share a cluster.
+Furthermore, it is sufficient to consider clusters of the shape $\{1, \ldots, m\}$ for $2 \leq m \leq n-1$.
+This is due to the fact that the distance $d(T_1,R_2)$ and $d(T_2,R_2)$ between two pairs of trees $(T_1,R_1)$ and $(T_2,R_2)$ are equal if one can receive $T_2$ from $T_1$ by permuting the taxa the same way as it is necessary for receiving $R_2$ from $R_1$.
+Therefore, we compute for all $m = 2, \ldots, n-1$ exact $\rnni$ distances between all trees containing the cluster $\{1, \ldots, m\}$, using Dijkstra.
+Additionally, the subgraph of $\rnni$ only consisting of trees that have $\{1, \ldots, m\}$ as cluster is computed.
+All pairwise distances between the trees in the subgraph are computed, by using Floyd-Warshall, to compare them with the distances in $\rnni$.
+With this approach it is possible to show that the Cluster Theorem holds for up to $6$ taxa. \todo{Can we improve this?}
 
-In Section~\ref{section:caterpillar_convex} we already indicated that computing distances between trees in $\rnni$ by using the algorithms introduced in previous sections has been important for understanding shortest paths.
-Moreover, these algorithm, in particular $\findpath$ and $\csort$, also became a substantial part of some of the in Section~\ref{section:geometry}.
-
-We can also substantiate the Cluster Theorem, which remains to be a conjecture, by proving it computationally for up to $k$ taxa. \todo{k=?, do we provide implementation?}
-Together with the analytical results of the previous section, this strongly supports our claim that the Cluster Theorem is true.
-
-%Max Distance Trees Algorithm (+ connection to MRCA algorithm)
 
 \section{Ideas}
 \todo{Which ideas do we want to keep? Shall this become an 'open problems/future work' section?}
@@ -737,17 +754,13 @@ This Lemma does only hold for caterpillar trees and not for trees with more than
 Furthermore, triplets do not represent ranked trees uniquely as they do not contain information about the ranks of internal nodes (but they can uniquely define caterpillar trees as these only have one cherry)
 
 \begin{proof}
+    %TODO
     % Insert the proof here
     Fix $T = (\ldots(1,2) \ldots ,n)$, use induction on $n$ and $\csort$ (taxon $n$ must be in cherry of $R$ if distance is max).
 \end{proof}
 
-According to Algorithm~\ref{alg:max_dist_tree}, the number of trees with maximum distance to a given tree $T$ depends on the number of cherries of $T$ and the ranks of their internal nodes.
-For caterpillar trees it is $(n-1)!$.
+According to Algorithm~\ref{alg:max_dist_tree}, the number of trees with maximum distance to a given caterpillar tree $T$ is $(n-1)!$.
 The number of caterpillar trees with distance $\Delta(\rnni)$ from a given caterpillar tree is $2^{n-2}$.
-
-
-
-%If this is true, we can follow that radius = diameter
 
 
 \subsection{Partition lattice}
