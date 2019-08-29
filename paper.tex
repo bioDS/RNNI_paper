@@ -660,6 +660,7 @@ In Section~\ref{section:geometry} we introduced the algorithm $\findpath$ for co
 Therefore, it approximates distances in $\rnni$.
 In this section we are providing pseudocode for $\findpath$ (Algorithm~\ref{alg:find_path}) to provide further insights.
 We implemented and tested this algorithm for trees on up to $k$ taxa, for which it gives the exact $\rnni$ distance. \todo{$k = ?$, How exactly did we test it?}
+The running time of $\findpath$ is quadratic in the number of taxa.
 
 \begin{algorithm}[H]
 \caption{$\findpath$($T,R$)}
@@ -706,7 +707,7 @@ However, it does not necessarily produce a tree with maximum distance from a giv
 \label{alg:max_dist_tree}
 \begin{algorithmic}[1]
 	\STATE $R$ only contains cherry taxa $a, b$ of $T$ and has internal node with rank $n-1$
-    \STATE In list $L$ all taxa $\{1,\ldots,n\}\setminus\{a,b\}$ are sorted such that the ranks of their parents in $T$ do not decrease
+    \STATE In list $L$ all taxa $\{1,\ldots,n\}\setminus\{a,b\}$ are ordered such that the ranks of their parents in $T$ do not decrease
 	\FOR {taxon $a$ in $L$}
 		\STATE Add an internal node as parent of $a$ on an edge in $R$ such that the new internal node has rank one less than the previously lowest internal node
 	\ENDFOR
@@ -739,11 +740,27 @@ With this approach it is possible to show that the Cluster Theorem holds for up 
 
 
 \section{Ideas}
-\todo{Which ideas do we want to keep? Shall this become an 'open problems/future work' section?}
+\todo{This section is just a rough draft. Are there ideas we want to keep? Shall this become an 'open problems/future work' section?}
 
-Following are some ideas that did not lead to major results so far:
+
+The paths computed by $\findpath$ depend on the order of input trees $T$ and $R$:
+$\findpath(T,R)$ does not necessarily produce the reverse path of $\findpath(R,T)$.
+An example can be found in Figure~\ref{fig:findpath_not_symmetric}.
+However, simulations suggest that the lengths of the two paths computed by $\findpath$ for one pair of trees are equal.
+
+\begin{conjecture}
+    Let $T$ and $R$ be ranked trees.
+    The lengths of paths $\findpath(T,R)$ and $\findpath(R,T)$ are equal.
+\end{conjecture}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{findpath_not_symmetric}
+	\caption{Two paths computed by $\findpath$. At the top $\findpath(T,R)$, at the bottom $\findpath(R,T)$}
+	\label{fig:findpath_not_symmetric}
+\end{figure}
+
 % idea for description of max distance caterpillar trees:
-
 \begin{lemma}
     Let $T$ and $R$ be caterpillar trees.
     It is $d_c(T,R) = \Delta(\rnni)$ if, and only if, $T$ and $R$ share no induced triplet.
