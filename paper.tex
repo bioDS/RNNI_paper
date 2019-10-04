@@ -42,7 +42,7 @@
 \graphicspath{{figures/}}
 
 
-\title{The Ranked Nearest Neighbour Interchange space}
+\title{Geometry of Ranked Nearest Neighbour Interchange Space of Phylogenetic Trees}
 \date{\today}
 \author{Lena Collienne\textsuperscript{1}}
 \email{lena.collienne@postgrad.otago.ac.nz}
@@ -50,8 +50,11 @@
 \author{Mareike Fischer\textsuperscript{2}}
 \email{email@mareikefischer.de}
 \address{\textsuperscript{2}Institute for Mathematics and Inofrmatics, University of Greifswald, Germany}
+\author{David Bryant\textsuperscript{3}}
+\email{david.bryant@otago.ac.nz}
+\address{\textsuperscript{1}Department of Mathematics and Statistics, University of Otago, New Zealand}
 \author{Alex Gavryushkin\textsuperscript{1, \Letter}}
-\email{alex@biods.org}
+\email{\textsuperscript{\Letter}alex@biods.org}
 
 
 \begin{document}
@@ -62,15 +65,17 @@
 
 \end{abstract}
 
+The nearest neighbour interchange ($\nni$) graph, defined on the set of phylogenetic trees with adjacency relation given by the interchange operation of two sister clades, has been known in mathematical biology literature for nearly 50 years \autocite{Robinson1971, Moore-Goodman-Barnabas1973}.
+Considered with the metric given by the length of the shortest path, this graph becomes a metric space and its geometry has been extensively studied \autocite{...}.
+In important property of the $\nni$ space is that the distance is NP-hard to compute \autocite{...}.
+As a result no algorithm exists to compute the distance in practical time \autocite{...Whidden may be}.
+[say a bit about tree search and sampling algorithms -- they are hard too]
 
-% All papers have this section so no need for this heading -- let's wait until a journal pushes us to put it back :)
-%\section{Introduction}
+[a paragraph on RNNI, mention that only ultrametric trees considered (extension could be mentioned in the end)]
 
-%Introduce RNNI as ranked nearest neighbour interchange space, only ultrametric trees considered (extension could be mentioned in the end)
+[Figure of ranked tree]
 
-%We use the exact algorithm to calculate all the distances for the examples given in this paper
-
-%Figure of ranked tree in introduction
+[summary of results, including the approaximate algorithm that works exactly on small spaces (Lena: is it already in the text?)]
 
 Although we endeavour to make this paper self-sufficient, we refer the reader to standard textbooks in phylogenetics for terminology \autocite{Felsenstein2004-of, Semple2003-nj, Steel2016-ye}.
 Unless is explicit, we follow these textbooks in our terminology.
