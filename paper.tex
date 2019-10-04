@@ -42,7 +42,7 @@
 \graphicspath{{figures/}}
 
 
-\title{Geometry of Ranked Nearest Neighbour Interchange Space of Phylogenetic Trees}
+\title[Ranked Nearest Neighbour Intarchange]{Geometry of Ranked Nearest Neighbour Interchange Space of Phylogenetic Trees}
 \date{\today}
 \author{Lena Collienne\textsuperscript{1}}
 \email{lena.collienne@postgrad.otago.ac.nz}
@@ -87,6 +87,7 @@ We postpone accurate definitions until later in this section.
 
 In line with the research programme proposed in \autocite{Gavryushkin2018-ol}, we investigate the geometry and algorithmic complexity of the $\rnni$ space.
 Specifically, in this paper we establish the exact radius and diameter of the space, [... -- Lena, please finish this including the approaximate algorithm that works exactly on small spaces (Lena: is it already in the text?)]
+The question of whether there exists a polynomial algorithms for computing the $\rnni$ distance remain an open problem.
 
 In the rest of introduction we formally introduce non-standard definitions necessary for this paper.
 
@@ -127,7 +128,7 @@ AG: Well -- if you decide to change this, go through all the definitions VERY ca
 \label{section:geometry}
 
 In this section we analyse shortest paths in $\rnni$.
-We will start by presenting an algorithm for computing paths in $\rnni$ ($\findpath$) that turns out to be an essential tool for understanding the geometry of $\rnni$.
+We will start by presenting an efficient algorithm for computing (not necessarily shortest) paths in $\rnni$ ($\findpath$) that turns out to be an essential tool for understanding the geometry of $\rnni$.
 Specifically, this algorithm will enable us to prove that there is always a shortest path between two caterpillar trees that only consists of caterpillar trees (Theorem~\ref{thm:caterpillar_convex}) in Section~\ref{section:caterpillar_convex}.
 In other words, the set of caterpillar trees is \emph{convex} in $\rnni$.
 \todo{The rest of this paragraph should be carefully checked and be in the introduction.
@@ -138,39 +139,58 @@ Finally, we disprove the so-called Strong Split Theorem, conjectured in \autocit
 However, the Weak Split Theorem remains a conjecture.
 Furthermore, we propose an alternative (even weaker) version of the conjecture, the Cluster Theorem (Section~\ref{section:split_theorem}).
 
-We now present an efficient algorithm for computing paths between pairs of trees in $\rnni$.
-Throughout this paper we will denote this algorithm by $\findpath$.
-We will see that it becomes a central tool for our investigation of shortest paths.
-
-Before introducing the idea of this algorithm, we need further definitions.
+To introduce the $\findpath$ algorithm, we need the following definitions.
 Each node $v$ of a tree defines a \emph{cluster} $C$, which is the set of taxa descending from $v$.
 We then say that $v$ \emph{induces} $C$.
-\emph{Trivial clusters} are clusters induced by leaves and the root of a tree.
-Note that the list of all clusters of a tree, if sorted increasingly according to the rank of the corresponding nodes, uniquely defines that tree.
-For computing a path from trees $T$ to $R$ we consider clusters $C_1, \ldots, C_{n-1}$ of $R$ where $C_i$ is induced by the node with rank $i$ for $i = 1, \ldots, n-1$.
+\emph{Trivial clusters} are clusters induced by leaves (contain just one element each) and the root of the tree (contains all taxa).
+Note that the list of all
+\todo{I added `non-trivial' here because the clusters corresponding to leaves cannot be put on the list.
+Check that the indexing of $C_i$ is still correct.
+I think we need to be explicit whether we ever use trivial clusters and I suggest that we don't.}
+non-trivial
+clusters of a tree, sorted according to the rank of the corresponding node, defines the tree unambiguously.
+
+To compute a path from tree $T$ to $R$ we consider clusters $C_1, \ldots, C_{n-1}$ of $R$ (the destination tree) where $C_i$ is induced by the node with rank $i$ for $i = 1, \ldots, n-1$.
+\todo{In that case the number of clusters should be $n-2$.}
 Trivial clusters do not need to be changed on any path between two trees which is why they are not considered in the algorithm.
-This list $C_1, \ldots, C_{n-1}$ of clusters, which is ordered increasingly according to the ranks of their corresponding nodes, uniquely defines $R$.
-Starting at tree $\hat{T} = T$, $\findpath$ constructs a path where the clusters of $R$ are constructed from bottom to top, using following procedure:
-For each $C_i$, find the \emph{most recent common ancestor} $\mrca_{\hat{T}}(C_i)$ (also known as \emph{least common ancestor}) of $C_i$ in current tree $\hat{T}$, that is the internal node with lowest rank that is ancestral to all the taxa in $C_i$.
-Update $\hat{T}$ by decreasing the rank of $\mrca_{\hat{T}}(C_i)$ with an $\rnni$ move until it has the same rank $i$ as in $R$. \todo{Do we need to explain why there is always an $\rnni$ move that moves the $\mrca$ down?}
-Since we consider the clusters of $R$ such that the ranks of the corresponding internal nodes in $R$ increase, $\mrca_{\hat{T}}(C_i)$ is the parent of cluster $C_i$ in $\hat{T}$ after these $\rnni$ moves.
+First, set $\hat{T} = T$
+Then for each $i$, find the node that induces $C_i$ in $\hat T$ and denote this node by $\mrca_{\hat{T}}(C_i)$ (short for \emph{most recent common ancestor}).
+Update $\hat{T}$ by
+\todo{This presumes  that the rank is higher.
+Why?}
+decreasing
+the rank of $\mrca_{\hat{T}}(C_i)$ by performing $\rnni$ moves until it has the same rank $i$ as in $R$.
+\todo{Do we need to explain why there is always an $\rnni$ move that moves the $\mrca$ down?
+AG: We need to explain quite a bit here -- there  are many ways one can do those moves + comment above.}
+Since we consider the clusters of $R$ such that the ranks of the corresponding internal nodes in $R$ increase, $\mrca_{\hat{T}}(C_i)$ is
+\todo{What is the `parent of a cluster' -- please check that you follow definitions you introduce.}
+the parent of cluster
+$C_i$ in $\hat{T}$ after these $\rnni$ moves.
 Thus, repeating this procedure for all clusters of $R$ results in a path between any pair of tress $T, R$, indeed.
+\todo{This kind of structure is not ideal (see my comment on the paper structure above).
+If we talk about the algorithm here, all the things, including the pseudo-code should be here.
+Possible solution: have algorithmic stuff first and geometry second.
+If you do it like this, explain that we need the algorithms for the geometry section.}
 Further details, including pseudo-code for $\findpath$, can be found in Section~\ref{section:computation_findpath}.
 
-This algorithm gives an upper bound for the diameter of $\rnni$, which improves the one given in \autocite{Gavryushkin2018-ol}.
+This algorithm gives an upper bound for the diameter of $\rnni$, which
+\todo{Why is that?}
+improves
+the one given in \autocite{Gavryushkin2018-ol}.
+\todo{When}
 Later we will see that this bound is tight.
 However, we don't know how good $\findpath$ approximates distances in $\rnni$. \todo{Can we say something about the approximation ratio?}
 More details can be found in Section~\ref{section:computation}.
 
 \begin{lemma}
-    $\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$, where $\Delta(G) = \max\limits_{u,v \in V(G)}d(u,v)$ denotes the diameter of graph $G$.
-    \label{lemma:diameter_bound}
+$\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$, where $\Delta(\rnni)$ denotes the diameter of the $\rnni$ graph, that is, if $d(u, v)$ is the graph distance in $\rnni$ then $\Delta(\rnni) = \max \{d(u, v) \mid u, v \in \rnni\}$.
+\label{lemma:diameter_bound}
 \end{lemma}
 
 \begin{proof}
-    Let us consider the maximum length of a path computed by $\findpath$.
-    In worst case each of the $n-2$ clusters $C$ induced by internal nodes of $R$ with rank $i = 1, \dots, n-2$, requires $n-1-i$ $\rnni$ operations to move $\mrca(C)$ down in $\hat{T}$.
-	Hence, the maximum length of a path computed by that algorithm for any pair of trees is less or equal to $\sum\limits_{i = 1}^{n-2} i = \frac{(n-2)(n-1)}{2}$.
+Since the diameter is bounded from above the maximum length of a path computed by $\findpath$, it is enough to find this maximum.
+The worst-case execution of $\findpath$ would require each of the $n-2$ clusters $C$ induced by internal nodes of $R$ to be moved by $n - 1 - i$ $\rnni$ operations in $\hat{T}$.
+Hence, the maximum length of such a path is bounded by $\sum\limits_{i = 1}^{n-2} i = \frac{(n-2)(n-1)}{2}$.
 \end{proof}
 
 Lemma~\ref{lemma:distance_delete_taxon} is important for some of the following proofs using induction.
