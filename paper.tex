@@ -52,7 +52,7 @@
 \address{\textsuperscript{2}Institute for Mathematics and Inofrmatics, University of Greifswald, Germany}
 \author{David Bryant\textsuperscript{3}}
 \email{david.bryant@otago.ac.nz}
-\address{\textsuperscript{1}Department of Mathematics and Statistics, University of Otago, New Zealand}
+\address{\textsuperscript{3}Department of Mathematics and Statistics, University of Otago, New Zealand}
 \author{Alex Gavryushkin\textsuperscript{1, \Letter}}
 \email{\textsuperscript{\Letter}alex@biods.org}
 
@@ -66,30 +66,32 @@
 \end{abstract}
 
 The nearest neighbour interchange ($\nni$) graph, defined on the set of phylogenetic trees with adjacency relation given by the interchange operation of two sister clades, has been known in mathematical biology literature for nearly 50 years \autocite{Robinson1971, Moore-Goodman-Barnabas1973}.
-Considered with the metric given by the length of the shortest path, this graph becomes a metric space and its geometry has been extensively studied \autocite{...}.
+Considered with the metric given by the length of the shortest path (graph-distance), this graph becomes a metric space and its geometry has been extensively studied \autocite{...}.
 In important property of the $\nni$ space is that the distance is NP-hard to compute \autocite{...}.
 As a result no algorithm exists to compute the distance in practical time \autocite{...Whidden may be}.
-[say a bit about tree search and sampling algorithms -- they are hard too]
+A consequence is that tree search and sampling algorithms pose a significant challenge even for moderately sized trees \autocite{...}.
 
-[a paragraph on RNNI, mention that only ultrametric trees considered (extension could be mentioned in the end)]
+More recent advances in computational phylogenetics introduced various classes of molecular clock models \autocite{...} and made possible computational inference of phylogenetic time-trees \autocite{...}.
+However, mathematical challenges that come with this seemingly inessential change in parametrisation (genomic distance VS time distance) of trees have only recently been brought to the attention \autocite{Gavryushkin2016-uu}.
+\textcite{Gavryushkin2018-ol} have proposed an extension of the $\nni$ graph to the class of discrete time-trees.
+The simplest such extension introduces the $\rnni$ graph on the set of ranked phylogenetic trees.
+Considered with the graph-distance $\rnni$ becomes a metric space and inherits the geometric and algorithmic challenges that the $\nni$ space has been traditionally facing.
+Surprisingly, most of them cannot be settled by directly translating results or applying techniques developed for $\nni$ \autocite{Gavryushkin2018-ol}.
+
+In this paper, we consider the $\rnni$ space on the ranked phylogenetic trees with all taxa being of rank $0$.
+An example of such a tree is depicted in Figure~\ref{fig:...}.
+In the terminology of \autocite{Gavryushkin2018-ol}, the space considered in this paper is $\rnniu$ (see the Section~\ref{sex:...} for accurate definitions).
 
 [Figure of ranked tree]
 
-[summary of results, including the approaximate algorithm that works exactly on small spaces (Lena: is it already in the text?)]
-
-Although we endeavour to make this paper self-sufficient, we refer the reader to standard textbooks in phylogenetics for terminology \autocite{Felsenstein2004-of, Semple2003-nj, Steel2016-ye}.
-Unless is explicit, we follow these textbooks in our terminology.
+In line with the research programme proposed in \autocite{Gavryushkin2018-ol}, we investigate the geometry of the $\rnni$ space and also consider several computational versions of the problems.
+Specifically, in this paper we establish the exact radius and diameter of the space, [... -- Lena, please finish this including the approaximate algorithm that works exactly on small spaces (Lena: is it already in the text?)]
 
 
 \section{Definitions}
 
-A \emph{rooted binary phylogenetic tree} on a set $X$ is a pair $(T, \Phi)$ where $T$ is a rooted binary tree with leaf set $\mathcal{L}(T)$ and $\Phi:X \to \mathcal{L}(T)$ a bijective mapping.
-\todo{do we need to define leaves and internal nodes, child, parent, subtree, cherry(defined below)?
-AG: Only if we use those terms.
-Can we use something like a glossary to automatically know what terminology we need to introduce?}
-From now on, we assume $X = \{1,\ldots,n\}$ for a fixed number $n \in \mathbb N$ of leaves.
+A \emph{ranked phylogenetic tree} is a pair consisting of a rooted binary phylogenetic tree $T$ on the set $X = \{1, \ldots, n\}$ of taxa for $n \in \mathbb N$, and a rank function that maps $X$ to $0$, all internal nodes to $\{1, \ldots, n-1\}$, and respects the partial order given by the tree.
 
-In this paper we study \emph{ranked trees} that are determined by a pair consisting of a rooted binary phylogenetic tree $(T, \Phi)$ on $X = \{1, \ldots, n\}$ for $n \in \mathbb N$, and a rank function.
 In the literature ranked trees are often referred to as labelled history in the context of coalescent trees.
 The following notion differs from the definition of ranks in that context, since we do not use negative integers as ranks.
 A \emph{rank function} on $T$ maps the vertex set of $T$ onto the set $\{0,\ldots,n-1\}$ such that all leaves are assigned rank $0$ and each internal node has rank greater than its children.
