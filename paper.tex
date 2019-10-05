@@ -219,13 +219,13 @@ Applying the two observations above we conclude that $|p{\big|}_n| \leq |p| - \d
 Since $d(T{\big|}_n,R{\big|}_n) \leq |p{\big|}_n|$ and $|p| = d(T,R)$, the desired inequality follows.
 \end{proof}
 
-Related to Lemma~\ref{lemma:distance_delete_taxon} is Proposition~\ref{proposition:lower_bound_distance} which provides a lower bound for the distance of two trees.
-Using the same arguments as in the proof of Lemma~\ref{lemma:distance_delete_taxon}, it easily follows that the rank difference of parents of the same taxon but in two different trees gives such a bound.
+Using the same arguemtn as in the proof of Lemma~\ref{lemma:distance_delete_taxon} we can establish the following Proposition~\ref{proposition:lower_bound_distance} that provides a lower bound on the distance between trees.
 
 \begin{proposition}
-    Given trees $T$ and $R$ with taxon $x$ that fulfils $|\rank_T(\parent(x)) - \rank_R(\parent(x))| = k$, it follows $d(T,R) \geq k$.
-    \label{proposition:lower_bound_distance}
+If trees $T$ and $R$ and taxon $x$ are such that $|\rank_T(\parent_T(x)) - \rank_R(\parent_R(x))| = \delta$ then $d(T,R) \geq \delta$.
+\label{proposition:lower_bound_distance}
 \end{proposition}
+
 
 \subsection{The set of caterpillar trees}
 \label{section:caterpillar_convex}
@@ -271,6 +271,7 @@ Throughout this paper this algorithm will be called $\csort$.
 
 Following the observations above, only swaps of the first three elements of a sequence with Bubble Sort need to be adapted for the computation of shortest caterpillar paths.
 Let us consider the first three elements $a,b,c$, appearing in this order in a sequence representing a caterpillar tree on a caterpillar path between trees $T$ and $R$.
+\todo{Check throughout that $\parent$ is never used without tree name in the index.}
 If the rank of $\parent(c)$ is higher than the ranks of $\parent(a)$ and $\parent(b)$ in $R$, there are no swaps needed for these taxa.
 If just one of the two taxa $a$ and $b$ is on the other side of $c$ in $R$, this taxon swaps position with $c$ in the sequence.
 And if both $a$ and $b$ are on the other side of $c$ in $R$, the taxon that has the parent with highest rank of all these three taxa in $R$ swaps with $c$ at first.
