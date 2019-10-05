@@ -87,7 +87,7 @@ We postpone accurate definitions until later in this section.
 
 In line with the research programme proposed in \autocite{Gavryushkin2018-ol}, we investigate the geometry and algorithmic complexity of the $\rnni$ space.
 Specifically, in this paper we establish the exact radius and diameter of the space, [... -- Lena, please finish this including the approaximate algorithm that works exactly on small spaces (Lena: is it already in the text?)]
-The question of whether there exists a polynomial algorithms for computing the $\rnni$ distance remain an open problem.
+The question of whether there exists a polynomial algorithm for computing the $\rnni$ distance remains an open problem.
 
 In the rest of introduction we formally introduce non-standard definitions necessary for this paper.
 
@@ -108,6 +108,8 @@ We introduce two types of operation ($\rnni$ \emph{moves}) on trees (see Figure~
 The first type of operation is called a \emph{rank move} and defined by swapping the ranks of two internal nodes that are not adjacent in the tree.
 Formally, if $x$ and $y$ are such nodes of a tree $T$ that $|\rank_T(x) - \rank_T(y)| = 1$ and $(x, y)$ is not an edge in $T$ then the tree $R$ obtained from $T$ by only changing $\rank_R(x) = \rank_T(y)$ and $\rank_R(y) = \rank_T(x)$ is said to be obtained by a rank move.
 The second type of operation is called an $\nni$ \emph{move} and defined in the usual way, that is, two trees $T$ and $R$ are said to be connected by an $\nni$ move if there exist internal edges $e$ in $T$ and $f$ in $R$ both of length one such that the trees obtained by shrinking $e$ and $f$ to internal nodes coincide.
+
+We use the notation $d(T, R)$ throughout the paper to denote the graph distance between trees in $\rnni$, that is, $d(T, R)$ is the length of a shortest $\rnni$ path between $T$ and $R$.
 
 \todo{Add a bit more space in all figures at the bottom to have at least a standard interval above he caption.}
 \todo{In this figure -- rm arrows (think how to place the RNNI edges), possibly avoid using colour, and highlight where the rank move is made (hollow nodes?)}
@@ -182,8 +184,9 @@ Later we will see that this bound is tight.
 However, we don't know how good $\findpath$ approximates distances in $\rnni$. \todo{Can we say something about the approximation ratio?}
 More details can be found in Section~\ref{section:computation}.
 
+\todo{make sure trees are consistently denoted by upper case letters}
 \begin{lemma}
-$\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$, where $\Delta(\rnni)$ denotes the diameter of the $\rnni$ graph, that is, if $d(u, v)$ is the graph distance in $\rnni$ then $\Delta(\rnni) = \max \{d(u, v) \mid u, v \in \rnni\}$.
+$\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$, where $\Delta(\rnni)$ denotes the diameter of the $\rnni$ graph, that is, if $d(T, R)$ is the graph distance in $\rnni$ then $\Delta(\rnni) = \max \{d(T, R) \mid T, R \in \rnni\}$.
 \label{lemma:diameter_bound}
 \end{lemma}
 
@@ -193,27 +196,28 @@ The worst-case execution of $\findpath$ would require each of the $n-2$ clusters
 Hence, the maximum length of such a path is bounded by $\sum\limits_{i = 1}^{n-2} i = \frac{(n-2)(n-1)}{2}$.
 \end{proof}
 
-Lemma~\ref{lemma:distance_delete_taxon} is important for some of the following proofs using induction.
-
-In most of the following inductive proofs the length of a shortest paths $p$ on trees on $n+1$ taxa is compared with a path on $n$ taxa induced by $p$.
-The following lemma bounds the length of these induced paths utilising the rank differences of certain internal nodes between start and end tree of $p$.
-Henceforth the notion $\parent(x)$ refers to the internal node that is parent of taxon $x$.
+The following lemma relates distances between trees on $n$ and $n+1$ taxa and is an important tool for inductive arguments.
+We use the notion $\parent_T(x)$ to refer to the node adjacent to taxon $x$ in tree $T$.
+$T{\big|}_n$ denotes the restriction of tree $T$ to the set of taxa $\{1, \ldots, n\}$.
+In particular if $T$ is a tree on taxa $1, \ldots, n+1$ the tree $T{\big|}_n$ is obtained by deleting taxon $n+1$ and suppressing the thereby created node of degree two.
 
 \begin{lemma}
-    Let $T$ and $R$ be two trees on $n+1$ taxa.
-    Let $T{\big|}_n$ and $R{\big|}_n$ be these trees restricted to taxa $1, \ldots, n$, i.e. taxon $n+1$ is deleted from $T$ and $R$ and the thereby arising node of degree two is suppressed.
-    Then it is $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - \delta$ where $\delta:= |\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))|$ is the rank difference of the parent of taxon $x$ between trees $T$ and $R$.
-    \label{lemma:distance_delete_taxon}
+Let $T$ and $R$ be two trees on taxa $\{1, \ldots, n+1\}$.
+Then $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - \delta$, where $\delta = |\rank_T(\parent_T(n+1)) - \rank_R(\parent_R(n+1))|$.
+\label{lemma:distance_delete_taxon}
 \end{lemma}
 
 \begin{proof}
-    Let $p$ be a shortest path from tree $T$ to $R$ and $p{\big|}_n$ the path resulting from deleting taxon $n+1$ from all trees on $p$.
-    This new path $p{\big|}_n$ is then a path from $T$ to $R$.
-    Showing that at least $\delta$ $\rnni$ moves are deleted from $p$ to receive $p{\big|}_n$ results in $d(T{\big|}_n,R{\big|}_n) \leq |p{\big|}_n| \leq |p| - \delta = d(T,R) -\delta$ which proves the lemma.
-    By the following two observations one can easily see that this claim is true, indeed:
-    The rank of an internal node $v$ only changes within an $\rnni$ move if this move is a rank move of $v$ or an $\nni$ move on an edge incident to $v$.
-    Furthermore, any $\rnni$ move can change the rank of an internal node by at most one.
-    Applying this to $\parent(n+1)$ and knowing that the rank of this node differs by $\delta$ between $T$ and $R$ proves that $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - \delta$.
+First observe that the rank of an internal node $v$ of a tree $T$ along an $\rnni$ path $p$ can only be changed by performing a rank move that involves $v$ or an $\nni$ move on an edge adjacent to $v$.
+Second observe that any $\rnni$ move can change the rank of an internal node by at most one.
+
+Let $p$ be a shortest path from tree $T$ to $R$ and $p{\big|}_n$ the path resulting from deleting taxon $n+1$ from all trees on $p$.
+This new path $p{\big|}_n$ is then a path from $T{\big|}_n$ to $R{\big|}_n$.
+Recall that $\delta$ is the difference in ranks between the parents of taxon $n+1$ in $T$ and $R$.
+\todo{This statement has to be checked very carefully and one or two sentences added to explain the `applying'.}
+Applying the two observations above we conclude that $|p{\big|}_n| \leq |p| - \delta$.
+Since $d(T{\big|}_n,R{\big|}_n) \leq |p{\big|}_n|$ and $|p| = d(T,R)$, the desired inequality follows.
+\end{proof}
 
     % Alternative: Induction:
     %
@@ -241,7 +245,6 @@ Henceforth the notion $\parent(x)$ refers to the internal node that is parent of
     %     In this case it is $d(T{\big|}_n,R{\big|}_n) \leq d(T{\big|}_n,R'{\big|}_n) + d(R'{\big|}_n, R{\big|}_n) \leq d(T{\big|}_n, R'{\big|}_n) + 1 \leq (k-m)+ 1$.
     %     It also follows that $|r_{T}(\parent(n+1}) - r_{R'}(\parent(n+1})| = |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$ and therefore, we can conclude $d(T{\big|}_n,R{\big|}_n) \leq k-m+1 = k+1-m = d(T,R) -  |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$.
     % \end{enumerate}
-\end{proof}
 
 %Following Proposition might not be needed(?)
 
