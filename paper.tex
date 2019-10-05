@@ -219,35 +219,6 @@ Applying the two observations above we conclude that $|p{\big|}_n| \leq |p| - \d
 Since $d(T{\big|}_n,R{\big|}_n) \leq |p{\big|}_n|$ and $|p| = d(T,R)$, the desired inequality follows.
 \end{proof}
 
-    % Alternative: Induction:
-    %
-    % Induction on $k = d(T,R)$:
-    %
-    % Basis($k = 1$):
-    % If rank of $\parent(n+1)$ changes between $T$ and $R$, it is $d(T{\big|}_n, R{\big|}_n) = 0$ and $|\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))| = 1$ and therefore, $d(T{\big|}_n, R{\big|}_n) = 0 \leq 1 - 1 = d(T,R) - |\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))|$.
-    % If on the other hand the rank of $\parent(n+1}$ does not change between $T$ and $R$, it is $d(T{\big|}_n, R{\big|}_n) = d(T,R) = 1$ and $|r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})| = 1$ and therefore, $d(T{\big|}_n, R{\big|}_n) = 1 \leq 1 - 0 = d(T,R) - |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$.
-    %
-    % Step($k \to k+1$):
-    % Let $T$ and $R$ be trees on $n+1$ taxa with distance $d(T,R) = k$.
-    % Let $R'$ be the last tree on a shortest path from $T$ to $R$, i.e. $d(T,R') = k$.
-    % We can apply the induction hypothesis on $T$ and $R'$ and see that $d(T{\big|}_n, R'{\big|}_n) \leq d(T, R') - |r_{T}(\parent(n+1}) - r_{R'}(\parent(n+1})| := k - m$.
-    % Now we differ two cases:
-    % \begin{enumerate}
-    %     \item $\parent(n+1}$ changes its rank between $R$ and $R'$ or is affected by the $\nni$ move is performed between $R$ and $R'$.
-    %
-    %     Then the trees $R{\big|}_n$ and $R'{\big|}_n$ are equal. \todo{Is this obivous?}
-    %     Therefore, it is $d(T{\big|}_n,R{\big|}_n) = d(T{\big|}_n, R'{\big|}_n) \leq k - m$.
-    %     It is either $|r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})| = m+1$, $|r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})| = m$, or $|r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})| = m-1$.
-    %     In either case, we have $d(T{\big|}_n,R{\big|}_n) = d(T{\big|}_n, R'{\big|}_n) \leq k - m = (k+1) - (m+1) \leq d(T, R) - |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$.
-    %
-    %     \item $\parent(n+1}$ has same rank in $R$ and $R'$.
-    %
-    %     In this case it is $d(T{\big|}_n,R{\big|}_n) \leq d(T{\big|}_n,R'{\big|}_n) + d(R'{\big|}_n, R{\big|}_n) \leq d(T{\big|}_n, R'{\big|}_n) + 1 \leq (k-m)+ 1$.
-    %     It also follows that $|r_{T}(\parent(n+1}) - r_{R'}(\parent(n+1})| = |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$ and therefore, we can conclude $d(T{\big|}_n,R{\big|}_n) \leq k-m+1 = k+1-m = d(T,R) -  |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$.
-    % \end{enumerate}
-
-%Following Proposition might not be needed(?)
-
 Related to Lemma~\ref{lemma:distance_delete_taxon} is Proposition~\ref{proposition:lower_bound_distance} which provides a lower bound for the distance of two trees.
 Using the same arguments as in the proof of Lemma~\ref{lemma:distance_delete_taxon}, it easily follows that the rank difference of parents of the same taxon but in two different trees gives such a bound.
 
