@@ -42,7 +42,7 @@
 \graphicspath{{figures/}}
 
 
-\title{The Ranked Nearest Neighbour Interchange space}
+\title[Ranked Nearest Neighbour Intarchange]{Geometry of Ranked Nearest Neighbour Interchange Space of Phylogenetic Trees}
 \date{\today}
 \author{Lena Collienne\textsuperscript{1}}
 \email{lena.collienne@postgrad.otago.ac.nz}
@@ -50,8 +50,11 @@
 \author{Mareike Fischer\textsuperscript{2}}
 \email{email@mareikefischer.de}
 \address{\textsuperscript{2}Institute for Mathematics and Inofrmatics, University of Greifswald, Germany}
+\author{David Bryant\textsuperscript{3}}
+\email{david.bryant@otago.ac.nz}
+\address{\textsuperscript{3}Department of Mathematics and Statistics, University of Otago, New Zealand}
 \author{Alex Gavryushkin\textsuperscript{1, \Letter}}
-\email{alex@biods.org}
+\email{\textsuperscript{\Letter}alex@biods.org}
 
 
 \begin{document}
@@ -62,169 +65,167 @@
 
 \end{abstract}
 
+The nearest neighbour interchange ($\nni$) graph, defined on the set of phylogenetic trees with adjacency relation given by the interchange operation of two sister clades, has been known in mathematical biology literature for nearly 50 years \autocite{Robinson1971, Moore-Goodman-Barnabas1973}.
+Considered with the metric given by the length of the shortest path (graph-distance), this graph becomes a metric space and its geometry has been extensively studied \autocite{...}.
+In important property of the $\nni$ space is that the distance is NP-hard to compute \autocite{...}.
+As a result no algorithm exists to compute the distance in practical time \autocite{...Whidden may be}.
+A consequence is that tree search and sampling algorithms pose a significant challenge even for moderately sized trees \autocite{...}.
 
-% All papers have this section so no need for this heading -- let's wait until a journal pushes us to put it back :)
-%\section{Introduction}
+More recent advances in computational phylogenetics introduced various classes of molecular clock models \autocite{...} and made possible computational inference of phylogenetic time-trees \autocite{...}.
+However, mathematical challenges that come with this seemingly inessential change in parametrisation (genomic distance VS time distance) of trees have only recently been brought to the attention \autocite{Gavryushkin2016-uu}.
+\textcite{Gavryushkin2018-ol} have proposed an extension of the $\nni$ graph to the class of discrete time-trees.
+The simplest such extension introduces the $\rnni$ graph on the set of ranked phylogenetic trees.
+Considered with the graph-distance $\rnni$ becomes a metric space and inherits the geometric and algorithmic challenges that the $\nni$ space has been traditionally facing.
+Surprisingly, most of them cannot be settled by directly translating results or applying techniques developed for $\nni$ \autocite{Gavryushkin2018-ol}.
 
-%Introduce RNNI as ranked nearest neighbour interchange space, only ultrametric trees considered (extension could be mentioned in the end)
+In this paper, we consider the $\rnni$ space on the ranked phylogenetic trees with all taxa being of rank $0$.
+An example of such a tree is depicted in Figure~\ref{fig:...}.
+In the terminology of \autocite{Gavryushkin2018-ol}, the space considered in this paper is the space of ranked ultrametric phylogenetic trees $\rnniu$.
+We postpone accurate definitions until later in this section.
 
-%We use the exact algorithm to calculate all the distances for the examples given in this paper
+[Figure of ranked tree]
 
-%Figure of ranked tree in introduction
+In line with the research programme proposed in \autocite{Gavryushkin2018-ol}, we investigate the geometry and algorithmic complexity of the $\rnni$ space.
+Specifically, in this paper we establish the exact radius and diameter of the space, [... -- Lena, please finish this including the approaximate algorithm that works exactly on small spaces (Lena: is it already in the text?)]
+The question of whether there exists a polynomial algorithm for computing the $\rnni$ distance remains an open problem.
 
-Although we endeavour to make this paper self-sufficient, we refer the reader to standard textbooks in phylogenetics for terminology \autocite{Felsenstein2004-of, Semple2003-nj, Steel2016-ye}.
-Unless is explicit, we follow these textbooks in our terminology.
+In the rest of introduction we formally introduce non-standard definitions necessary for this paper.
 
+A \emph{ranked phylogenetic tree} is a pair consisting of a rooted binary phylogenetic tree $T$ on the set $X = \{1, \ldots, n\}$ of taxa for $n \in \mathbb N$, and a (total) rank function $\rank$ that maps all elements of $X$ to $0$, all internal nodes of $T$ onto the set $\{1, \ldots, n-1\}$, and respects the partial order given by the tree.
+The latter means that if $x$ and $y$ are two internal nodes of $T$ such that there exists a path from a taxon $z \in X$ to $y$ which passes through $x$ then $\rank(x) < \rank(y)$.
+Ranked trees $(T_1, r_1)$ and $(T_2, r_2)$ are different if trees $T_1$ and $T_2$ are different or $T_1 = T_2$ and $\rank_1 \neq \rank_2$.
+Since all trees in this paper are ranked trees, we will abuse the notation and drop the ranking from the notation.
+We will also refer to a ranked tree simply by tree.
+For a tree $T$, we will use $\rank_T$ to refer to its ranking.
 
-\section{Definitions}
-
-A \emph{rooted binary phylogenetic tree} on a set $X$ is a pair $(T, \Phi)$ where $T$ is a rooted binary tree with leaf set $\mathcal{L}(T)$ and $\Phi:X \to \mathcal{L}(T)$ a bijective mapping.
-\todo{do we need to define leaves and internal nodes, child, parent, subtree, cherry(defined below)?
-AG: Only if we use those terms.
-Can we use something like a glossary to automatically know what terminology we need to introduce?}
-From now on, we assume $X = \{1,\ldots,n\}$ for a fixed number $n \in \mathbb N$ of leaves.
-
-In this paper we study \emph{ranked trees} that are determined by a pair consisting of a rooted binary phylogenetic tree $(T, \Phi)$ on $X = \{1, \ldots, n\}$ for $n \in \mathbb N$, and a rank function.
-In the literature ranked trees are often referred to as labelled history in the context of coalescent trees.
-The following notion differs from the definition of ranks in that context, since we do not use negative integers as ranks.
-A \emph{rank function} on $T$ maps the vertex set of $T$ onto the set $\{0,\ldots,n-1\}$ such that all leaves are assigned rank $0$ and each internal node has rank greater than its children.
-The rank of a node $v$ in a ranked tree will be denoted by $\rank(v)$.
-For simplicity of notation we use the term \emph{tree} instead instead of ranked tree.
-
-We will identify leaves with their labels and also call them \emph{taxa} (singular: \emph{taxon}) following the systematic biology tradition.
-All nodes that are no leafs are called \emph{internal nodes} and an edge $(u,v)$ is an \emph{internal edge}, if both $u$ and $v$ are internal nodes.
-Our definition of ranked tree leads to a natural characterisation of edge lengths within ranked trees:
-integer $l$ denotes the \emph{length} of an edge $e=(u,v)$ if $|\rank(v) - \rank(u)| = l$.
-Two trees are called \emph{isomorphic} if the underlying rooted phylogenetic trees are isomorphic and the isomorphism preserves ranks of the nodes.
+Our definition of a ranked tree implies a natural notion of the edge length.
+Indeed, a tree edge $(u,v)$ has length $l$ if $|\rank(v) - \rank(u)| = l$.
 
 Now we are ready to define the tree space which is the subject of study in this paper, the $\rnni$ graph.
-Note that we will define the $\rnni$ graph on ultrametric trees where all leaves have the same rank $0$, and therefore refers to the $\rnniu$ graph as introduced in \autocite{Gavryushkin2018-ol}.
-The vertex set of the \emph{$\rnni$ graph} is given by the set of all ranked trees on $n$ taxa.
-We introduce two types of operations (\emph{$\rnni$ moves}) connecting trees $T$ and $R$ in this graph by an edge:
-A swap of the ranks of two internal nodes ($x$ and $y$) of subsequent ranks ($|\rank(x) - \rank(y)| = 1$) is called a \emph{rank move}.
-We say that trees $T$ and $R$ are \emph{connected} by an \emph{$\nni$ move} move if there exist internal edges $e$ in $T$ and $f$ in $R$ both of length one such that the graphs obtained by shrinking $e$ and $f$ to internal nodes are isomorphic.
-The above definition follows \autocite{Gavryushkin2018-ol} and is equivalent to the common definition of $\nni$ operations as given in \autocite{Steel2016-ye}.
-Trees that are connected by either a rank move or an $\nni$ move are called \emph{$\rnni$ neighbours} or \emph{adjacent in} $\rnni$.
-Note that thus defined $\rnni$ graph is a metric space with the standard shortest-path distance.
 
+The vertex set of the $\rnni$ graph is the set of all ranked trees on $n$ taxa.
+We introduce two types of operation ($\rnni$ \emph{moves}) on trees (see Figure~\ref{fig:RNNI}) and say that two trees are adjacent in the $\rnni$ graph is they are connected by an operation of either type.
+The first type of operation is called a \emph{rank move} and defined by swapping the ranks of two internal nodes that are not adjacent in the tree.
+Formally, if $x$ and $y$ are such nodes of a tree $T$ that $|\rank_T(x) - \rank_T(y)| = 1$ and $(x, y)$ is not an edge in $T$ then the tree $R$ obtained from $T$ by only changing $\rank_R(x) = \rank_T(y)$ and $\rank_R(y) = \rank_T(x)$ is said to be obtained by a rank move.
+The second type of operation is called an $\nni$ \emph{move} and defined in the usual way, that is, two trees $T$ and $R$ are said to be connected by an $\nni$ move if there exist internal edges $e$ in $T$ and $f$ in $R$ both of length one such that the trees obtained by shrinking $e$ and $f$ to internal nodes coincide.
+
+We use the notation $d(T, R)$ throughout the paper to denote the graph distance between trees in $\rnni$, that is, $d(T, R)$ is the length of a shortest $\rnni$ path between $T$ and $R$.
+
+\todo{Add a bit more space in all figures at the bottom to have at least a standard interval above he caption.}
+\todo{In this figure -- rm arrows (think how to place the RNNI edges), possibly avoid using colour, and highlight where the rank move is made (hollow nodes?)}
+\todo{Two of these trees are caterpillar trees.
+Do you think it would be helpful to draw them as caterpillars to prepare readers for the rest of the paper?}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{RNNI}
-	\caption{Four trees connected by edges in the $\rnni$ graph. A rank move of $\mrca(\{1,2\})$ and $\mrca(\{3,4\})$ and all $\nni$ moves on the edge highlighted in red are illustrated}
+	\caption{Two types of operation that define edges of the $\rnni$ graph.}
 	\label{fig:RNNI}
 \end{figure}
 
-\todo{label of taxa in figure shouldn't be numbers}
+\todo{label of taxa in figure shouldn't be numbers\\
+AG: Well -- if you decide to change this, go through all the definitions VERY carefully to make sure we update everywhere.}
 
-The following definitions are less standard and required for the results obtained in this paper.
-A set $\mathbb S$ of trees is called \emph{convex} if for all pairs of trees $T,R \in \mathbb S$, there exists a shortest path from $T$ to $R$ such that every tree on $p$ is element of $\mathbb S$.
 
 \section{Geometry of $\rnni$}
 \label{section:geometry}
 
-This paper is an advance towards the general goal of understanding the geometry of the $\rnni$ space.
-In this section we are investigating the geometry by analysing the structure of shortest paths in $\rnni$.
-We will start by presenting an algorithm for computing paths in $\rnni$ ($\findpath$) that turns out to be an essential tool for our studies.
-Using this algorithm, we are able to prove that there is always a shortest path between two caterpillar trees that only consists of caterpillar trees (Theorem~\ref{thm:caterpillar_convex}) in Section~\ref{section:caterpillar_convex}.
-In other words, the set of caterpillar trees is convex in $\rnni$.
+In this section we analyse shortest paths in $\rnni$.
+We will start by presenting an efficient algorithm for computing (not necessarily shortest) paths in $\rnni$ ($\findpath$) that turns out to be an essential tool for understanding the geometry of $\rnni$.
+Specifically, this algorithm will enable us to prove that there is always a shortest path between two caterpillar trees that only consists of caterpillar trees (Theorem~\ref{thm:caterpillar_convex}) in Section~\ref{section:caterpillar_convex}.
+In other words, the set of caterpillar trees is \emph{convex} in $\rnni$.
+\todo{The rest of this paragraph should be carefully checked and be in the introduction.
+Generally, you might want to think a bit more about a better structure of this paper into chapters.}
 This distinguishes $\rnni$ from $\nni$ where this does not hold.
 One further result, presented in Section~\ref{section:diameter}, directly following from the proof of Theorem~\ref{thm:caterpillar_convex}, is the diameter of $\rnni$.
-Finally, we disprove the so-called Split Theorem, conjectured in \autocite{Gavryushkin2018-ol}, and formulate an alternative version of it, the Cluster Theorem (Section~\ref{section:split_theorem}).
+Finally, we disprove the so-called Strong Split Theorem, conjectured in \autocite{Gavryushkin2018-ol}.
+However, the Weak Split Theorem remains a conjecture.
+Furthermore, we propose an alternative (even weaker) version of the conjecture, the Cluster Theorem (Section~\ref{section:split_theorem}).
 
-We now present an efficient algorithm for computing paths between pairs of trees in $\rnni$.
-Throughout this paper we will denote this algorithm by $\findpath$.
-We will see that it becomes a central tool for our investigation of shortest paths.
-
-Before introducing the idea of this algorithm, we need further definitions.
+To introduce the $\findpath$ algorithm, we need the following definitions.
 Each node $v$ of a tree defines a \emph{cluster} $C$, which is the set of taxa descending from $v$.
 We then say that $v$ \emph{induces} $C$.
-\emph{Trivial clusters} are clusters induced by leaves and the root of a tree.
-Note that the list of all clusters of a tree, if sorted increasingly according to the rank of the corresponding nodes, uniquely defines that tree.
-For computing a path from trees $T$ to $R$ we consider clusters $C_1, \ldots, C_{n-1}$ of $R$ where $C_i$ is induced by the node with rank $i$ for $i = 1, \ldots, n-1$.
+\emph{Trivial clusters} are clusters induced by leaves (contain just one element each) and the root of the tree (contains all taxa).
+Note that the list of all
+\todo{I added `non-trivial' here because the clusters corresponding to leaves cannot be put on the list.
+Check that the indexing of $C_i$ is still correct.
+I think we need to be explicit whether we ever use trivial clusters and I suggest that we don't.}
+non-trivial
+clusters of a tree, sorted according to the rank of the corresponding node, defines the tree unambiguously.
+
+To compute a path from tree $T$ to $R$ we consider clusters $C_1, \ldots, C_{n-1}$ of $R$ (the destination tree) where $C_i$ is induced by the node with rank $i$ for $i = 1, \ldots, n-1$.
+\todo{In that case the number of clusters should be $n-2$.}
 Trivial clusters do not need to be changed on any path between two trees which is why they are not considered in the algorithm.
-This list $C_1, \ldots, C_{n-1}$ of clusters, which is ordered increasingly according to the ranks of their corresponding nodes, uniquely defines $R$.
-Starting at tree $\hat{T} = T$, $\findpath$ constructs a path where the clusters of $R$ are constructed from bottom to top, using following procedure:
-For each $C_i$, find the \emph{most recent common ancestor} $\mrca_{\hat{T}}(C_i)$ (also known as \emph{least common ancestor}) of $C_i$ in current tree $\hat{T}$, that is the internal node with lowest rank that is ancestral to all the taxa in $C_i$.
-Update $\hat{T}$ by decreasing the rank of $\mrca_{\hat{T}}(C_i)$ with an $\rnni$ move until it has the same rank $i$ as in $R$. \todo{Do we need to explain why there is always an $\rnni$ move that moves the $\mrca$ down?}
-Since we consider the clusters of $R$ such that the ranks of the corresponding internal nodes in $R$ increase, $\mrca_{\hat{T}}(C_i)$ is the parent of cluster $C_i$ in $\hat{T}$ after these $\rnni$ moves.
+First, set $\hat{T} = T$
+Then for each $i$, find the node that induces $C_i$ in $\hat T$ and denote this node by $\mrca_{\hat{T}}(C_i)$ (short for \emph{most recent common ancestor}).
+Update $\hat{T}$ by
+\todo{This presumes  that the rank is higher.
+Why?}
+decreasing
+the rank of $\mrca_{\hat{T}}(C_i)$ by performing $\rnni$ moves until it has the same rank $i$ as in $R$.
+\todo{Do we need to explain why there is always an $\rnni$ move that moves the $\mrca$ down?
+AG: We need to explain quite a bit here -- there  are many ways one can do those moves + comment above.}
+Since we consider the clusters of $R$ such that the ranks of the corresponding internal nodes in $R$ increase, $\mrca_{\hat{T}}(C_i)$ is
+\todo{What is the `parent of a cluster' -- please check that you follow definitions you introduce.}
+the parent of cluster
+$C_i$ in $\hat{T}$ after these $\rnni$ moves.
 Thus, repeating this procedure for all clusters of $R$ results in a path between any pair of tress $T, R$, indeed.
+\todo{This kind of structure is not ideal (see my comment on the paper structure above).
+If we talk about the algorithm here, all the things, including the pseudo-code should be here.
+Possible solution: have algorithmic stuff first and geometry second.
+If you do it like this, explain that we need the algorithms for the geometry section.}
 Further details, including pseudo-code for $\findpath$, can be found in Section~\ref{section:computation_findpath}.
 
-This algorithm gives an upper bound for the diameter of $\rnni$, which improves the one given in \autocite{Gavryushkin2018-ol}.
+This algorithm gives an upper bound for the diameter of $\rnni$, which
+\todo{Why is that?}
+improves
+the one given in \autocite{Gavryushkin2018-ol}.
+\todo{When}
 Later we will see that this bound is tight.
 However, we don't know how good $\findpath$ approximates distances in $\rnni$. \todo{Can we say something about the approximation ratio?}
 More details can be found in Section~\ref{section:computation}.
 
+\todo{make sure trees are consistently denoted by upper case letters}
 \begin{lemma}
-    $\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$, where $\Delta(G) = \max\limits_{u,v \in V(G)}d(u,v)$ denotes the diameter of graph $G$.
-    \label{lemma:diameter_bound}
+$\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$, where $\Delta(\rnni)$ denotes the diameter of the $\rnni$ graph, that is, if $d(T, R)$ is the graph distance in $\rnni$ then $\Delta(\rnni) = \max \{d(T, R) \mid T, R \in \rnni\}$.
+\label{lemma:diameter_bound}
 \end{lemma}
 
 \begin{proof}
-    Let us consider the maximum length of a path computed by $\findpath$.
-    In worst case each of the $n-2$ clusters $C$ induced by internal nodes of $R$ with rank $i = 1, \dots, n-2$, requires $n-1-i$ $\rnni$ operations to move $\mrca(C)$ down in $\hat{T}$.
-	Hence, the maximum length of a path computed by that algorithm for any pair of trees is less or equal to $\sum\limits_{i = 1}^{n-2} i = \frac{(n-2)(n-1)}{2}$.
+Since the diameter is bounded from above the maximum length of a path computed by $\findpath$, it is enough to find this maximum.
+The worst-case execution of $\findpath$ would require each of the $n-2$ clusters $C$ induced by internal nodes of $R$ to be moved by $n - 1 - i$ $\rnni$ operations in $\hat{T}$.
+Hence, the maximum length of such a path is bounded by $\sum\limits_{i = 1}^{n-2} i = \frac{(n-2)(n-1)}{2}$.
 \end{proof}
 
-Lemma~\ref{lemma:distance_delete_taxon} is important for some of the following proofs using induction.
-
-In most of the following inductive proofs the length of a shortest paths $p$ on trees on $n+1$ taxa is compared with a path on $n$ taxa induced by $p$.
-The following lemma bounds the length of these induced paths utilising the rank differences of certain internal nodes between start and end tree of $p$.
-Henceforth the notion $\parent(x)$ refers to the internal node that is parent of taxon $x$.
+The following lemma relates distances between trees on $n$ and $n+1$ taxa and is an important tool for inductive arguments.
+We use the notion $\parent_T(x)$ to refer to the node adjacent to taxon $x$ in tree $T$.
+$T{\big|}_n$ denotes the restriction of tree $T$ to the set of taxa $\{1, \ldots, n\}$.
+In particular if $T$ is a tree on taxa $1, \ldots, n+1$ the tree $T{\big|}_n$ is obtained by deleting taxon $n+1$ and suppressing the thereby created node of degree two.
 
 \begin{lemma}
-    Let $T$ and $R$ be two trees on $n+1$ taxa.
-    Let $T{\big|}_n$ and $R{\big|}_n$ be these trees restricted to taxa $1, \ldots, n$, i.e. taxon $n+1$ is deleted from $T$ and $R$ and the thereby arising node of degree two is suppressed.
-    Then it is $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - \delta$ where $\delta:= |\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))|$ is the rank difference of the parent of taxon $x$ between trees $T$ and $R$.
-    \label{lemma:distance_delete_taxon}
+Let $T$ and $R$ be two trees on taxa $\{1, \ldots, n+1\}$.
+Then $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - \delta$, where $\delta = |\rank_T(\parent_T(n+1)) - \rank_R(\parent_R(n+1))|$.
+\label{lemma:distance_delete_taxon}
 \end{lemma}
 
 \begin{proof}
-    Let $p$ be a shortest path from tree $T$ to $R$ and $p{\big|}_n$ the path resulting from deleting taxon $n+1$ from all trees on $p$.
-    This new path $p{\big|}_n$ is then a path from $T$ to $R$.
-    Showing that at least $\delta$ $\rnni$ moves are deleted from $p$ to receive $p{\big|}_n$ results in $d(T{\big|}_n,R{\big|}_n) \leq |p{\big|}_n| \leq |p| - \delta = d(T,R) -\delta$ which proves the lemma.
-    By the following two observations one can easily see that this claim is true, indeed:
-    The rank of an internal node $v$ only changes within an $\rnni$ move if this move is a rank move of $v$ or an $\nni$ move on an edge incident to $v$.
-    Furthermore, any $\rnni$ move can change the rank of an internal node by at most one.
-    Applying this to $\parent(n+1)$ and knowing that the rank of this node differs by $\delta$ between $T$ and $R$ proves that $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - \delta$.
+First observe that the rank of an internal node $v$ of a tree $T$ along an $\rnni$ path $p$ can only be changed by performing a rank move that involves $v$ or an $\nni$ move on an edge adjacent to $v$.
+Second observe that any $\rnni$ move can change the rank of an internal node by at most one.
 
-    % Alternative: Induction:
-    %
-    % Induction on $k = d(T,R)$:
-    %
-    % Basis($k = 1$):
-    % If rank of $\parent(n+1)$ changes between $T$ and $R$, it is $d(T{\big|}_n, R{\big|}_n) = 0$ and $|\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))| = 1$ and therefore, $d(T{\big|}_n, R{\big|}_n) = 0 \leq 1 - 1 = d(T,R) - |\rank_T(\parent(n+1)) - \rank_R(\parent(n+1))|$.
-    % If on the other hand the rank of $\parent(n+1}$ does not change between $T$ and $R$, it is $d(T{\big|}_n, R{\big|}_n) = d(T,R) = 1$ and $|r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})| = 1$ and therefore, $d(T{\big|}_n, R{\big|}_n) = 1 \leq 1 - 0 = d(T,R) - |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$.
-    %
-    % Step($k \to k+1$):
-    % Let $T$ and $R$ be trees on $n+1$ taxa with distance $d(T,R) = k$.
-    % Let $R'$ be the last tree on a shortest path from $T$ to $R$, i.e. $d(T,R') = k$.
-    % We can apply the induction hypothesis on $T$ and $R'$ and see that $d(T{\big|}_n, R'{\big|}_n) \leq d(T, R') - |r_{T}(\parent(n+1}) - r_{R'}(\parent(n+1})| := k - m$.
-    % Now we differ two cases:
-    % \begin{enumerate}
-    %     \item $\parent(n+1}$ changes its rank between $R$ and $R'$ or is affected by the $\nni$ move is performed between $R$ and $R'$.
-    %
-    %     Then the trees $R{\big|}_n$ and $R'{\big|}_n$ are equal. \todo{Is this obivous?}
-    %     Therefore, it is $d(T{\big|}_n,R{\big|}_n) = d(T{\big|}_n, R'{\big|}_n) \leq k - m$.
-    %     It is either $|r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})| = m+1$, $|r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})| = m$, or $|r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})| = m-1$.
-    %     In either case, we have $d(T{\big|}_n,R{\big|}_n) = d(T{\big|}_n, R'{\big|}_n) \leq k - m = (k+1) - (m+1) \leq d(T, R) - |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$.
-    %
-    %     \item $\parent(n+1}$ has same rank in $R$ and $R'$.
-    %
-    %     In this case it is $d(T{\big|}_n,R{\big|}_n) \leq d(T{\big|}_n,R'{\big|}_n) + d(R'{\big|}_n, R{\big|}_n) \leq d(T{\big|}_n, R'{\big|}_n) + 1 \leq (k-m)+ 1$.
-    %     It also follows that $|r_{T}(\parent(n+1}) - r_{R'}(\parent(n+1})| = |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$ and therefore, we can conclude $d(T{\big|}_n,R{\big|}_n) \leq k-m+1 = k+1-m = d(T,R) -  |r_{T}(\parent(n+1}) - r_{R}(\parent(n+1})|$.
-    % \end{enumerate}
+Let $p$ be a shortest path from tree $T$ to $R$ and $p{\big|}_n$ the path resulting from deleting taxon $n+1$ from all trees on $p$.
+This new path $p{\big|}_n$ is then a path from $T{\big|}_n$ to $R{\big|}_n$.
+Recall that $\delta$ is the difference in ranks between the parents of taxon $n+1$ in $T$ and $R$.
+\todo{This statement has to be checked very carefully and one or two sentences added to explain the `applying'.}
+Applying the two observations above we conclude that $|p{\big|}_n| \leq |p| - \delta$.
+Since $d(T{\big|}_n,R{\big|}_n) \leq |p{\big|}_n|$ and $|p| = d(T,R)$, the desired inequality follows.
 \end{proof}
 
-%Following Proposition might not be needed(?)
-
-Related to Lemma~\ref{lemma:distance_delete_taxon} is Proposition~\ref{proposition:lower_bound_distance} which provides a lower bound for the distance of two trees.
-Using the same arguments as in the proof of Lemma~\ref{lemma:distance_delete_taxon}, it easily follows that the rank difference of parents of the same taxon but in two different trees gives such a bound.
+Using the same arguemtn as in the proof of Lemma~\ref{lemma:distance_delete_taxon} we can establish the following Proposition~\ref{proposition:lower_bound_distance} that provides a lower bound on the distance between trees.
 
 \begin{proposition}
-    Given trees $T$ and $R$ with taxon $x$ that fulfils $|\rank_T(\parent(x)) - \rank_R(\parent(x))| = k$, it follows $d(T,R) \geq k$.
-    \label{proposition:lower_bound_distance}
+If trees $T$ and $R$ and taxon $x$ are such that $|\rank_T(\parent_T(x)) - \rank_R(\parent_R(x))| = \delta$ then $d(T,R) \geq \delta$.
+\label{proposition:lower_bound_distance}
 \end{proposition}
+
 
 \subsection{The set of caterpillar trees}
 \label{section:caterpillar_convex}
@@ -270,6 +271,7 @@ Throughout this paper this algorithm will be called $\csort$.
 
 Following the observations above, only swaps of the first three elements of a sequence with Bubble Sort need to be adapted for the computation of shortest caterpillar paths.
 Let us consider the first three elements $a,b,c$, appearing in this order in a sequence representing a caterpillar tree on a caterpillar path between trees $T$ and $R$.
+\todo{Check throughout that $\parent$ is never used without tree name in the index.}
 If the rank of $\parent(c)$ is higher than the ranks of $\parent(a)$ and $\parent(b)$ in $R$, there are no swaps needed for these taxa.
 If just one of the two taxa $a$ and $b$ is on the other side of $c$ in $R$, this taxon swaps position with $c$ in the sequence.
 And if both $a$ and $b$ are on the other side of $c$ in $R$, the taxon that has the parent with highest rank of all these three taxa in $R$ swaps with $c$ at first.
@@ -785,7 +787,8 @@ The number of caterpillar trees with distance $\Delta(\rnni)$ from a given cater
 % Define Partition Lattice $\Pi_n$ and max chains in that lattice!
 
 \begin{theorem}
-	The $\rnni$ space on $n$ taxa is isomorphic to the space of maximum chains of the partition lattice $\Pi_n$ where two maximum chains are connected by an edge if, and only if, they differ by exactly one partition.
+The $\rnni$ graph on $n$ taxa is isomorphic to the graph of maximal chains of the partition lattice $\Pi_n$ where two maximal chains are connected by an edge if and only if they differ by exactly one partition.
+The corresponding metric spaces are isometric.
 \end{theorem}
 
 
