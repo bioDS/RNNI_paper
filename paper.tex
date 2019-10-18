@@ -66,19 +66,20 @@
 \end{abstract}
 
 The nearest neighbour interchange ($\nni$) graph, defined on the set of phylogenetic trees with adjacency relation given by the interchange operation of two sister clades, has been known in mathematical biology literature for nearly 50 years \autocite{Robinson1971, Moore-Goodman-Barnabas1973}.
-Considered with the metric given by the length of the shortest path (graph-distance), this graph becomes a metric space and its geometry has been extensively studied \autocite{...}.
-In important property of the $\nni$ space is that the distance is NP-hard to compute \autocite{...}.
+Considered with the metric given by the length of a shortest path (graph-distance), this graph becomes a metric space.
+Its geometry has been extensively studied \autocite{...}.
+An important property of the $\nni$ graph is that computing distance is NP-hard \autocite{...}.
 As a result no algorithm exists to compute the distance in practical time \autocite{...Whidden may be}.
 A consequence is that tree search and sampling algorithms pose a significant challenge even for moderately sized trees \autocite{...}.
 
-More recent advances in computational phylogenetics introduced various classes of molecular clock models \autocite{...} and made possible computational inference of phylogenetic time-trees \autocite{...}.
-However, mathematical challenges that come with this seemingly inessential change in parametrisation (genomic distance VS time distance) of trees have only recently been brought to the attention \autocite{Gavryushkin2016-uu}.
+More recent advances in computational phylogenetics introduce various classes of molecular clock models \autocite{...} and made possible computational inference of phylogenetic time-trees \autocite{...}.
+However, mathematical challenges that come with this seemingly inessential change in parametrisation (genomic distance VS time distance) of trees have only recently been brought to attention \autocite{Gavryushkin2016-uu}.
 \textcite{Gavryushkin2018-ol} have proposed an extension of the $\nni$ graph to the class of discrete time-trees.
 The simplest such extension introduces the $\rnni$ graph on the set of ranked phylogenetic trees.
 Considered with the graph-distance $\rnni$ becomes a metric space and inherits the geometric and algorithmic challenges that the $\nni$ space has been traditionally facing.
 Surprisingly, most of them cannot be settled by directly translating results or applying techniques developed for $\nni$ \autocite{Gavryushkin2018-ol}.
 
-In this paper, we consider the $\rnni$ space on the ranked phylogenetic trees with all taxa being of rank $0$.
+In this paper, we consider the $\rnni$ space on the ranked phylogenetic trees with all taxa being of equal rank.
 An example of such a tree is depicted in Figure~\ref{fig:...}.
 In the terminology of \autocite{Gavryushkin2018-ol}, the space considered in this paper is the space of ranked ultrametric phylogenetic trees $\rnniu$.
 We postpone accurate definitions until later in this section.
@@ -89,7 +90,7 @@ In line with the research programme proposed in \autocite{Gavryushkin2018-ol}, w
 Specifically, in this paper we establish the exact radius and diameter of the space, [... -- Lena, please finish this including the approaximate algorithm that works exactly on small spaces (Lena: is it already in the text?)]
 The question of whether there exists a polynomial algorithm for computing the $\rnni$ distance remains an open problem.
 
-In the rest of introduction we formally introduce non-standard definitions necessary for this paper.
+In the rest of this chapter we formally introduce non-standard definitions necessary for this paper.
 
 A \emph{ranked phylogenetic tree} is a pair consisting of a rooted binary phylogenetic tree $T$ on the set $X = \{1, \ldots, n\}$ of taxa for $n \in \mathbb N$, and a (total) rank function $\rank$ that maps all elements of $X$ to $0$, all internal nodes of $T$ onto the set $\{1, \ldots, n-1\}$, and respects the partial order given by the tree.
 The latter means that if $x$ and $y$ are two internal nodes of $T$ such that there exists a path from a taxon $z \in X$ to $y$ which passes through $x$ then $\rank(x) < \rank(y)$.
@@ -219,7 +220,7 @@ Applying the two observations above we conclude that $|p{\big|}_n| \leq |p| - \d
 Since $d(T{\big|}_n,R{\big|}_n) \leq |p{\big|}_n|$ and $|p| = d(T,R)$, the desired inequality follows.
 \end{proof}
 
-Using the same arguemtn as in the proof of Lemma~\ref{lemma:distance_delete_taxon} we can establish the following Proposition~\ref{proposition:lower_bound_distance} that provides a lower bound on the distance between trees.
+Using the same argument as in the proof of Lemma~\ref{lemma:distance_delete_taxon} we can establish the following Proposition~\ref{proposition:lower_bound_distance} that provides a lower bound on the distance between trees.
 
 \begin{proposition}
 If trees $T$ and $R$ and taxon $x$ are such that $|\rank_T(\parent_T(x)) - \rank_R(\parent_R(x))| = \delta$ then $d(T,R) \geq \delta$.
