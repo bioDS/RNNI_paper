@@ -94,24 +94,13 @@ In the rest of this chapter we formally introduce non-standard definitions neces
 
 A \emph{ranked phylogenetic tree} is a pair consisting of a rooted binary phylogenetic tree $T$ on the set $X = \{1, \ldots, n\}$ of taxa for $n \in \mathbb N$, and a (total) rank function $\rank$ that maps all elements of $X$ to $0$, all internal nodes of $T$ onto the set $\{1, \ldots, n-1\}$, and respects the partial order given by the tree.
 The latter means that if $x$ and $y$ are two internal nodes of $T$ such that there exists a path from a taxon $z \in X$ to $y$ which passes through $x$ then $\rank(x) < \rank(y)$.
-Ranked trees $(T_1, r_1)$ and $(T_2, r_2)$ are different if trees $T_1$ and $T_2$ are different or $T_1 = T_2$ and $\rank_1 \neq \rank_2$.
+Ranked trees $(T_1, \rank_1)$ and $(T_2, \rank_2)$ are different if trees $T_1$ and $T_2$ are different or $T_1 = T_2$ and $\rank_1 \neq \rank_2$.
 Since all trees in this paper are ranked trees, we will abuse the notation and drop the ranking from the notation.
 We will also refer to a ranked tree simply by tree.
 For a tree $T$, we will use $\rank_T$ to refer to its ranking.
 
 Our definition of a ranked tree implies a natural notion of the edge length.
 Indeed, a tree edge $(u,v)$ has length $l$ if $|\rank(v) - \rank(u)| = l$.
-
-\todo{LC: move the following definition? - it's actually quite important not only for the algorithm, so we might want to have it in the introduction?}
-Each node $v$ of a tree defines a \emph{cluster} $C$, which is the set of taxa descending from $v$.
-We then say that $v$ \emph{induces} $C$.
-\emph{Trivial clusters} are clusters induced by leaves (contain just one element each) and the root of the tree (contains all taxa).
-Note that the list of all
-\todo{I added `non-trivial' here because the clusters corresponding to leaves cannot be put on the list.
-Check that the indexing of $C_i$ is still correct.
-I think we need to be explicit whether we ever use trivial clusters and I suggest that we don't.}
-non-trivial
-clusters of a tree, sorted according to the rank of the corresponding node, defines the tree unambiguously.
 
 Now we are ready to define the tree space which is the subject of study in this paper, the $\rnni$ graph.
 
@@ -145,8 +134,8 @@ AG: Well -- if you decide to change this, go through all the definitions VERY ca
 
 \todo{LC: make sure that we move all definitions in this paper to the right place}
 
-Within this section we will two introduce algorithms, namely $\findpath$ and $\csort$ for computing paths between two given trees in $\rnni$.
-These will be used later to prove some geometric properties of the $\rnni$ graph.
+Within this section we will first two introduce algorithms, namely $\findpath$ and $\csort$, for computing paths between two given trees in $\rnni$.
+These will be used later to prove some geometric properties of the $\rnni$ graph in section~\ref{section:geometry}.
 Additionally we will present the algorithm $\mdtree$, which computes a caterpillar tree with maximum distance
 \todo{LC: can we use the term max dist here?}
 from a given tree.
@@ -164,10 +153,19 @@ from a given tree.
 
 \todo{LC: Introducing words}
 
+\todo{LC: move the following definition? - it's actually quite important not only for the algorithm, so we might want to have it in the introduction?}
+Before introducing the algorithm, we need the following definitions.
+Each node $v$ of a tree defines a \emph{cluster} $C$, which is the set of taxa descending from $v$.
+We then say that $v$ \emph{induces} $C$.
+\emph{Trivial clusters} are clusters induced by leaves (contain just one element each) and the root of the tree (contains all taxa).
+Note that the list of all
+\todo{Check that the indexing of $C_i$ is still correct.}
+non-trivial clusters of a tree, sorted according to the rank of the corresponding node, defines the tree unambiguously.
+For the rest of this paper we will use the notion cluster and mean non-trivial clusters only because all trees on $n$ taxa share the trivial clusters.
+\todo{LC: so we ever use trivial clusters? If so, we need to add a comment here}
 
-To compute a path from tree $T$ to $R$ we consider clusters $C_1, \ldots, C_{n-1}$ of $R$ (the destination tree) where $C_i$ is induced by the node with rank $i$ for $i = 1, \ldots, n-1$.
+To compute a path from tree $T$ to $R$ we consider clusters $C_1, \ldots, C_{n-2}$ of $R$ (the destination tree) where $C_i$ is induced by the node with rank $i$ for $i = 1, \ldots, n-2$.
 \todo{In that case the number of clusters should be $n-2$.}
-Trivial clusters do not need to be changed on any path between two trees which is why they are not considered in the algorithm.
 First, set $\hat{T} = T$
 Then for each $i$, find the node that induces $C_i$ in $\hat T$ and denote this node by $\mrca_{\hat{T}}(C_i)$ (short for \emph{most recent common ancestor}).
 Update $\hat{T}$ by
@@ -177,15 +175,63 @@ decreasing
 the rank of $\mrca_{\hat{T}}(C_i)$ by performing $\rnni$ moves until it has the same rank $i$ as in $R$.
 \todo{Do we need to explain why there is always an $\rnni$ move that moves the $\mrca$ down?
 AG: We need to explain quite a bit here -- there  are many ways one can do those moves + comment above.}
-Since we consider the clusters of $R$ such that the ranks of the corresponding internal nodes in $R$ increase, $\mrca_{\hat{T}}(C_i)$ is
-\todo{What is the `parent of a cluster' -- please check that you follow definitions you introduce.}
-the parent of cluster
-$C_i$ in $\hat{T}$ after these $\rnni$ moves.
+Since we consider the clusters of $R$ such that the ranks of the corresponding internal nodes in $R$ increase, $\mrca_{\hat{T}}(C_i)$ is the node inducing cluster $C_i$ in $\hat{T}$ after these $\rnni$ moves.
 Thus, repeating this procedure for all clusters of $R$ results in a path between any pair of tress $T, R$, indeed.
 \todo{This kind of structure is not ideal (see my comment on the paper structure above).
 If we talk about the algorithm here, all the things, including the pseudo-code should be here.
 Possible solution: have algorithmic stuff first and geometry second.
 If you do it like this, explain that we need the algorithms for the geometry section.}
+
+%BEGIN: From MareikesVisit
+
+\todo{LC: Is it worth introducing intervals for $\rnni$ moves for the proof of the following lemma?}
+
+\begin{lemma}
+    Let $T$ be a tree and $C \subset \{1, \ldots, n\}$ a subset of taxa such that $C$ is not induced by any node in $T$.
+    There is exactly one tree $T'$ that can be obtained from $T$ by one $\rnni$ move such that $\rank(\mrca_{T'}(C)) = \rank(\mrca_{T}(C)) -1 $.
+\end{lemma}
+
+\begin{proof}
+
+    \todo{LC: revise this whole proof}
+
+    Let $(C_1, \ldots, C_n)$ be the list representation of $T$ as introduced above.
+    \todo{LC: Introduce this representation above!}
+    Let $v:=mrca_T(C)$, let $C_{i+1}$ be the cluster induced by $v$, and let $w$ be the node inducing $C_i$.
+    We will distinguish the case that there is an edge $(v,w)$ in $T$ from the case that there is no such edge.
+
+    At first we assume that there is no edge $(v,w)$, which means $C_i \not \subset C_{i+1}$.
+    In this case the two sets $C_i, C_{i+1}$ can exchange by a rank swap.
+    Since $C \subset C_{i+1}$, this rank swap decreases the rank of $\mrca(C)$ by one and there is no $\nni$ move that could move $\mrca(C)$ down.
+
+    Let us now consider the case that $(v,w)$ is an edge in $T$.
+    The only move that could decrease the rank of $\mrca(C)$ is an $\nni$ move on the edge $(v,w)$.
+    Let $C_k$ and $C_j$ be the clusters induced by the children of $C_i$.
+    Then it is $C_k \cup C_j = C_i$.
+    There are two different $\nni$ moves possible on $(v,w)$.
+    $C_i$ can either be replaced by $C_j \cup (C_{i+1} \setminus C_i)$ or by $C_k \cup (C_{i+1} \setminus C_i)$.
+    To prove that there is always exactly one $\rnni$ moves that decreases the rank of $\mrca(C)$, we need to show that it is either $C \subset (C_j \cup (C_{i+1} \setminus C_i))$ or $C \subset (C_k \cup (C_{i+1} \setminus C_i))$.
+
+    Let $a \in C$.
+    Then it is $a \in C_{i+1} = mrca(C)$ and it follows $a \in C_{i+1} \setminus C_i$ or $a \in C_i$.
+    If $a \in C_{i+1} \setminus C_i$, $a$ is in the new set after the $\nni$ move.
+    So now we will assume that $a \in C_i$.
+    Then it is either $a \in C_j$ or $a \in C_k$.
+    Without loss of generality we assume that $a \in C_j$.
+
+    We need to prove that if $a \in C_j$, there is no $b \in C$ with $b \in C_k$.
+    This makes sure that it is either $C \subset (C_j \cup (C_{i+1} \setminus C_i))$ or $C \subset (C_k \cup (C_{i+1} \setminus C_i))$.
+    For contradiction we assume that $a \in C_j$ and $C \in S_k$.
+    We know that all sets that are subsets of $C$ already are at the same position in the current tree as in the destination tree $R$.
+    Therefore, we can conclude from $a \in C_j$ and $b \in C_k$ that $C_j \cup C_k = C$.
+    Hence, it holds $mrca(C) = C_i$.
+    This is a contradiction to our assumption that $C_{i+1} = mrca(C)$ in the current tree.
+    Therefore, it holds either $C \subset (C_j \cup (C_{i+1} \setminus C_i))$ or $C \subset (C_k \cup (C_{i+1} \setminus C_i))$.
+
+    Concluding, there is always an $\rnni$ move on the edge $(v,w)$ for $mrca(C) = C_{i+1}, C \subsetneq C_{i+1}$ that decreases the rank of $mrca(C)$.
+
+\end{proof}
+
 
 
 \todo{LC: Change the references to sections}
@@ -277,9 +323,6 @@ However, it does not necessarily produce a tree with maximum distance from a giv
 	\RETURN $R$
 \end{algorithmic}
 \end{algorithm}
-
-\subsection{Cluster Theorem}
-\label{section:computation_cluster_theorem}
 
 
 
