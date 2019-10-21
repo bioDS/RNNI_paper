@@ -135,7 +135,7 @@ AG: Well -- if you decide to change this, go through all the definitions VERY ca
 \todo{LC: make sure that we move all definitions in this paper to the right place}
 
 Within this section we will first two introduce algorithms, namely $\findpath$ and $\csort$, for computing paths between two given trees in $\rnni$.
-These will be used later to prove some geometric properties of the $\rnni$ graph in section~\ref{section:geometry}.
+We will use them later to prove some geometric properties of the $\rnni$ graph in section~\ref{section:geometry}.
 Additionally we will present the algorithm $\mdtree$, which computes a caterpillar tree with maximum distance
 \todo{LC: can we use the term max dist here?}
 from a given tree.
@@ -148,7 +148,7 @@ from a given tree.
 % All algorithms have been implemented with Python and are available online. \todo{link?}
 % In the following, further details about the implementation of algorithms $\findpath$ and $\mdtree$ as well as a description of how to prove the Cluster Theorem will be given.
 
-\subsection{Algorithm $\findpath$}
+\subsection{$\findpath$}
 \label{section:alg_findpath}
 
 \todo{LC: Introducing words}
@@ -159,36 +159,35 @@ Each node $v$ of a tree defines a \emph{cluster} $C$, which is the set of taxa d
 We then say that $v$ \emph{induces} $C$.
 \emph{Trivial clusters} are clusters induced by leaves (contain just one element each) and the root of the tree (contains all taxa).
 Note that the list of all
-\todo{Check that the indexing of $C_i$ is still correct.}
+\todo{Check that the indexing of $C_i$ is still correct. ($i=1,\ldots,n-2$)}
 non-trivial clusters of a tree, sorted according to the rank of the corresponding node, defines the tree unambiguously.
 For the rest of this paper we will use the notion cluster and mean non-trivial clusters only because all trees on $n$ taxa share the trivial clusters.
 \todo{LC: so we ever use trivial clusters? If so, we need to add a comment here}
 
-To compute a path from tree $T$ to $R$ we consider clusters $C_1, \ldots, C_{n-2}$ of $R$ (the destination tree) where $C_i$ is induced by the node with rank $i$ for $i = 1, \ldots, n-2$.
-\todo{In that case the number of clusters should be $n-2$.}
-First, set $\hat{T} = T$
-Then for each $i$, find the node that induces $C_i$ in $\hat T$ and denote this node by $\mrca_{\hat{T}}(C_i)$ (short for \emph{most recent common ancestor}).
-Update $\hat{T}$ by
-\todo{This presumes  that the rank is higher.
-Why?}
-decreasing
-the rank of $\mrca_{\hat{T}}(C_i)$ by performing $\rnni$ moves until it has the same rank $i$ as in $R$.
-\todo{Do we need to explain why there is always an $\rnni$ move that moves the $\mrca$ down?
-AG: We need to explain quite a bit here -- there  are many ways one can do those moves + comment above.}
-Since we consider the clusters of $R$ such that the ranks of the corresponding internal nodes in $R$ increase, $\mrca_{\hat{T}}(C_i)$ is the node inducing cluster $C_i$ in $\hat{T}$ after these $\rnni$ moves.
+We are now presenting an algorithm for computing paths in $\rnni$ between any two given trees.
+Let $C_1, \ldots, C_{n-2}$ be the clusters of $R$ (the destination tree) where $C_i$ is induced by the node with rank $i$ for $i = 1, \ldots, n-2$.
+Within every step of the algorithm we add one more tree to extend a path $p$, which will be the output path of $\findpath$.
+First, set $\hat{T} = T$ to be the first element in $p$.
+With $\hat T$ we denote the last tree of $p$ at each step in the algorithm.
+Consider the clusters $C_1, \ldots, C_{n-2}$ of $R$ in this order.
+When arriving at cluster $C_k$, find the node inducing the smallest cluster containing all elements of $C_k$ in $\hat T$.
+This node is denoted by $\mrca_{\hat{T}}(C_k)$ (short for \emph{most recent common ancestor}).
+\todo{LC: make sure you don't use mrca before this!}
+The rank of $\mrca_{\hat{T}}(C_k)$ in $\hat T$ is higher than the rank of the node inducing $C_k$ in $R$, because we consider $C_i$ for increasing $i$.
+As a result, all clusters $C_1, \ldots, C_{i-1}$ are induced by some nodes of $\hat T$ as they are in the destination tree $R$.
+Now update $\hat{T}$ by performing an $\rnni$ move that decreases the rank of $\mrca_{\hat{T}}(C_i)$.
+With Lemma~\ref{lemma:mrca_move} we know that there is always exactly one $\rnni$ move possible that decreases the rank of $\mrca_{\hat{T}}(C_i)$.
+Repeat this until $\mrca_{\hat{T}}(C_i)$ has the same rank $i$ in $\hat T$ as in $R$.
 Thus, repeating this procedure for all clusters of $R$ results in a path between any pair of tress $T, R$, indeed.
-\todo{This kind of structure is not ideal (see my comment on the paper structure above).
-If we talk about the algorithm here, all the things, including the pseudo-code should be here.
-Possible solution: have algorithmic stuff first and geometry second.
-If you do it like this, explain that we need the algorithms for the geometry section.}
 
 %BEGIN: From MareikesVisit
 
-\todo{LC: Is it worth introducing intervals for $\rnni$ moves for the proof of the following lemma?}
+\todo{LC: Work on the following proof! Is it worth introducing intervals for $\rnni$ moves for the proof of the following lemma?}
 
 \begin{lemma}
     Let $T$ be a tree and $C \subset \{1, \ldots, n\}$ a subset of taxa such that $C$ is not induced by any node in $T$.
     There is exactly one tree $T'$ that can be obtained from $T$ by one $\rnni$ move such that $\rank(\mrca_{T'}(C)) = \rank(\mrca_{T}(C)) -1 $.
+    \label{lemma:mrca_move}
 \end{lemma}
 
 \begin{proof}
@@ -232,14 +231,21 @@ If you do it like this, explain that we need the algorithms for the geometry sec
 
 \end{proof}
 
-
-
-\todo{LC: Change the references to sections}
-In Section~\ref{section:geometry} we introduced the algorithm $\findpath$ for computing paths between arbitrary trees in $\rnni$.
-Therefore, it approximates distances in $\rnni$.
-In this section we are providing pseudocode for $\findpath$ (Algorithm~\ref{alg:find_path}) to provide further insights.
-We implemented and tested this algorithm for trees on up to $k$ taxa, for which it gives the exact $\rnni$ distance. \todo{$k = ?$, How exactly did we test it?}
-The running time of $\findpath$ is quadratic in the number of taxa.
+With $\findpath$ we can compute a path between two arbitrary trees in $\rnni$.
+The length of such a path can then be used as approximation for the distance between the trees.
+We implemented $\findpath$ in Python.
+\todo{LC: cite, link to github code?}
+\todo{LC: Shall we mention the exact algorithm at the beginning of this section already?}
+In~\autocite{Gavryushkin2018-ol} an algorithm for computing the $\rnni$ graph is being introduced.
+We implemented this algorithm
+\todo{LC: github?}
+and used
+\todo{LC: which algorithms did we use?}
+to compute exact distances between all pairs of trees on up to $7$ taxa.
+\todo{LC: Is 7 the actual number?}
+By comparing these distances with the distances given by $\findpath$, we find that $\findpath$ gives the correct distances for all pairs of trees on up to $7$ taxa.
+\todo{LS: Is it 7? How did we compute all distances with $\findpath$? - We used the symmetry of $\rnni$}
+The running time of $\findpath$, implemented as described by the pseudo-code in Algorithm~\ref{alg:find_path}, is quadratic in the number of taxa.
 
 \begin{algorithm}[H]
 \caption{$\findpath$($T,R$)}
@@ -258,58 +264,66 @@ The running time of $\findpath$ is quadratic in the number of taxa.
 \end{algorithmic}
 \end{algorithm}
 
-Recall that Section~\ref{section:diameter} revealed that the maximum distance computed by $\findpath$ for an arbitrary pair of trees equals the diameter of $\rnni$.
+In Section~\ref{section:diameter} we will see that for any pair of trees, $\findpath$ computes a path that is at most as long as the the diameter of $\rnni$.
 Thus, if the distance between two trees equals the diameter, $\findpath$ computes the correct distance.
-Following this observation, we claim Conjecture~\ref{conjecture:findpath_maxdist_correct}.
-Notice that one direction of the conjecture is already known to be true, it only remains open whether the distance of two trees is $\Delta(\rnni)$ indeed, if $\findpath$ computes a path of this length.
-
-\begin{conjecture}
-    Let $T$ and $R$ be two trees.
-    It is $d(T,R) = \frac{(n-1)(n-2)}{2}$ if, and only if, $\findpath(T,R)$ computes a path of this length between $T$ and $R$.
-    \label{conjecture:findpath_maxdist_correct}
-\end{conjecture}
+\todo{LC: Can we say something about the approximation ratio here?}
 
 
-\subsection{Algorithm $\cpath$}
+\subsection{$\csort$}
 \label{section:alg_cpath}
 
 \todo{LC: move definitions of caterpillar stuff here}
 \todo{LC: pseudo code}
 
-Before we start analysing shortest paths between caterpillar trees, we need to introduce further notations.
+Before we start introducing an algorithm for computing paths between caterpillar trees, we need to introduce further notations.
 A path $p$ between two caterpillar trees $T$ and $R$ that only consists of caterpillar trees is called \emph{caterpillar path}.
 If $p$ is shortest among all caterpillar paths between these trees we call it \emph{shortest caterpillar path}, and the length of $p$ will be denoted by $d_c(T,R)$ and called \emph{caterpillar distance}.
 
-We next introduce a unique representation of caterpillar trees to show how one can use the classical \emph{Bubble Sort} algorithm \autocite{Knuth1997-pi} to compute caterpillar paths.
+
+\todo{LC: structure in the following paragraph!}
+We next introduce a unique way to represent of caterpillar trees as sequences of taxa.
+We will use this to show how one can use the classical \emph{Bubble Sort} algorithm \autocite{Knuth1997-pi} to compute caterpillar paths.
+This algorithm is denoted by $\csort$ and the pseudo-code is provided in Algorithm.
+\todo{LC: pseudo-code}
 One can see caterpillar trees as sequences of taxa, ordered non-decreasing according to the ranks of their parents.
+Note that the only two elements in such a sequence that have parents of equal rank are the first two elements, the cherry taxa $c_1$ and $c_2$.
+To make the sequence representation of caterpillar trees unique, we assume that for it is $c_1 < c_2$.
 $\nni$ moves between caterpillar trees, which are the only possible $\rnni$ moves between those trees, coincide with exchanges of two neighboured elements in the sequence.
-In these sequences the first two taxa are somehow equivalent since they build the unique cherry which means they share their parent with rank one.
-Therefore, we need to consider $\nni$ moves that change the cherry of a tree separately.
-These moves refer to exchanges of the first or the second element with the third element of the sequence, while exchanges of the first two elements do not change the corresponding tree.
-With this observation we can provide an algorithm for computing shortest caterpillar paths by a simple modification of the commonly known Bubble Sort algorithm.
-Throughout this paper this algorithm will be called $\csort$.
+The only exception are the two first three elements in the sequence.
+Corresponding to $\nni$ moves on the lowest internal edge are exchanges of either $c_1$ or $c_2$ with the third elements $c_3$ in the sequence.
+But a swap of $c_1$ and $c_2$ does not correspond to any move in $\rnni$.
+Therefore, we need to adapt Bubble Sort for the first three elements of the sequence as follows:
+\todo{LC: add the pseudocode and refer to the line where $\csort$ differs from Bubble Sort! (We assume that we are at the point where we do some changes only on the first positions of the sequence)}
+If the rank of $\parent_R(c_3)$ is higher than the ranks of both $\parent_R(c_1)$ and $\parent_R(c_2)$ in $R$, there are no swaps needed for these taxa.
+If just one of the two taxa $c_1$ or $c_2$ is on the other side of $c_3$ in $R$, this taxon swaps position with $c_3$ in the sequence.
+And if both $c_1$ and $c_2$ are on the other side of $c_3$ in $R$, the taxon that has the parent with higher rank in $R$ swaps with $c_3$.
+This makes sure that there is no additional swap of $c_1$ and $c_2$ needed on the subsequent path to $R$.
 
-Following the observations above, only swaps of the first three elements of a sequence with Bubble Sort need to be adapted for the computation of shortest caterpillar paths.
-Let us consider the first three elements $a,b,c$, appearing in this order in a sequence representing a caterpillar tree on a caterpillar path between trees $T$ and $R$.
+
 \todo{Check throughout that $\parent$ is never used without tree name in the index.}
-If the rank of $\parent(c)$ is higher than the ranks of $\parent(a)$ and $\parent(b)$ in $R$, there are no swaps needed for these taxa.
-If just one of the two taxa $a$ and $b$ is on the other side of $c$ in $R$, this taxon swaps position with $c$ in the sequence.
-And if both $a$ and $b$ are on the other side of $c$ in $R$, the taxon that has the parent with highest rank of all these three taxa in $R$ swaps with $c$ at first.
-This makes sure that there is no additional swap of $a$ and $b$ needed on the subsequent path to $R$.
-\todo{Do we need to explain Bubble Sort?}
 
 
-\subsection{Algorithm $\mdtree$}
+\subsection{$\mdtree$}
 \label{section:alg_mdtree}
 
-For finding the radius of the $\rnni$ graph, algorithm $\mdtree$ has been introduced in Section~\ref{section:diameter}.
-It computes a tree $R$ with distance $\Delta(\rnni)$ from a given caterpillar tree, as it has been proven in Lemma~\ref{lemma:max_dist_caterpillar}.
-Algorithm~\ref{alg:max_dist_tree} provides the pseudocode for this algorithm.
-It is important to note that $\mdtree$ can not only be applied onto caterpillar trees, as it is done in Section~\ref{section:diameter}, but to any arbitrary tree.
-However, it does not necessarily produce a tree with maximum distance from a given tree.
+The algorithm we are going to introduce here will be important for finding the radius of the $\rnni$ graph.
+In Section~\ref{section:diameter} we will prove that it computes a tree with maximum distance from a given caterpillar tree, which implies that the radius of $\rnni$ equals its diameter.
+Therefore, it is called $\mdtree$ (Maximum Distance Tree).
+\todo{LC: References to the corresponding proofs?}
 
-%TODO
-% Shall we give an example where the distance is not max or simulate trees and compute histogram of distances approximated by $\findpath$?
+$\mdtree$ works as follows for an input tree $T$:
+At first, all taxa of $T$ are sorted in a list $L$ such that the ranks of their parents are non-decreasing.
+If the input is a caterpillar tree, it follows that $L[0]$ and $L[1]$ are the cherry taxa of $T$, in an arbitrary order, and $\parent(L[i])$ has rank $i$ in $T$ for all $i = 2, \ldots, n-1$.
+Note that this list $L$ does not give a unique representation of a tree.
+The output tree $R$ is built inductively as follows:
+Initially, $R$ only consists of a cherry with taxa $L[0]$ and $L[1]$ such that the parent of these taxa has rank $n-1$.
+All following taxa in $L$ are added to $R$ sequentially, according to their order in $L$, by creating a new internal node at one of the existing branches in $R$ such that this new node has rank one less than the previously lowest internal node in $R$.
+
+Algorithm~\ref{alg:max_dist_tree} provides the pseudocode for this algorithm.
+We will see in Section~\ref{section:diameter} that it computes trees with maximum distance form any given caterpillar tree.
+But if the given tree is an arbitrary tree, the output tree might not have maximum distance to the input tree.
+
+\todo{LC: Shall we give an example where the distance is not max or simulate trees and compute histogram of distances approximated by $\findpath$?}
 
 \begin{algorithm}[H]
 \caption{$\mdtree(T)$}
@@ -538,19 +552,9 @@ With the results of Section~\ref{section:caterpillar_convex} is not hard to see 
 \end{corollary}
 
 We now proceed to show that the radius of the $\rnni$ graph equals its diameter.
-For this aim an algorithm for constructing a tree $R$ with distance $\Delta(\rnni)$ from a given caterpillar tree $T$ will be used.
-This algorithm will be called $\mdtree$ (Maximum Distance Tree).
-After introducing this algorithm, we will prove that a tree $R = \mdtree(T)$ has distance $d(T,R) = \Delta(\rnni)$ to $T$ if $T$ is a caterpillar tree.
+Therefore we use the algorithm $\mdtree$ that has been introduced in section~\ref{section:alg_mdtree}.
 
-$\mdtree$ works as follows:
-At first, all taxa of $T$ are sorted in a list $L$ such that the ranks of their parents are non-decreasing.
-If the input is a caterpillar tree, it follows that $L[0]$ and $L[1]$ are the cherry taxa of $T$ and $\parent(L[i])$ has rank $i$ in $T$ for all $i = 2, \ldots, n-1$.
-Now $R$ is built inductively as follows:
-Initially, $R$ only consists of a cherry with taxa $L[0]$ and $L[1]$ such that the parent of these taxa has rank $n-1$.
-All following taxa in $L$ are added to $R$ sequentially, according to their order in $L$, by creating a new internal node at one of the existing branches in $R$ such that this new node has rank one less than the previously lowest internal node in $R$.
-When this is done for all taxa in $L$, the resulting tree $R$ is an $\rnni$ tree.
 
-It is important to note that this algorithm can be applied to any input tree $T$, which does not need to be a caterpillar tree.
 However, the results provided in this section are only true for caterpillar trees.
 The pseudocode for $\mdtree$ can be found in Section~\ref{section:alg_mdtree}.
 \todo{figure? + do we need the pseudocode?}
