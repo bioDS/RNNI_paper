@@ -267,34 +267,72 @@ We aim to find paths between \emph{caterpillar trees} where each internal node h
 A path $p$ between two caterpillar trees $T$ and $R$ that only consists of caterpillar trees is called \emph{caterpillar path}.
 If $p$ is shortest among all caterpillar paths between these trees we call it \emph{shortest caterpillar path}, and the length of $p$ will be denoted by $d_c(T,R)$ and called \emph{caterpillar distance}.
 
-We next introduce a representation of caterpillar trees as sequences of taxa.
+We next introduce a representation of caterpillar trees as lists of taxa.
 We will use it to show how one can adapt the classical \emph{Bubble Sort} algorithm \autocite{Knuth1997-pi} to compute caterpillar paths.
 \todo{LC: pseudo-code}
-Ordering the taxa of a caterpillar trees as a non-decreasing, according to the ranks of their parents, gives us a sequence of length $n$.
-Note that the only two elements in such a sequence that have parents of equal rank are the first two elements $c_1$ and $c_2$.
+Ordering the taxa of a caterpillar trees as a non-decreasing, according to the ranks of their parents, gives us a list of length $n$.
+Note that the only two elements in such a list that have parents of equal rank are the first two elements $c_1$ and $c_2$.
 We will call a pair of two taxa that share their parent \emph{cherry}.
 \todo{LC: pair of taxa or subtree (includes internal node and two edges)}
-To make the sequence representation of caterpillar trees unique, we assume that it is $c_1 < c_2$ for the first two elements in the sequence.
+To make the list representation of caterpillar trees unique, we assume that it is $c_1 < c_2$ for the first two elements in the list.
 
-In the following we explain how $\rnni$ moves between caterpillar trees work in the sequence representation.
+In the following we explain how $\rnni$ moves between caterpillar trees work in the list representation.
 At first it is important to realise that the only possible $\rnni$ moves between caterpillar trees are $\nni$ moves, since there is no pair of internal nodes with rank difference one that is not connected by an edge.
-$\nni$ moves between caterpillar trees correspond to swaps of two neighboured elements in the sequence representation.
+$\nni$ moves between caterpillar trees correspond to swaps of two neighboured elements in the list representation.
 The only exception of this are $\nni$ moves on the lowest internal edge, that is the edge connecting the internal nodes of rank one and two.
 There are two $\nni$ moves possible on this edge that result in caterpillar trees, while there is for every other edge only one $\nni$ move that results in a caterpillar tree.
-Corresponding to the $\nni$ moves on the lowest internal edge are exchanges of either the first or the second element with the third elements in the sequence representation.
+Corresponding to the $\nni$ moves on the lowest internal edge are exchanges of either the first or the second element with the third elements in the list representation.
 
 For computing shortest caterpillar paths we modify Bubble Sort as described in the following.
 We call this algorithm $\csort$ (Algorithm~\ref{alg:csort}).
 
 \todo{Description + Pseudo code $\csort$}
-% But a swap of $c_1$ and $c_2$ does not correspond to any move in $\rnni$.
-% Therefore, we need to adapt Bubble Sort for the first three elements of the sequence as follows:
-% \todo{LC: add the pseudocode and refer to the line where $\csort$ differs from Bubble Sort! (We assume that we are at the point where we do some changes only on the first positions of the sequence)}
-% If the rank of $\parent_R(c_3)$ is higher than the ranks of both $\parent_R(c_1)$ and $\parent_R(c_2)$ in $R$, there are no swaps needed for these taxa.
-% If just one of the two taxa $c_1$ or $c_2$ is on the other side of $c_3$ in $R$, this taxon swaps position with $c_3$ in the sequence.
-% And if both $c_1$ and $c_2$ are on the other side of $c_3$ in $R$, the taxon that has the parent with higher rank in $R$ swaps with $c_3$.
-% This makes sure that there is no additional swap of $c_1$ and $c_2$ needed on the subsequent path to $R$.
+We consider the input trees $T$ and $R$ in their list representation $L_T$ and $L_R$ as described above and want to compute a path from $L_T$ to $L_R$.
+A path $p$ is built stepwise by adding a new list to the end of $p$.
+We call the last element of $p$ at any step $L_{\hat T}$ and when we say we update $L_{\hat T}$, we modify this list and append the new version of $L_{\hat T}$ to $p$.
 
+As in the Bubble Sort algorithm, we go through the list $L_{\hat T}$ and swap two elements if they appear in different orders in $L_{\hat T}$ and $L_R$.
+Each swap of elements is an update of $\hat T$ and extends the path $p$ by one element.
+We compare pairs of list elements from the start of the list until its end, and repeat this until the whole list is sorted, just as in classical Bubble Sort.
+Our algorithm $\csort$ only differs from Bubble Sort when considering the first three elements of the list.
+Since the first two elements refer to the cherry taxa of the caterpillar tree, both can exchange with the third element of the list as $\nni$ move.
+Therefore, we need to consider these moves separately to all other moves.
+Most importantly, we need to make sure that these moves are performed in a way that leads to a shortest caterpillar path.
+We can guarantee this, if the moves are done as described in the following.
+Let $c_1, c_2$ and $c_3$ be the first three elements of $L_{\hat T}$, in this order.
+If $c_1$ ($c_2$) is the last element of those three in $L_R$, we update $L_{\hat T}$ by swapping $c_1$ ($c_2$) and $c_3$.
+By doing this we make sure that there will be no point on $p$ where $c_1$ and $c_2$ swap positions, which would cause an additional $\nni$ move that can be avoided if we perform the moves as we describe them here.
+
+Because all moves between caterpillar trees are $\nni$ moves as described in the previous paragraph, all pairs of taxa that are not in the same order in $L_T$ and $L_R$ need to swap at some point on any path between $L_T$ and $L_R$.
+And since only elements that are direct neighbours in a sequence are allowed to swap, with the only exception being the first three elements, the path computed by $\csort$ is a shortest caterpillar path.
+\todo{LC: Do we need further explanation why $\csort$ gives a shortest caterpillar path?}
+
+\todo{LC: improve readability of pseudo-code}
+
+\begin{algorithm}[H]
+\caption{$\csort$($T,R$)}
+\label{alg:csort}
+\begin{algorithmic}[1]
+    \STATE $\hat T:= T$, $p = [\hat T]$
+    \STATE $L:=$ list representation of $\hat T$
+	% \STATE $L_{\hat T} :=$ list representation of $\hat T$, $L_R :=$ list representation of $R$
+    \FOR {$i=0,\ldots,n-1$}
+        \STATE $j = 0$ \COMMENT{Special case: cherry}
+        \IF {$L[0]$ is last element of $L[0],L[1],L[2]$ in list representation $R$}
+            \STATE Update $\hat T$: swap $L[0]$ and $L[2]$
+        \ELSIF {$L[1]$ is last element of $L[0],L[1],L[2]$ in list representation $R$}
+            \STATE Update $\hat T$: swap $L[1]$ and $L[2]$
+        \ENDIF
+        \STATE $j = 2$
+	    % \IF {$L_R^{-1}[L_{\hat T}[j]] > L_R^{-1}[L_{\hat T}[j+1]]$}
+        \IF {order of $L[j]$ and $L[j+1]$ different in $\hat T$ and $R$}
+			\STATE Update $\hat{T}$: Swap $L[j+1]$ and $L[j]$
+			\STATE $p = p+\hat{T}$
+		\ENDIF
+    \ENDFOR
+	\RETURN $p$
+\end{algorithmic}
+\end{algorithm}
 
 \todo{Check throughout that $\parent$ is never used without tree name in the index.}
 
