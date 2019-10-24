@@ -84,7 +84,7 @@ This distinguishes $\rnni$ from $\nni$ where this does not hold.
 One further result, presented in Section~\ref{section:diameter}, directly following from the proof of Theorem~\ref{thm:caterpillar_convex}, is the diameter of $\rnni$.
 Finally, we disprove the so-called Strong Split Theorem, conjectured in \autocite{Gavryushkin2018-ol}.
 However, the Weak Split Theorem remains a conjecture.
-Furthermore, we propose an alternative (even weaker) version of the conjecture, the Cluster Theorem (Section~\ref{section:split_theorem}).
+Furthermore, we propose an alternative (even weaker) version of the conjecture, the Cluster Theorem (Section~\ref{section:cluster_theorem}).
 
 
 
@@ -364,15 +364,17 @@ But if the given tree is an arbitrary tree, the output tree might not have maxim
 \label{alg:max_dist_tree}
 \begin{algorithmic}[1]
 	\STATE $R$ only contains cherry taxa $a, b$ of $T$ and has internal node with rank $n-1$
-    \STATE In list $L$ all taxa $\{1,\ldots,n\}\setminus\{a,b\}$ are ordered such that the ranks of their parents in $T$ do not decrease
+    \STATE In list $L$ all taxa $\{1,\ldots,n\}\setminus\{a,b\}$ are ordered such that the ranks of their parents in $T$ do not decrease \label{alg:mdtree_lineL}
 	\FOR {taxon $a$ in $L$}
-		\STATE Add an internal node as parent of $a$ on an edge in $R$ such that the new internal node has rank one less than the previously lowest internal node
+		\STATE Add an internal node as parent of $a$ on an edge in $R$ such that the new internal node has rank one less than the previously lowest internal node \label{alg:mdtree_lineAddTaxon}
 	\ENDFOR
 	\RETURN $R$
 \end{algorithmic}
 \end{algorithm}
 
-
+An important property of $\mdtree$, which we will use later on in Section~\ref{section:diameter} is the fact that this algorithm is non-deterministic.
+This is because the list computed in Line~\ref{alg:mdtree_lineL} the and the attachment edge of the new taxon in the tree in Line~\ref{alg:mdtree_lineAddTaxon} are not uniquely determined.
+Therefore the output tree $R$ of $\mdtree$ is not unique.
 
 \section{Geometry of $\rnni$}
 \label{section:geometry}
@@ -535,16 +537,34 @@ Notice that by Lemma~\ref{lemma:diameter_bound} $\frac{(n-1)(n-2)}{2}$ is the up
     \todo{LC: replace this figure}
     \begin{figure}[H]
     	\centering
-    	\includegraphics[width=\textwidth]{cat_convex_seq_example}
-    	\caption{Loop number $k$ of $\csort$ between $T$ and $R$ as described in proof of Theorem~\ref{thm:caterpillar_convex}.
-        The trees are represented as sequences that are being ordered by $\csort$.
-        Right before loop number $k$, $x_1, \ldots, x_{k-1}$ are already at the same position as in $R$.
+        \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
+            \hline
+            $x_{k+1}$ & $x_k$ & $\ldots$ & $b$ & $a$ & \multicolumn{3}{c|}{$\ldots$} & $x_n$ & $x_{k-1}$ & $\ldots$ & $x_1$\\
+            \hline
+            \multicolumn{12}{c}{}\\
+            \hline
+            $x_{k+1}$ & $x_{k+2}$ & $\ldots$ & $b$ & $x_k$ & $\ldots$ & $a$ & $\ldots$ & $x_n$ & $x_{k-1}$ & $\ldots$ & $x_1$\\
+            \hline
+            \multicolumn{12}{c}{}\\
+            \multicolumn{12}{c}{}\\
+            \hline
+            $x_{k+1}$ & $x_k$ & $\ldots$ & $a$ & $b$ & \multicolumn{3}{c|}{$\ldots$} & $x_n$ & $x_{k-1}$ & $\ldots$ & $x_1$\\
+            \hline
+            \multicolumn{12}{c}{}\\
+            \hline
+            $x_{k+1}$ & $x_{k+2}$ & $\ldots$ & $x_k$ & $b$ & $\ldots$ & $a$ & $\ldots$ & $x_n$ & $x_{k-1}$ & $\ldots$ & $x_1$\\
+            \hline
+        \end{tabular}
+        \vspace{2pt}
+    	\caption{Loop number $k$ of $\csort$ between $T$ and $R$ (in list representation) as described in proof of Theorem~\ref{thm:caterpillar_convex}.
+        The trees are represented as sequences that are being sorted by $\csort$.
+        Right before loop number $k$, taxa $x_1, \ldots, x_{k-1}$ are already at the same position as in $R$.
         At the top: sequences between $T$ and $R$ -- $x_k$ and $b$ swap in loop number $k$, but $x_k$ and $a$ not.
         At the bottom: sequences between $T'$ and $R$ -- $a$ and $b$ swap in loop number $k$; $x_k$ and $b$ will swap later}
     	\label{fig:cat_convex_seq_example}
     \end{figure}
 
-    Since it is clear that $T'$ has caterpillar distance $d_c(T',R) = l+1$ to $T$, we can apply the induction hypothesis on $T'$ and $R$ and see that $d(T',R) = l+1$.
+    Because $T'$ has caterpillar distance $d_c(T',R) = l+1$ to $T$, we can apply the induction hypothesis on $T'$ and $R$ and see that $d(T',R) = l+1$.
     Furthermore, it is $d(T,T') = 1$.
     If it now were $d(T,R) < l$, it would hold $d(T',R) \leq d(T,R) + d(T,T') < l + 1$ which contradicts the induction hypothesis.
     We can conclude $d(T,R) = l$, which completes the proof.
@@ -556,8 +576,9 @@ Notice that by Lemma~\ref{lemma:diameter_bound} $\frac{(n-1)(n-2)}{2}$ is the up
 
 With the results of Section~\ref{section:caterpillar_convex} we can easily provide the exact diameter of the $\rnni$ graph and hence improve the bounds for the diameter given in \autocite{Gavryushkin2018-ol}.
 Furthermore, we are able to show that the \emph{radius} of the $\rnni$ graph, which is defined as $rad(G) =  \min\limits_u \max\limits_v d(u,v)$ for a graph $G$, equals its diameter.
-Let us first consider the diameter of the $\rnni$ graph.
-With the results of Section~\ref{section:caterpillar_convex} is not hard to see that is $\Delta(\rnni) = \frac{(n-1)(n-2))}{2}$ as it is stated in Corollary~\ref{corollary:diameter}.
+At first we consider the diameter of the $\rnni$ graph.
+By Lemma~\ref{lemma:diameter_bound} we already know an upper bound for the diameter.
+We will now show that this is not only a bound, but the exact diameter of $\rnni$.
 
 \begin{lemma}
 	There are two caterpillar trees in $\rnniu$ with distance $\frac{(n-1)(n-2)}{2}$.
@@ -565,10 +586,10 @@ With the results of Section~\ref{section:caterpillar_convex} is not hard to see 
 \end{lemma}
 
 \begin{proof}
-	Let $T = (( \dots (n,1)2)\dots)n-1)$ and $R = (( \dots (n,n-1)n-2)\dots)1)$.
+	Let $T = [1,n,2,3,\ldots,n-1]$ and $R = [n-1,n,n-2,n-3, \ldtos, 1]$ be two caterpillar trees.
     According to Theorem~\ref{thm:caterpillar_convex}, there is a shortest path between $T$ and $R$ that is a caterpillar path.
     We can compute a shortest caterpillar path by using $\csort$ as explained in Section~\ref{section:caterpillar_convex}.
-    When running this algorithm on $T$ and $R$, each taxon $i$ ($i \in \{1, \ldots, n\}$) swaps $n-1-i$ times with its right neighbour.
+    When running this algorithm on $T$ and $R$, each taxon $i$ ($i \in \{1, \ldots, n\}$) swaps $n-1-i$ times with its upper neighbour.
     Therefore, the length of a shortest caterpillar path is $\sum\limits_{i=1}^{n-1}(n-1-i) = \sum\limits_{i=0}^{n-2}i = \frac{(n-1)(n-2)}{2}$.
 \end{proof}
 
@@ -579,11 +600,7 @@ With the results of Section~\ref{section:caterpillar_convex} is not hard to see 
 
 We now proceed to show that the radius of the $\rnni$ graph equals its diameter.
 Therefore we use the algorithm $\mdtree$ that has been introduced in section~\ref{section:alg_mdtree}.
-
-
-However, the results provided in this section are only true for caterpillar trees.
-The pseudocode for $\mdtree$ can be found in Section~\ref{section:alg_mdtree}.
-\todo{figure? + do we need the pseudocode?}
+Note that the results provided in this section are only true if the input tree of $\mdtree$ is a caterpillar tree.
 
 \begin{lemma}
     Let $T$ be a caterpillar tree.
@@ -593,28 +610,29 @@ The pseudocode for $\mdtree$ can be found in Section~\ref{section:alg_mdtree}.
 
 \begin{proof}
     Recall that with Corollary~\ref{corollary:diameter} we know that $\Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
-    Within this proof we assume, without loss of generality, that it is $T = (( \dots (1,2)3)\dots)n)$
+    Within this proof we assume, without loss of generality, that it is $T = [1,2,3,\ldots,n]$.
     We prove the lemma by induction on the number of taxa $n$.
 
     Induction basis: $n = 3$\\
-    $\mdtree(T)$ results either in $R = ((1,3),2)$ or $R'= ((2,3),1)$ for $T = ((1,2),3)$.
+    $\mdtree(T)$ results either in $R =[1,3,2]$ or $R'= [2,3,1]$ for $T = [1,2,3]$.
     Since it is $d(T,R) = d(T,R') = 1 = \Delta(\rnni_3)$, the lemma is true for trees on $n=3$ taxa.
 
     Induction step: $n \to n+1$\\
     Induction hypothesis: For a caterpillar tree $T$ on $n$ taxa $\mdtree$ computes a tree $R$ with distance $d(T,R) = \frac{(n-1)(n-2)}{2}$.\\
     Let us now  assume that $T$ is a tree on $n+1$ taxa.
-    In the list $L$ produced in $\mdtree(T)$ the taxon $n+1$ is the last one, $L[n] = n+1$.
-    Hence $n+1$ is added to $R$ in the last step and therefore, it is in the lowest cherry of $R$ and has parent with rank $1$.
+    In the list $L$ produced Line~\ref{alg:mdtree_lineL} in $\mdtree(T)$ (Algorithm~\ref{alg:max_dist_tree}) taxon $n+1$ is the last one, because its parent, the root, has the highest rank in $T$.
+    This means that this taxon $n+1$ is the last one added last to $R$ as in Line~\ref{alg:mdtree_lineAddTaxon} and therefore, it has parent with rank one in $R$.
     Because the parent of $n+1$ has rank $n$ in $T$, we can conclude from Lemma~\ref{lemma:distance_delete_taxon} that for $T$ and $R$ restricted to taxa $1,\ldots,n$ it holds: $d(T|_n,R|_n) \leq d(T,R) - (n-1)$.
-    It is easy to see that $R|_n$ can be received from $T|_n$ by applying $\mdtree$.
+    It is not hard to see that $R|_n$ can be received from $T|_n$ by applying $\mdtree$:
+    $R|_n$ can be constructed from input tree $T|_n$ in the same way as $R$ can be constructed from $T$, since the list $L$ computed in Line~\ref{alg:mdtree_lineL} of Algorithm~\ref{alf:max_dist_tree} for $T|_n$ is the same as the one for $T$, just the last element is missing.
     So we can follow from the induction hypothesis and Lemma~\ref{lemma:distance_delete_taxon} that it is $d(T,R) \geq d(T|_n,R|_n) + (n-1) = \frac{(n-1)(n-2)}{2} = \frac{n(n-1)}{2}$, which concludes the proof of the lemma.
 \end{proof}
 
-In $\mdtree$ it is not uniquely determined, where a new taxon is added to the already existing tree.
-Instead, the attachment branch can be randomly chosen with the only restriction being that the rank of the new node needs to be below the ranks of already existing internal nodes.
-Therefore the output tree $R$ of $\mdtree$ is not unique.
-Every tree topology on $n$ taxa can be resulting from $\mdtree$.
-And because permuting labels of trees does not change the distance between them, $\mdtree$ shows that there is for every tree $R$ on $n$ taxa a caterpillar tree $T$ with distance $d(T,R) = \Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
+In Section~\ref{alg:max_dist_tree} we already discussed that $\mdtree$ is a non-deterministic algorithm.
+In fact, every tree topology on $n$ taxa can be resulting from $\mdtree$, since there is no restriction on where to add the new taxon in the already existing tree in Line~\ref{alg:mdtree_lineAddTaxon} of Algorithm~\ref{ald:max_dist_tree}.
+This means that for each caterpillar input tree $\mdtree$ can compute a tree with any tree topology that has maximum distance from the input tree.
+\todo{LC: Definition tree topology?}
+And because permuting labels of trees does not change the distance between them, there is for every tree $R$ on $n$ taxa a caterpillar tree $T$ with distance $d(T,R) = \Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
 This gives us Corollary~\ref{corollary:radius}.
 
 \begin{corollary}
@@ -715,8 +733,8 @@ This gives us Corollary~\ref{corollary:radius}.
 % 	Hence, there is always a shortest path between $T$ and $R$ that is a caterpillar path.
 % \end{proof}
 
-\subsection{Split Theorem}
-\label{section:split_theorem}
+\subsection{Cluster Theorem}
+\label{section:cluster_theorem}
 \todo{Split or Cluster?}
 
 Within this section we will make a further step towards understanding the complexity of computing shortest paths in $\rnni$.
