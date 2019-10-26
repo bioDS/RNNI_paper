@@ -761,42 +761,32 @@ The proof of NP-completeness of $\nni$ in \autocite{Dasgupta2000-xa} is based on
 \end{proof}
 
 In the proof presented in \autocite{Li1996-zw} for Theorem~\ref{thm:split_nni} an example of two trees that share a cluster but have no shortest path that preserves this cluster is given.
+In Figure~\ref{fig:NNI_NP_proof} there is an illustration of this example.
 The reason that this proof does not work for $\rnni$ is similar to the reason that caterpillar trees are convex in $\rnni$, but not in $\nni$.
 Both trees $T$ and $R$ in the example of \autocite{Li1996-zw} have $2n$ taxa and consist of two caterpillar trees that share the root as parent.
 The clusters given by the two nodes adjacent to the root are $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$ in both trees $T$ and $R$.
 There is a shortest path in $\nni$ where at first $T$ is transformed to a tree $T'$ with $n$ cherries where each cherry contains one taxon of $\{1, \ldots, n\}$ and one taxon of $\{n+1, \ldots, 2n\}$.
 Afterwards, $T'$ is transformed to a tree $R'$ still containing the same cherries as $T'$ but in a way that resolving all these cherries of $R'$ results in $R$.
-For proving that this path is shorter than any path preserving the clusters $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$, the fact that $d_{\nni}(R,R') = d_{\nni}(T{\big|}_{\{1, \ldots, n\}}, R{\big|}_{\{1, \ldots, n\}})$ where $T{\big|}_{\{1, \ldots, n\}}$ and $R{\big|}_{\{1, \ldots, n\}}$ are $T$ and $R$ restricted to taxa $\{1,\ldots,n\}$, respectively, is being used.
+For proving that this path is shorter than any path preserving the clusters $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$, \autocite{Li1996-zw} use the fact that $d_{\nni}(R,R') = d_{\nni}(T{\big|}_{\{1, \ldots, n\}}, R{\big|}_{\{1, \ldots, n\}})$ where $T{\big|}_{\{1, \ldots, n\}}$ and $R{\big|}_{\{1, \ldots, n\}}$ are $T$ and $R$ restricted to taxa $\{1,\ldots,n\}$, respectively.
 However, this does not work in $\rnni$.
 Similar to what we observed in the example depicted in Figure~\ref{fig:NNI_vs_RNNI}, there are lots of additional rank moves needed on a similar path in $\rnni$.
 Therefore, a path where the two caterpillar trees are sorted separately, is shorter in $\rnni$.
-\todo{(1) Do we want this explanation?
-(2) If yes, is this explanation sufficient (we never say how we assign ranks to $T$ and $R$)?}
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{NNI_NP_proof}
+    \vspace{2pt}
+    \caption{Example of a shortest path between two trees $T$ and $R$ in $\nni$.
+    All leaves labelled with dots are labelled by taxa in $\{1, \ldots, n$, squares represent taxa in $\{n+1, \ldots, 2n\}$.
+    In \autocite{Li1996-zw} it is proven that there is such a labelling that ensures that there is no shortest path in $\nni$ where the clusters shared between $T$ and $R$ are preserved.}
+	\label{fig:NNI_NP_proof}
+\end{figure}
 
-
-% \todo{Shall we keep this explanation? The problem is that the $\rnni$ path depends on the assignment of ranks to the cherries produced on the path}
-% The counterexample presented in \autocite{Li1996-zw} works in $\nni$ because of the following:
-% When proving Theorem~\ref{thm:split_nni}, \autocite{Li1996-zw} gives an example of two trees $T$ and $R$ on $2n$ taxa that consist of two caterpillar trees each that share the root as parent.
-% The clusters given by the two nodes adjacent to the root are $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$ in both trees $T$ and $R$.
-% Between these there is a shortest path in $\nni$ where at first $T$ is transformed to a tree $T'$ with $n$ cherries where each cherry contains one taxon of $\{1, \ldots, n\}$ and one taxon of $\{n+1, \ldots, 2n\}$.
-% Afterwards, $T'$ is transformed to a tree $R'$ still containing the same cherries as $T'$ but in a way that resolving all these cherries of $R'$ results in $R$.
-% For proving that this path is shorter than any path preserving the clusters $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$, the fact that $d_{\nni}(R,R') = d_{\nni}(T{\big|}_{\{1, \ldots, n\}}, R{\big|}_{\{1, \ldots, n\}})$ where $T{\big|}_{\{1, \ldots, n\}}$ and $R{\big|}_{\{1, \ldots, n\}}$ are $T$ and $R$ restricted to taxa $\{1,\ldots,n\}$, respectively, is being used.
-% However, this does not work in $\rnni$.
-% Introducing new cherries means introducing new internal nodes with new ranks.
-% Since there are lots of rank moves needed for an $\rnni$ path similar to the shortest $\nni$ path presented above, the path in $\rnni$ that breaks the clusters $\{1, \ldots, n\}$ and $\{n+1, \ldots, 2n\}$ is no shortest path.
-
-% ^How do we assign ranks to the new cherry nodes?
-% We could either create a path where $R$ and $R'$ have distance equal to $d_{\rnni}(T{\big|}_{\{1, \ldots, n\}}, R{\big|}_{\{n+1, \ldots, 2n\}})$ and have a lot of additional rank moves before and after that part OR
-% Build $R$ and $R'$ that contain all the cherries within the least number of moves possible (3n-3) and having a longer path between $R$ and $R'$.
-% Also anything in between these two options is possible. Are we able to disprove every option??
-
-
-Since the example given in \autocite{Li1996-zw} that proves Theorem~\ref{thm:split_nni} in $\nni$ does not work in $\rnni$, a contrary statement was conjectured in \autocite{Gavryushkin2018-ol}.
-For understanding this conjecture it is important to realise the connection between edges in a tree and so-called splits, which are bipartitions of the taxon set of that tree:
-By deleting an edge $e$ of a tree $T$ one receives two trees on taxon sets $A$ and $B$ such that $\{A,B\}$ is a partition of the taxon set of $T$.
+Since the example given in \autocite{Li1996-zw}, which proves Theorem~\ref{thm:split_nni} in $\nni$, does not work in $\rnni$, a contrary statement was conjectured in \autocite{Gavryushkin2018-ol}.
+For understanding this conjecture it is important to realise the connection between edges in a tree and so-called \emph{splits}, which are bipartitions of the taxon set of a tree:
+By deleting an edge $e$ of a tree $T$ one receives two graphs with labels in $A$ and $B$, respectively, such that $\{A,B\}$ is a partition of the taxon set of $T$.
 Note that each edge induces such a bipartition, often written as $A|B$, and that both edges incident to the root of a tree induce the same partition.
-Since these partitions are commonly referred to as \emph{splits}, the following conjecture was named \emph{Split Theorem} in \autocite{Gavryushkin2018-ol}.
+Since these partitions are commonly referred to as splits, the following conjecture was named \emph{Split Theorem} in \autocite{Gavryushkin2018-ol}.
 
 \begin{conjecture}[Split Theorem]
 	For the $\rnni$ graph the following statement holds:
@@ -809,7 +799,8 @@ However, we found a simple counterexample to this conjecture, provided in Figure
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{splitthm_counterexample}
-	\caption{The split $123|45$ is present in $T$ and $R$, but the path at the top is a shortest path where none of the trees contains this split.
+    \vspace{2pt}
+	\caption{The split $123|45$ is present in $T$ and $R$, but the path at the top is a shortest path (computed by $\csort$) where none of the trees contains this split.
     However, this split is maintained on the path at the bottom, which is a shortest path as well.}
 	\label{fig:splitthm_counterexample}
 \end{figure}
@@ -818,16 +809,7 @@ Since the counterexample in Figure~\ref{fig:splitthm_counterexample} shows that 
 Within the Cluster Theorem we are considering clusters instead of splits.
 This is motivated by the fact that rooted phylogenetic trees can uniquely be represented by sets of clusters \autocite{Steel2016-ye}, but not by sets of splits as they cannot define the position of the root.
 Moreover, a ranked tree can be uniquely determined by ordering the clusters such that the ranks of the internal nodes inducing those clusters increase.
-
-% \begin{conjecture}[Weak Split Theorem]
-% 	For $\rnni$ graph the following statement holds:
-% 	if a partition of leaves given by an edge is present in two trees $T$ and $R$ then there exists a shortest path between $T$ and $R$ where this partition is present in every tree on this path.
-% 	\label{split_theorem_weak}
-% \end{conjecture}
-%
-% \todo{Do we want to keep the weak version of the split thm? It is stronger than the Cluster Thm!}
-%
-% The weak Split Theorem (in the version as in Lena's thesis) is computationally proven to hold for trees with up to $6$ taxa ($\sim 38$ min running time on laptop).
+We already used this representation of trees in Section~\ref{section:algorithms}.
 
 \begin{conjecture}[Cluster Theorem]
 	For the $\rnni$ graph the following statement holds:
@@ -835,7 +817,7 @@ Moreover, a ranked tree can be uniquely determined by ordering the clusters such
 	\label{conjecture:cluster_theorem}
 \end{conjecture}
 
-Note that trees $T$ and $R$ of counterexample~\ref{fig:splitthm_counterexample} induce the same set of splits, but have distinct clusters.
+Note that trees $T$ and $R$ in Figure~\ref{fig:splitthm_counterexample} induce the same set of splits, but have distinct clusters.
 Furthermore, this counterexample can be used to prove that the Cluster Theorem does not hold in $\nni$.
 
 \todo{LC: connect previous with following (has been in computation section before)}
@@ -843,22 +825,29 @@ Furthermore, this counterexample can be used to prove that the Cluster Theorem d
 %TODO
 %How much detail do we need? Shall we have this as separate section or is it sufficient to mention that we checked the cluster theorem for up to $k$ taxa?
 
-For proving the Cluster Theorem as stated in Conjecture~\ref{conjecture:cluster_theorem} for small trees, we implemented the algorithm for computing the $\rnni$ graph as stated above.
-If the graph is computed, one can get distances by using algorithms such as Floyd-Warshall~\autocite{Floyd1962-ew} or Dijkstra~\autocite{Dijkstra1959-ph}.
+\todo{LC: re-read the two following paragraphs and move them to correct position in paper (maybe some stuff should go to alg section?)}
+
+For providing further evidence that the Cluster Theorem holds in $\rnni$, we can show computationally that it holds for small trees with up to seven taxa.
+\todo{LC: We still need to check 7 taxa.}
+We are doing this in the following way.
+\todo{LC: Move the following paragraph to algorithms section?}
+At first we compute the $\rnni$ graph by using the algorithm introduced in \autocite{Gavryushkin2018-ol}, which we already discussed in Section~\ref{section:algorithms}.
+If the graph is computed, one can get distances by using algorithms such as Floyd-Warshall \autocite{Floyd1962-ew} or Dijkstra\autocite{Dijkstra1959-ph}.
 However, the large number of vertices in $\rnni$ is an obstacle when it comes to computing distances.
 For instance the Floyd-Warshall algorithm needs to save a matrix containing all pairwise distances of vertices in the graph, which needs space quadratic in the number of vertices.
-Since there are $\frac{n!(n-1)!}{2^{n-1}}$ vertices in the $\rnni$ graph~\autocite{Gavryushkin2018-ol}, we already run out of space when considering $7$ taxa.
+Since there are $\frac{n!(n-1)!}{2^{n-1}}$ vertices in the $\rnni$ graph \autocite{Gavryushkin2018-ol}, we already run out of space when considering seven taxa.
 Therefore, we cannot simply use this algorithm to compute all distances in $\rnni$.
 Instead of this we compute distances between certain pairs of trees and use the symmetry of $\rnni$ to draw conclusions about the remaining distances.
 
 In the following we describe how the Cluster Theorem has computationally been proven for small trees.
 For this aim only a restricted subset of trees in $\rnni$ needs to be considered, that is trees that share a cluster.
 Furthermore, it is sufficient to consider clusters of the shape $\{1, \ldots, m\}$ for $2 \leq m \leq n-1$.
-This is due to the fact that the distance $d(T_1,R_2)$ and $d(T_2,R_2)$ between two pairs of trees $(T_1,R_1)$ and $(T_2,R_2)$ are equal if one can receive $T_2$ from $T_1$ by permuting the taxa the same way as it is necessary for receiving $R_2$ from $R_1$.
-Therefore, we compute for all $m = 2, \ldots, n-1$ exact $\rnni$ distances between all trees containing the cluster $\{1, \ldots, m\}$, using Dijkstra.
-Additionally, the subgraph of $\rnni$ only consisting of trees that have $\{1, \ldots, m\}$ as cluster is computed.
+This is due to the fact that the distance $d(T_1,R_1)$ and $d(T_2,R_2)$ between two pairs of trees $(T_1,R_1)$ and $(T_2,R_2)$ are equal if one can receive $T_2$ from $T_1$ by permuting the taxa the same way as it is necessary for receiving $R_2$ from $R_1$.
+Therefore, we compute for all $m = 2, \ldots, n-1$ exact $\rnni$ distances between all trees containing the cluster $\{1, \ldots, m\}$, using Dijkstra's algorithm \autocite{Dijkstra1959-ph}.
+Additionally, the subgraph of $\rnni$ induced by the subset of trees that have $\{1, \ldots, m\}$ as cluster is computed.
+\todo{LC: Do we need to define induced subgraph?}
 All pairwise distances between the trees in the subgraph are computed, by using Floyd-Warshall, to compare them with the distances in $\rnni$.
-With this approach it is possible to show that the Cluster Theorem holds for up to $6$ taxa. \todo{Can we improve this?}
+With this approach it is possible to show that the Cluster Theorem holds for up to seven taxa. \todo{Can we improve this?}
 
 \section{Ideas}
 \todo{This section is just a rough draft. Are there ideas we want to keep? Shall this become an 'open problems/future work' section?}
@@ -877,6 +866,7 @@ However, simulations suggest that the lengths of the two paths computed by $\fin
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\textwidth]{findpath_not_symmetric}
+    \vspace{2pt}
 	\caption{Two paths computed by $\findpath$. At the top $\findpath(T,R)$, at the bottom $\findpath(R,T)$}
 	\label{fig:findpath_not_symmetric}
 \end{figure}
