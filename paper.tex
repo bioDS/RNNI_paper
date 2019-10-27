@@ -180,9 +180,9 @@ Repeating this procedure for all clusters of $R$ results in a path from $T$ to $
 	\STATE $\hat{T} := T$
 	\STATE $p := [\hat T]$
 	\FOR {$i = 1, \dots, n-2$}
-		\STATE Let $C_i$ be the cluster induced by the node with rank $i$ in $R$ \label{alg:find_path:line:_cluster}
-		\WHILE {$\rank(\mrca_{\hat{T}}(C_i))>i$}
-			\STATE Update $\hat{T}$: Decrease $\rank(\mrca_{\hat{T}}(C_i))$ by an $\rnni$ move \label{alg:line:move_set_down}
+		\STATE Let $C_i$ be the cluster induced by the node with rank $i$ in $R$ \label{alg:find_path:line:cluster}
+		\WHILE {$\rank_{\hat T}(\mrca_{\hat{T}}(C_i))>i$}
+			\STATE Update $\hat{T}$: Decrease $\rank_{\hat T}(\mrca_{\hat{T}}(C_i))$ by an $\rnni$ move \label{alg:findpath:line:move_set_down}
 			\STATE $p = p+\hat{T}$
 		\ENDWHILE
 	\ENDFOR
@@ -190,13 +190,12 @@ Repeating this procedure for all clusters of $R$ results in a path from $T$ to $
 \end{algorithmic}
 \end{algorithm}
 
-%BEGIN: From MareikesVisit
-
 \todo{LC: Work on the following proof! Is it worth introducing intervals for $\rnni$ moves for the proof of the following lemma?}
 
 \begin{lemma}
-    Let $T$ be a tree and $C \subset \{1, \ldots, n\}$ a subset of taxa such that $C$ is not induced by any node in $T$.
-    There is exactly one tree $T'$ that can be obtained from $T$ by one $\rnni$ move such that $\rank(\mrca_{T'}(C)) = \rank(\mrca_{T}(C)) -1 $.
+    Let $T$ and $R$ be two trees on which we apply $\findpath$ to compute a path from $T$ to $R$.
+    We assume that $\hat T \neq T,R$ is a tree on the path computed by this algorithm, which needs to be updated in Line~\ref{alg:findpath:line:move_set_down} of Algorithm~\ref{alg:find_path}.
+    Then there is always exactly one $\rnni$ move that can update $\hat T$ to a tree $T'$ such that $\mrca_{T'}(C_i) < \mrca_{\hat T}(C_i)$ for cluster $C_i$ as defined in Line~\ref{alg:find_path:line:cluster}.
     \label{lemma:mrca_move}
 \end{lemma}
 
@@ -204,40 +203,83 @@ Repeating this procedure for all clusters of $R$ results in a path from $T$ to $
 
     \todo{LC: revise this whole proof}
 
-    Let $(C_1, \ldots, C_n)$ be the list representation of $T$ as introduced above.
-    \todo{LC: Introduce this representation above!}
-    Let $v:=mrca_T(C)$, let $C_{i+1}$ be the cluster induced by $v$, and let $w$ be the node inducing $C_i$.
-    We will distinguish the case that there is an edge $(v,w)$ in $T$ from the case that there is no such edge.
+    Let $T$ and $R$ be trees and $[C_1, \ldots, C_n]$ the cluster representation
+    \todo{LC: How do we call this representation? Introduce it in the beginning of alg chapter!}
+    of $R$ as introduced above.
+    Let $\hat T$ be a tree as in Line~\ref{alg:findpath:line:move_set_down} of Algorithm~\ref{alg:find_path} and $C_i$ the cluster defined in Line~\ref{alg:find_path:line:cluster}.
+    We want to prove that there is exactly one $\rnni$ move possible on $\hat T$ that results in a tree $T'$ where $\mrca_{T'}(C_i) < \mrca_{\hat T}(C_i)$ if $C_i$ is not induced by a node in $\hat T$ already.
 
-    At first we assume that there is no edge $(v,w)$, which means $C_i \not \subset C_{i+1}$.
-    In this case the two sets $C_i, C_{i+1}$ can exchange by a rank swap.
-    Since $C \subset C_{i+1}$, this rank swap decreases the rank of $\mrca(C)$ by one and there is no $\nni$ move that could move $\mrca(C)$ down.
+    To do this, we distinguish the following two cases:
+    Either there is an edge between the node $v = \mrca_{\hat T}(C_i)$ and the node $w$ with rank $rank_{\hat T}(w) = rank_{hat T}(v) - 1$, or there is no such edge.
 
-    Let us now consider the case that $(v,w)$ is an edge in $T$.
-    The only move that could decrease the rank of $\mrca(C)$ is an $\nni$ move on the edge $(v,w)$.
-    Let $C_k$ and $C_j$ be the clusters induced by the children of $C_i$.
-    Then it is $C_k \cup C_j = C_i$.
-    There are two different $\nni$ moves possible on $(v,w)$.
-    $C_i$ can either be replaced by $C_j \cup (C_{i+1} \setminus C_i)$ or by $C_k \cup (C_{i+1} \setminus C_i)$.
-    To prove that there is always exactly one $\rnni$ moves that decreases the rank of $\mrca(C)$, we need to show that it is either $C \subset (C_j \cup (C_{i+1} \setminus C_i))$ or $C \subset (C_k \cup (C_{i+1} \setminus C_i))$.
+    In the latter case, there is only one $\rnni$ move that could increase the rank of $v$.
+    That is a rank move swapping the ranks of $v$ and $w$.
 
-    Let $a \in C$.
-    Then it is $a \in C_{i+1} = mrca(C)$ and it follows $a \in C_{i+1} \setminus C_i$ or $a \in C_i$.
-    If $a \in C_{i+1} \setminus C_i$, $a$ is in the new set after the $\nni$ move.
-    So now we will assume that $a \in C_i$.
-    Then it is either $a \in C_j$ or $a \in C_k$.
-    Without loss of generality we assume that $a \in C_j$.
+    If there is an edge $(v,w)$ in $\hat T$, there are two $\nni$ moves possible on this edge, which could possibly change the rank of the most recent common ancestor of $C_i$.
+    We are now going to explain why only one of these two $\nni$ moves changes the rank of this most recent common ancestor.
+    Therefore it is important to see that the clusters $C_1, \ldots, C_{i-1}$ already appear in $\hat T$ as they do in $R$, which is a direct result from the algorithm.
+    It is also straight forward to see
+    \todo{LC: is it?}
+    that the $C_i$ either is the disjoint union $C_i = C_j \dot\cup C_k$ for $j,k < i$ or $C_i = C_j \dot\cup \{x\}$ for a taxon $x \in X \setminus (C_1 \cup \ldots \cup C_{i-1})$.
 
-    We need to prove that if $a \in C_j$, there is no $b \in C$ with $b \in C_k$.
-    This makes sure that it is either $C \subset (C_j \cup (C_{i+1} \setminus C_i))$ or $C \subset (C_k \cup (C_{i+1} \setminus C_i))$.
-    For contradiction we assume that $a \in C_j$ and $C \in S_k$.
-    We know that all sets that are subsets of $C$ already are at the same position in the current tree as in the destination tree $R$.
-    Therefore, we can conclude from $a \in C_j$ and $b \in C_k$ that $C_j \cup C_k = C$.
-    Hence, it holds $mrca(C) = C_i$.
-    This is a contradiction to our assumption that $C_{i+1} = mrca(C)$ in the current tree.
-    Therefore, it holds either $C \subset (C_j \cup (C_{i+1} \setminus C_i))$ or $C \subset (C_k \cup (C_{i+1} \setminus C_i))$.
+    Le us at first assume that $C_i = C_j \dot\cup C_k$ for some $j,k < i$.
+    The tree $\hat T$ looks like the tree depicted in Figure~\ref{fig:mrca_move} where $T_w^1$ and $T_w^2$ are the two subtrees rooted in the children of $w$ and $T_v$ is the subtree whose root is child of $v$ and does not include $w$.
+    Because it is $v = \mrca_{\hat T}(C_i)$, either $C_j$ or $C_k$ is a subset of the taxon set of $T_v$.
+    Without loss of generality we assume that it is $C_j$.
+    Since $C_k$ is already induced by a node in $\hat T$, all taxa in $C_k$ are either in $T_w^1$ or in $T_w^2$.
+    If there were taxa of $C_k$ in both subtrees $T_w^1$ and $T_w^2$, $w$ would be the node inducing $C_k$ and hence it would be $k = i-1$, which means that $v$ induces $C_i$.
+    Therefore, we know that $C_j$ is a subset of the taxon set of $T_v$ and $C_k$ is subset of the taxon set of one of the subtrees $T_w^1$ or $T_w^2$.
+    In Figure~\ref{fig:mrca_move} one can see the two moves possible on $(v,w)$.
+    Depending on which of the subtrees $T_w^1$ or $T_w^2$ includes the taxa of $C_k$, one can see that only one of the two $\nni$ moves results in a tree where the tank of the most recent common ancestor of $C_i$ is below its rank in $\hat T$.
 
-    Concluding, there is always an $\rnni$ move on the edge $(v,w)$ for $mrca(C) = C_{i+1}, C \subsetneq C_{i+1}$ that decreases the rank of $mrca(C)$.
+    Now we consider the case that $C_i = C_j \dot\cup \{x\}$ for a taxon $x \in X \setminus (C_1 \cup \ldots \cup C_{i-1})$.
+    For the same reason as above, $C_j$ is in subset of the taxon set of one of the subtrees $T_w^1, T_w^2$ or $T_v$ of $\hat T$ as depicted in Figure~\ref{fig:mrca_move}.
+    Similarly $x$ is taxon of one of these three subtrees in a way that either $C_j$ or $x$ is included in $T_v$, because $v = \mrca_{\hat T}(C_i)$.
+    So there is just one of the two subtrees $T_w^1$ and $T_w^2$ that neither includes $C_j$ nor $x$.
+    Therefore, the $\nni$ move that moves this subtree to the position where $T_v$ has been before, is the only $\nni$ move that decreases the rank of $\mrca_{\hat T}(C_i)$.
+
+    We can conclude that there is in any case exactly one $\rnni$ move that can be performed on $\hat T$ that decreases the rank of $\mrca_{\hat T}(C_i)$ in Line~\ref{alg:findpath:line:move_set_down} of Algorithm~\ref{alg:find_path}.
+
+    \begin{figure}[H]
+    	\centering
+    	\includegraphics[width=0.5\textwidth]{mrca_move}
+        \vspace{2pt}
+    	\caption{\todo{caption}}
+    	\label{fig:mrca_move}
+    \end{figure}
+
+    % Let $v:=\mrca_{\hat T}(C_i)$, let $C_{i+1}$ be the cluster induced by $v$, and let $w$ be the node inducing $C_i$.
+    % We will distinguish the case that there is an edge $(v,w)$ in $T$ from the case that there is no such edge.
+    %
+    % At first we assume that there is no edge $(v,w)$, which means $C_i \not \subset C_{i+1}$.
+    % In this case the two sets $C_i, C_{i+1}$ can exchange by a rank swap.
+    % Since $C \subset C_{i+1}$, this rank swap decreases the rank of $\mrca(C)$ by one and there is no $\nni$ move that could move $\mrca(C)$ down.
+    %
+    % Let us now consider the case that $(v,w)$ is an edge in $T$.
+    % The only move that could decrease the rank of $\mrca(C)$ is an $\nni$ move on the edge $(v,w)$.
+    % Let $C_k$ and $C_j$ be the clusters induced by the children of $C_i$.
+    % Then it is $C_k \cup C_j = C_i$.
+    % There are two different $\nni$ moves possible on $(v,w)$.
+    % $C_i$ can either be replaced by $C_j \cup (C_{i+1} \setminus C_i)$ or by $C_k \cup (C_{i+1} \setminus C_i)$.
+    % To prove that there is always exactly one $\rnni$ moves that decreases the rank of $\mrca(C)$, we need to show that it is either $C \subset (C_j \cup (C_{i+1} \setminus C_i))$ or $C \subset (C_k \cup (C_{i+1} \setminus C_i))$.
+    %
+    % Let $a \in C$.
+    % Then it is $a \in C_{i+1} = mrca(C)$ and it follows $a \in C_{i+1} \setminus C_i$ or $a \in C_i$.
+    % If $a \in C_{i+1} \setminus C_i$, $a$ is in the new set after the $\nni$ move.
+    % So now we will assume that $a \in C_i$.
+    % Then it is either $a \in C_j$ or $a \in C_k$.
+    % Without loss of generality we assume that $a \in C_j$.
+    %
+    % We need to prove that if $a \in C_j$, there is no $b \in C$ with $b \in C_k$.
+    % This makes sure that it is either $C \subset (C_j \cup (C_{i+1} \setminus C_i))$ or $C \subset (C_k \cup (C_{i+1} \setminus C_i))$.
+    % For contradiction we assume that $a \in C_j$ and $C \in S_k$.
+    % We know that all sets that are subsets of $C$ already are at the same position in the current tree as in the destination tree $R$.
+    % Therefore, we can conclude from $a \in C_j$ and $b \in C_k$ that $C_j \cup C_k = C$.
+    % Hence, it holds $mrca(C) = C_i$.
+    % This is a contradiction to our assumption that $C_{i+1} = mrca(C)$ in the current tree.
+    % Therefore, it holds either $C \subset (C_j \cup (C_{i+1} \setminus C_i))$ or $C \subset (C_k \cup (C_{i+1} \setminus C_i))$.
+    %
+    % Concluding, there is always an $\rnni$ move on the edge $(v,w)$ for $mrca(C) = C_{i+1}, C \subsetneq C_{i+1}$ that decreases the rank of $mrca(C)$.
 
 \end{proof}
 
