@@ -429,7 +429,7 @@ In Section~\ref{section:diameter} we will investigate diameter and radius of the
 We will give a counterexample to disprove their version of the Split Theorem and claim an alternative version.
 
 Before we get into the details of these geometric properties of $\rnni$, we need to prove some statements that will be used a few times within this geometry section.
-At first we in Lemma~\ref{lemma:diameter_bound} an upper bound of the \emph{diameter} $\Delta(\rnni)$ of the $\rnni$ graph, which is defined as $\Delta(\RNNI) = \max \{d(T, R) \mid T, R \in \rnni\}$.
+At first we in Lemma~\ref{lemma:diameter_bound} an upper bound of the \emph{diameter} $\Delta(\rnni)$ of the $\rnni$ graph, which is defined as $\Delta(\rnni) = \max \{d(T, R) \mid T, R \in \rnni\}$.
 
 \begin{lemma}
 $\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$ for $n \geq 3$.
@@ -438,7 +438,7 @@ $\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$ for $n \geq 3$.
 
 \begin{proof}
 Since the diameter is bounded from above by the maximum length of a path computed by $\findpath$, it is enough to find this maximum.
-The worst-case execution of $\findpath$ would require each of the $n-2$ clusters $C_i$, considered in Line~\ref{alg:find_path:line:_cluster} of Algorithm~\ref{alg:find_path}, to be moved by $n-1-i$ $\rnni$ operations in $\hat{T}$.
+The worst-case execution of $\findpath$ would require each of the $n-2$ clusters $C_i$, considered in Line~\ref{alg:find_path:line:cluster} of Algorithm~\ref{alg:find_path}, to be moved by $n-1-i$ $\rnni$ operations in $\hat{T}$.
 Hence, the maximum length of such a path is bounded by $\sum\limits_{i = 1}^{n-2} i = \frac{(n-2)(n-1)}{2}$.
 \end{proof}
 
@@ -454,14 +454,16 @@ Then $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - \delta$, where $\delta = |\rank_T(
 \end{lemma}
 
 \begin{proof}
-First observe that the rank of an internal node $v$ of a tree $T$ along an $\rnni$ path $p$ can only be changed by performing a rank move that involves $v$ or an $\nni$ move on an edge adjacent to $v$.
-Second observe that any $\rnni$ move can change the rank of an internal node by at most one.
+First observe that the rank of the internal node $\parent_T(n+1)$ can only be changed by performing a rank move that involves $\parent_T(n+1)$ or an $\nni$ move on an edge adjacent to $\parent_T(n+1)$.
+Second observe that any $\rnni$ move can change the rank of $\parent_T(n+1)$ by at most one.
+So we can follow that the rank of $\parent_T(n+1)$ can be decreased by at most one by an $\rnni$ move on $T$.
 
 Let $p$ be a shortest path from tree $T$ to $R$ and $p{\big|}_n$ the path resulting from deleting taxon $n+1$ from all trees on $p$.
 This new path $p{\big|}_n$ is then a path from $T{\big|}_n$ to $R{\big|}_n$.
+The reason for this is that the only moves that are deleted from $p$ to receive $p{\big|}_n$ are those involving the parent of taxon $n+1$.
+All other moves stay the same and can be performed equally on a path from $T{\big|}_n$ to $R{\big|}_n$ as on a path from $T$ to $R$, because the relations of all other internal nodes are the same between both pairs of trees.
 Recall that $\delta$ is the difference in ranks between the parents of taxon $n+1$ in $T$ and $R$.
-\todo{This statement has to be checked very carefully and one or two sentences added to explain the `applying'.}
-Applying the two observations above we conclude that $|p{\big|}_n| \leq |p| - \delta$.
+With the knowledge that an $\rnni$ move on $T$ can change the rank of $\parent_T(n+1)$ by at most one, we can conclude that $|p{\big|}_n| \leq |p| - \delta$.
 Since $d(T{\big|}_n,R{\big|}_n) \leq |p{\big|}_n|$ and $|p| = d(T,R)$, the desired inequality follows.
 \end{proof}
 
@@ -480,7 +482,7 @@ In this section we restrict our attention to the set of \emph{caterpillar trees}
 This type of tree is of particular interest in $\rnni$ because shortest paths between such trees in $\rnni$ differ from those in classical $\nni$ space.
 This in combination with the importance of caterpillar trees in the proof of $\np$-hardness of $\nni$ distances in \autocite{Dasgupta2000-xa} suggests that understanding the geometry of paths between caterpillar trees helps investigating the complexity of computing $\rnni$ distances.
 In particular, we are going to prove that one can always find a shortest path between two caterpillar trees that contains caterpillar trees only, meaning that the set of caterpillar trees is convex in $\rnni$.
-We discovered this by computing caterpillar paths with $\csort$ and comparing them with shortest path in $\rnni$, computed by the exact algorithm as explained in Section~\ref{section:algorithm}.
+We discovered this by computing caterpillar paths with $\csort$ and comparing them with shortest path in $\rnni$, computed by the exact algorithm as explained in Section~\ref{section:algorithms}.
 In the following we demonstrate why finding shortest paths between caterpillar trees builds the basis for understanding the difference between $\nni$ and $\rnni$.
 
 Therefore, we compare shortest paths between caterpillar trees in $\nni$ with those in $\rnni$.
@@ -628,7 +630,7 @@ We will now show that this is not only a bound, but the exact diameter of $\rnni
 \end{lemma}
 
 \begin{proof}
-	Let $T = [1,n,2,3,\ldots,n-1]$ and $R = [n-1,n,n-2,n-3, \ldtos, 1]$ be two caterpillar trees.
+	Let $T = [1,n,2,3,\ldots,n-1]$ and $R = [n-1,n,n-2,n-3, \ldots, 1]$ be two caterpillar trees.
     According to Theorem~\ref{thm:caterpillar_convex}, there is a shortest path between $T$ and $R$ that is a caterpillar path.
     We can compute a shortest caterpillar path by using $\csort$ as explained in Section~\ref{section:caterpillar_convex}.
     When running this algorithm on $T$ and $R$, each taxon $i$ ($i \in \{1, \ldots, n\}$) swaps $n-1-i$ times with its upper neighbour.
@@ -666,12 +668,12 @@ Note that the results provided in this section are only true if the input tree o
     This means that this taxon $n+1$ is the last one added last to $R$ as in Line~\ref{alg:mdtree_lineAddTaxon} and therefore, it has parent with rank one in $R$.
     Because the parent of $n+1$ has rank $n$ in $T$, we can conclude from Lemma~\ref{lemma:distance_delete_taxon} that for $T$ and $R$ restricted to taxa $1,\ldots,n$ it holds: $d(T|_n,R|_n) \leq d(T,R) - (n-1)$.
     It is not hard to see that $R|_n$ can be received from $T|_n$ by applying $\mdtree$:
-    $R|_n$ can be constructed from input tree $T|_n$ in the same way as $R$ can be constructed from $T$, since the list $L$ computed in Line~\ref{alg:mdtree_lineL} of Algorithm~\ref{alf:max_dist_tree} for $T|_n$ is the same as the one for $T$, just the last element is missing.
+    $R|_n$ can be constructed from input tree $T|_n$ in the same way as $R$ can be constructed from $T$, since the list $L$ computed in Line~\ref{alg:mdtree_lineL} of Algorithm~\ref{alg:max_dist_tree} for $T|_n$ is the same as the one for $T$, just the last element is missing.
     So we can follow from the induction hypothesis and Lemma~\ref{lemma:distance_delete_taxon} that it is $d(T,R) \geq d(T|_n,R|_n) + (n-1) = \frac{(n-1)(n-2)}{2} = \frac{n(n-1)}{2}$, which concludes the proof of the lemma.
 \end{proof}
 
 In Section~\ref{alg:max_dist_tree} we already discussed that $\mdtree$ is a non-deterministic algorithm.
-In fact, every tree topology on $n$ taxa can be resulting from $\mdtree$, since there is no restriction on where to add the new taxon in the already existing tree in Line~\ref{alg:mdtree_lineAddTaxon} of Algorithm~\ref{ald:max_dist_tree}.
+In fact, every tree topology on $n$ taxa can be resulting from $\mdtree$, since there is no restriction on where to add the new taxon in the already existing tree in Line~\ref{alg:mdtree_lineAddTaxon} of Algorithm~\ref{alg:max_dist_tree}.
 This means that for each caterpillar input tree $\mdtree$ can compute a tree with any tree topology that has maximum distance from the input tree.
 \todo{LC: Definition tree topology?}
 And because permuting labels of trees does not change the distance between them, there is for every tree $R$ on $n$ taxa a caterpillar tree $T$ with distance $d(T,R) = \Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
