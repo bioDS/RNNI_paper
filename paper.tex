@@ -128,7 +128,7 @@ Do you think it would be helpful to draw them as caterpillars to prepare readers
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\textwidth]{RNNI}
-    \vspace{2pt}
+    \vspace{12pt}
 	\caption{Two types of operation that define edges of the $\rnni$ graph.
     The move at the top left is a rank move while the trees in the triangle are connected by $\nni$ moves.}
 	\label{fig:RNNI}
@@ -205,59 +205,56 @@ Appending all trees on this path from $T'$ to $T''$ and repeating this procedure
 \end{algorithmic}
 \end{algorithm}
 
+The following lemma shows that $\findpath$ gives a path between the two input trees, indeed, by proving that there is always an $\rnni$ move possible as descibred in Line~\ref{ald:findpath:line:move_set_down} of Algorithm~\ref{alg:find_path}.
 
 \begin{lemma}
-    Let $T$ and $R$ be two trees on which we apply $\findpath$ to compute a path from $T$ to $R$.
-    We assume that $\hat T \neq T,R$ is a tree on the path computed by this algorithm, which needs to be updated in Line~\ref{alg:findpath:line:move_set_down} of Algorithm~\ref{alg:find_path}.
-    Then there is always exactly one $\rnni$ move that can update $\hat T$ to a tree $T'$ such that $\mrca_{T'}(C_i) < \mrca_{\hat T}(C_i)$ for cluster $C_i$ as defined in Line~\ref{alg:find_path:line:cluster}.
+    Let $T$ and $R = [C_1, \ldots, C_{n-2}]$ be two trees and $p:= \findpath (T,R)$ a path from $T$ to $R$.
+    Let $T' \neq T,R$ be a tree on $p$ such that $C_1, \ldots, C_{k-1}$ are induced by internal nodes of $T'$, but $C_k$ is not.
+    Then there is always exactly one $\rnni$ move on $T'$ that results in a tree $T''$ such that $\mrca_{T''}(C_i) < \mrca_{T'}(C_i)$.
     \label{lemma:mrca_move}
 \end{lemma}
 
 \begin{proof}
 
 
-    Let $T$ and $R$ be trees and $[C_1, \ldots, C_n]$ the cluster representation
-    \todo{LC: How do we call this representation? Introduce it in the beginning of alg chapter!}
-    of $R$ as introduced above.
-    Let $\hat T$ be a tree as in Line~\ref{alg:findpath:line:move_set_down} of Algorithm~\ref{alg:find_path} and $C_i$ the cluster defined in Line~\ref{alg:find_path:line:cluster}.
-    We want to prove that there is exactly one $\rnni$ move possible on $\hat T$ that results in a tree $T'$ where $\mrca_{T'}(C_i) < \mrca_{\hat T}(C_i)$ if $C_i$ is not induced by a node in $\hat T$ already.
+    Let $T, R$ and $T'$ be trees as defined in the lemma and $[C_1, \ldots, C_{n-2}]$ the cluster representation of $R$.
+    We want to prove that there is exactly one $\rnni$ move on $T'$ that results in a tree $T''$ where $\mrca_{T''}(C_k) < \mrca_{T'}(C_k)$.
+    Notice, that the only $\rnni$ move on $T$ that could decrease the rank of $\mrca_{T'}(C_k)$ are $\nni$ movs on the edge between $\mrca_{T'}(C_k)$ and its child (if this edge has length one), or a rank move between $\mrca_{T'}(C_k)$ and the node with rank one less.
+    Therefore, we will now distinguish these two cases:
+    Either there is an edge $(v,w)$ between nodes $v = \mrca_{T'}(C_k)$ and $w$ with rank $rank_{T'}(w) = rank_{T'}(v) - 1$, or there is no such edge.
 
-    To do this, we distinguish the following two cases:
-    Either there is an edge between the node $v = \mrca_{\hat T}(C_i)$ and the node $w$ with rank $rank_{\hat T}(w) = rank_{hat T}(v) - 1$, or there is no such edge.
+    In the latter case the only $\rnni$ move that could increase the rank of $v$ is a rank move swapping the ranks of $v$ and $w$.
 
-    In the latter case, there is only one $\rnni$ move that could increase the rank of $v$.
-    That is a rank move swapping the ranks of $v$ and $w$.
-
-    If there is an edge $(v,w)$ in $\hat T$, there are two $\nni$ moves possible on this edge, which could possibly change the rank of the most recent common ancestor of $C_i$.
+    If there is an edge $(v,w)$ in $T'$ there are two $\nni$ moves possible on this edge.
     We are now going to explain why only one of these two $\nni$ moves changes the rank of this most recent common ancestor.
-    Therefore it is important to see that the clusters $C_1, \ldots, C_{i-1}$ already appear in $\hat T$ as they do in $R$, which is a direct result from the algorithm.
-    It is also straight forward to see
-    \todo{LC: is it?}
-    that the $C_i$ either is the disjoint union $C_i = C_j \dot\cup C_k$ for $j,k < i$ or $C_i = C_j \dot\cup \{x\}$ for a taxon $x \in X \setminus (C_1 \cup \ldots \cup C_{i-1})$.
+    By definition we know that $C_1, \ldots, C_{k-1}$ are induced by the nodes of rank $1, \ldots, k-1$, respectively, in $T'$ already.
+    It is important to notice that $C_k$ either is the disjoint union $C_k = C_i \dot\cup C_j$ for $i,j < k$ or $C_k = C_i \dot\cup \{x\}$ for a taxon $x \in X \setminus (C_1 \cup \ldots \cup C_{k-1})$.
 
-    Le us at first assume that $C_i = C_j \dot\cup C_k$ for some $j,k < i$.
-    The tree $\hat T$ looks like the tree depicted in Figure~\ref{fig:mrca_move} where $T_w^1$ and $T_w^2$ are the two subtrees rooted in the children of $w$ and $T_v$ is the subtree whose root is child of $v$ and does not include $w$.
-    Because it is $v = \mrca_{\hat T}(C_i)$, either $C_j$ or $C_k$ is a subset of the taxon set of $T_v$.
-    Without loss of generality we assume that it is $C_j$.
-    Since $C_k$ is already induced by a node in $\hat T$, all taxa in $C_k$ are either in $T_w^1$ or in $T_w^2$.
-    If there were taxa of $C_k$ in both subtrees $T_w^1$ and $T_w^2$, $w$ would be the node inducing $C_k$ and hence it would be $k = i-1$, which means that $v$ induces $C_i$.
-    Therefore, we know that $C_j$ is a subset of the taxon set of $T_v$ and $C_k$ is subset of the taxon set of one of the subtrees $T_w^1$ or $T_w^2$.
-    In Figure~\ref{fig:mrca_move} one can see the two moves possible on $(v,w)$.
-    Depending on which of the subtrees $T_w^1$ or $T_w^2$ includes the taxa of $C_k$, one can see that only one of the two $\nni$ moves results in a tree where the tank of the most recent common ancestor of $C_i$ is below its rank in $\hat T$.
+    Le us at first assume that $C_k = C_i \dot\cup C_j$ for some $i,j < k$.
+    The tree $T'$ looks like the tree depicted in the left of Figure~\ref{fig:mrca_move} where $T_w^1$ and $T_w^2$ are the two subtrees rooted in the children of $w$ and $T_v$ is the subtree whose root is child of $v$ and does not include $w$.
+    Since we know that all clusters $C_1,\ ldots, C_{k-1}$ are induced by some nodes in $T'$, each of these clusters must be a subset of the taxon set of one of the three subtrees $T_w^1,T_w^2$, or $T_v$.
+    In particular, there can't be elements of the same cluster $C_m$ in more than one of these subtrees.
+    This and the fact that $v = \mrca_{T'}(C_i \dot\cup C_j)$ yields that either $C_i$ or $C_j$ is subset of the taxon set of $T_v$ and the other cluster is subset of the taxon set of either $T_w^1$ or $T_w^2$.
 
-    Now we consider the case that $C_i = C_j \dot\cup \{x\}$ for a taxon $x \in X \setminus (C_1 \cup \ldots \cup C_{i-1})$.
-    For the same reason as above, $C_j$ is in subset of the taxon set of one of the subtrees $T_w^1, T_w^2$ or $T_v$ of $\hat T$ as depicted in Figure~\ref{fig:mrca_move}.
-    Similarly $x$ is taxon of one of these three subtrees in a way that either $C_j$ or $x$ is included in $T_v$, because $v = \mrca_{\hat T}(C_i)$.
+    Without loss of generality we assume that $C_i$ is included in $T_v$.
+    Otherwise, change the indices $i$ and $j$.
+    Then $C_i$ is a subset of the taxon set of either $T_w^1$ or $T_w^2$.
+    Therefore, just one of the two $\nni$ moves on $(v,w)$, as depicted in Figure~\ref{fig:mrca_move}, moves the most recent common ancestor of $C_k = C_i \dot \cup C_j$ down.
+
+    Now we consider the case that $C_k = C_i \dot\cup \{x\}$ for a taxon $x \in X \setminus (C_1 \cup \ldots \cup C_{k-1})$.
+    For the same reason as above, $C_i$ is in subset of the taxon set of one of the subtrees $T_w^1, T_w^2$ or $T_v$ of $\hat T$ as depicted in Figure~\ref{fig:mrca_move}.
+    Similarly $x$ is taxon of one of these three subtrees in a way that either $C_i$ or $x$ is included in $T_v$, because $v = \mrca_{T'}(C_i \dot \cup \{x\})$.
     So there is just one of the two subtrees $T_w^1$ and $T_w^2$ that neither includes $C_j$ nor $x$.
-    Therefore, the $\nni$ move that moves this subtree to the position where $T_v$ has been before, is the only $\nni$ move that decreases the rank of $\mrca_{\hat T}(C_i)$.
+    As in the previous case, just one of the two $\nni$ moves on $(v,w)$ as illustrated in Figure~\ref{fig:mrca_move} decreases the rank of $\mrca_{T'}(C_i \dot \cup \{x\})$.
 
-    We can conclude that there is in any case exactly one $\rnni$ move that can be performed on $\hat T$ that decreases the rank of $\mrca_{\hat T}(C_i)$ in Line~\ref{alg:findpath:line:move_set_down} of Algorithm~\ref{alg:find_path}.
+    We can conclude that in any case there is exactly one $\rnni$ move possible on $T'$ that decreases the rank of $\mrca_{T'}(C_k)$ in Line~\ref{alg:findpath:line:move_set_down} of Algorithm~\ref{alg:find_path}.
 
     \begin{figure}[H]
     	\centering
     	\includegraphics[width=0.5\textwidth]{mrca_move}
-        \vspace{2pt}
-    	\caption{\todo{caption}}
+        \vspace{12pt}
+        \caption{Two $\nni$ moves that are possible on the edge $(v,w)$ of the tree $T'$.
+        They result in the trees on the right as described in the proof of Lemma~\ref{lemma:mrca_move}.}
     	\label{fig:mrca_move}
     \end{figure}
 
@@ -477,7 +474,7 @@ Hence a path where taxa move separately and no second cherry is built, is shorte
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{NNI_vs_RNNI}
-    \vspace{2pt}
+    \vspace{12pt}
 	\caption{Paths between caterpillar trees $T$ and $R$: The solid paths are paths in $\rnni$, the dashed one is a path that is only possible in the plain $\nni$ graph.
     The upper path, which is the $\rnni$ path that is the natural extension of the shortest $\nni$ path, is longer than a shortest $\rnni$ path as the one at the bottom.}
 	\label{fig:NNI_vs_RNNI}
@@ -591,7 +588,7 @@ Notice that $\frac{(n-1)(n-2)}{2}$ is the upper bound for the diameter of $\rnni
             $x_{k+1}$ & $x_{k+2}$ & $\ldots$ & $x_k$ & $b$ & $\ldots$ & $a$ & $\ldots$ & $x_n$ & $x_{k-1}$ & $\ldots$ & $x_1$\\
             \hline
         \end{tabular}
-        \vspace{2pt}
+        \vspace{12pt}
     	\caption{Loop number $k$ of $\csort$ between $T$ and $R$ (in list representation) as described in proof of Theorem~\ref{thm:caterpillar_convex}.
         The trees are represented as sequences that are being sorted by $\csort$.
         Right before loop number $k$, taxa $x_1, \ldots, x_{k-1}$ are already at the same position as in $R$.
@@ -718,7 +715,7 @@ Therefore, a path where the two caterpillar trees are sorted separately is short
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{NNI_NP_proof}
-    \vspace{2pt}
+    \vspace{12pt}
     \caption{Example of a shortest path between two trees $T$ and $R$ in $\nni$.
     All leaves labelled with dots are labelled by taxa in $\{1, \ldots, n\}$, squares represent taxa in $\{n+1, \ldots, 2n\}$.
     In \autocite{Li1996-zw} it is proven that there is such a labelling that ensures that there is no shortest path in $\nni$ where the clusters shared between $T$ and $R$ are preserved.
@@ -743,7 +740,7 @@ However, we found a simple counterexample to this conjecture, provided in Figure
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\textwidth]{splitthm_counterexample}
-    \vspace{2pt}
+    \vspace{12pt}
 	\caption{The split $123|45$ is present in $T$ and $R$, but the path at the top is a shortest path (computed by $\csort$) where none of the trees contains this split.
     However, this split is maintained on the path at the bottom, which is a shortest path as well.}
 	\label{fig:splitthm_counterexample}
@@ -794,7 +791,7 @@ However, simulations suggest that the lengths of the two paths computed by $\fin
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.7\textwidth]{findpath_not_symmetric}
-    \vspace{2pt}
+    \vspace{12pt}
 	\caption{Two paths computed by $\findpath$. At the top $\findpath(T,R)$, at the bottom $\findpath(R,T)$}
 	\label{fig:findpath_not_symmetric}
 \end{figure}
