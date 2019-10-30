@@ -205,7 +205,7 @@ Appending all trees on this path from $T'$ to $T''$ and repeating this procedure
 \end{algorithmic}
 \end{algorithm}
 
-The following lemma shows that $\findpath$ gives a path between the two input trees, indeed, by proving that there is always an $\rnni$ move possible as descibred in Line~\ref{ald:findpath:line:move_set_down} of Algorithm~\ref{alg:find_path}.
+The following lemma shows that $\findpath$ gives a path between the two input trees, indeed, by proving that there is always an $\rnni$ move possible as described in Line~\ref{alg:findpath:line:move_set_down} of Algorithm~\ref{alg:find_path}.
 
 \begin{lemma}
     Let $T$ and $R = [C_1, \ldots, C_{n-2}]$ be two trees and $p:= \findpath (T,R)$ a path from $T$ to $R$.
@@ -529,7 +529,7 @@ Notice that $\frac{(n-1)(n-2)}{2}$ is the upper bound for the diameter of $\rnni
     It is obvious that it gives an upper bound for the distance as it is $\Delta(\rnni_{n+1}) \leq \frac{n(n-1)}{2}$ for the $\rnni$ graph $\rnni_{n+1}$ on $n+1$ taxa by Lemma~\ref{lemma:diameter_bound}.
     So we now need to prove that $\frac{n(n-1)}{2}$ is a lower bound for the distance between $T$ and $R$ as well.
     According to Lemma~\ref{lemma:distance_delete_taxon}, the distance between $T{\big|}_n$ and $R{\big|}_n$ is at least $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - |\rank_T(\parent_T(n+1)) - \rank_R(\parent_R(n+1))|$.
-    We also know $|\rank_T(\parent_T(n+1)) - \rank_R(\pare nt_R(n+1))| = n-1$.
+    We also know $|\rank_T(\parent_T(n+1)) - \rank_R(\parent_R(n+1))| = n-1$.
     Suppose, contrary to our claim, that there is a path from $T$ to $R$ of length less than $\frac{n(n-1)}{2}$.
     By the above, it follows that $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - |\rank_T(\parent_T(n+1)) - \rank_R(\parent_R(n+1))| < \frac{n(n-1)}{2} - (n-1) < \frac{(n-1)(n-2)}{2}$.
     Since this is a contradiction to $d(T{\big|}_n, R{\big|}_n) = \frac{(n-1)(n-2)}{2}$, it is proven that $d(T,R) = \frac{n(n-1)}{2} $.
@@ -543,64 +543,69 @@ Notice that $\frac{(n-1)(n-2)}{2}$ is the upper bound for the diameter of $\rnni
 \todo{LC: Work on the following proof, especially the figure and explanation of it}
 
 \begin{proof}
-    We prove this Theorem by backwards induction on the length $l$ of a shortest caterpillar path between two caterpillar trees $T$ and $R$.
+    We prove this Theorem by backwards induction on the caterpillar distance $l = d_c(T,R)$ between caterpillar trees $T$ and $R$.
     For this backwards induction the maximum caterpillar distance, which is $\frac{(n-1)(n-2)}{2}$ (Lemma~\ref{lemma:caterpillar_dist=diameter}), is the base case.
 
     Induction basis: $l = \frac{(n-1)(n-2)}{2}$\\
     With Lemma~\ref{lemma:caterpillar_dist=diameter} one can see that for each pair of caterpillar trees $T$, $R$ with caterpillar distance $d_c(T,R) = \frac{(n-1)(n-2)}{2}$, it is $d(T,R) = d_c(T,R)$.
-    Therefore, there is a shortest path between $T$ and $R$ that is a caterpillar path.
+    This means that there is a shortest path between $T$ and $R$ that is a caterpillar path.
 
     Induction step: $l+1 \to l$\\
-    Induction hypothesis: For each pair of caterpillar trees with caterpillar distance $l+1$ there is a shortest path between these trees that only consists of caterpillar trees, which means that the distance between these trees is $l+1$.
+    Induction hypothesis: For each pair of caterpillar trees with caterpillar distance $l+1$ there is a shortest path between these trees that consists of caterpillar trees only, so the distance between these trees is $l+1$.
 
     Let $T$ and $R$ be caterpillar trees with caterpillar distance $l$.
-    We consider the shortest caterpillar path from $T$ to $R$ computed by $\csort$.
-    Since $l < \frac{(n-1)(n-2)}{2}$, there must be one loop $k$ in $\csort$ where less than $n-2-k$ taxon pairs swap positions.
-    Let us assume that loop number $k$ is the first one where this happens.
-    This situation is illustrated in the top of Figure~\ref{fig:cat_convex_seq_example}.
-    Whenever the number of swaps of taxa or, in terms of lists, neighboured elements in the list is maximum in a loop, one of the first two elements swaps position with $n-1-k$ subsequent elements of the list.
-    We already saw this in the proof of Lemma~\ref{lemma:caterpillar_dist=diameter}.
-    Since we assume that the number of swaps in loop $k$ is not maximal, there are less than $n-1-k$ such moves.
-    \todo{LC: From here on it is confusing}
-    Let us assume that $a$ is the first element that is compared with its left neighbour in loop $k$ but does not swap with it.
-    Then the left neighbour $b$ of $a$ in $T$ is below $a$ in $R$ as well.
-    Therefore, the tree $T'$ which can be received from $T$ by exchanging $a$ and $b$ must have caterpillar distance $d_c(T',R) = d_c(T,R) + 1 = l + 1$ to $R$.
-    For an illustration of the $k^{th}$ loop when performing $\csort$ between $T$ and $R$ or $T'$ and $R$, respectively, consider Figure~\ref{fig:cat_convex_seq_example}.
+    We consider the shortest caterpillar path between these trees computed by $\csort$.
+    From now on we will consider the trees $T$ and $R$, as well as all other caterpillar trees within this proof, in their list representation $L_T$ and $L_R$ as introduced in Section~\ref{section:alg_csort}.
 
-    \todo{LC: replace this figure}
-    \begin{figure}[H]
-    	\centering
-        \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|}
-            \hline
-            $x_{k+1}$ & $x_k$ & $\ldots$ & $b$ & $a$ & \multicolumn{3}{c|}{$\ldots$} & $x_n$ & $x_{k-1}$ & $\ldots$ & $x_1$\\
-            \hline
-            \multicolumn{12}{c}{}\\
-            \hline
-            $x_{k+1}$ & $x_{k+2}$ & $\ldots$ & $b$ & $x_k$ & $\ldots$ & $a$ & $\ldots$ & $x_n$ & $x_{k-1}$ & $\ldots$ & $x_1$\\
-            \hline
-            \multicolumn{12}{c}{}\\
-            \multicolumn{12}{c}{}\\
-            \hline
-            $x_{k+1}$ & $x_k$ & $\ldots$ & $a$ & $b$ & \multicolumn{3}{c|}{$\ldots$} & $x_n$ & $x_{k-1}$ & $\ldots$ & $x_1$\\
-            \hline
-            \multicolumn{12}{c}{}\\
-            \hline
-            $x_{k+1}$ & $x_{k+2}$ & $\ldots$ & $x_k$ & $b$ & $\ldots$ & $a$ & $\ldots$ & $x_n$ & $x_{k-1}$ & $\ldots$ & $x_1$\\
-            \hline
-        \end{tabular}
-        \vspace{12pt}
-    	\caption{Loop number $k$ of $\csort$ between $T$ and $R$ (in list representation) as described in proof of Theorem~\ref{thm:caterpillar_convex}.
-        The trees are represented as sequences that are being sorted by $\csort$.
-        Right before loop number $k$, taxa $x_1, \ldots, x_{k-1}$ are already at the same position as in $R$.
-        At the top: sequences between $T$ and $R$ -- $x_k$ and $b$ swap in loop number $k$, but $x_k$ and $a$ not.
-        At the bottom: sequences between $T'$ and $R$ -- $a$ and $b$ swap in loop number $k$; $x_k$ and $b$ will swap later}
-    	\label{fig:cat_convex_seq_example}
-    \end{figure}
+    Since $l < \frac{(n-1)(n-2)}{2}$, there must be one of the loops starting in Line~\ref{alg:csort:line:loop} of Algorithm~\ref{alg:csort} ($\csort$) where not every considered pair of taxa swaps positions.
+    Let us assume that loop number $k$ is the first one where the number of swaps is not maximal.
+    It might well be that this happens in the first loop $k=1$ already.
+    Since we assume that the number of swaps in loop $k$ is not maximal, there is a pair $a,b$ of elements that is compared in the algorithm but does not swap positions.
+    And because we consider the first time that this happens, $a$ is either one of the first two elements in the sequence, or it previously swapped with an element $c$ that has been between $a$ and $b$ before loop number $k$.
 
-    Because $T'$ has caterpillar distance $d_c(T',R) = l+1$ to $T$, we can apply the induction hypothesis on $T'$ and $R$ and see that $d(T',R) = l+1$.
-    Furthermore, it is $d(T,T') = 1$.
-    If it now were $d(T,R) < l$, it would hold $d(T',R) \leq d(T,R) + d(T,T') < l + 1$ which contradicts the induction hypothesis.
-    We can conclude $d(T,R) = l$, which completes the proof.
+    Let us first consider the latter case.
+    The sequence $L_{T'}$ at the time where $a$ and $b$ are compared but not swapped, looks as follows:
+
+    \vspace{12pt}
+    \begin{tabular}{c|c|c|c|c|c|c|c|c|}
+        \cline{2-9}
+        $L_{T'}$: & $\ldots$ & $c$ & $a$ & $b$ & $\ldots$& $x_{k-1}$ & $\ldots$ & $x_1$\\
+        \cline{2-9}
+    \end{tabular}
+    \vspace{12pt}
+
+    Note that in this illustration of $L_{T'}$ the elements $x_1, \ldots, x_{k-1}$ are in the same place as they are in $L_R$.
+    However, it could be that $k=1$, which means that there are no such elements at the end of $L_{T'}$ that are already sorted the same way as in the destination tree.
+
+    The last move before comparing $a$ and $b$ is a swap of $a$ with an element $c$.
+    Since $a$ and $c$ swapped, but $a$ and $b$ did not, we can follow that $b$ and $c$ appear in $L_R$ in the same order as they do in $L_{T'}$.
+    Furthermore, $c$ and $b$ must have been neighbours in $L_T$, because we assume that the comparison of $a$ and $b$ is the first one where the compared elements are not swapped in the sequence.
+    Let now $L_{\hat T}$ be a list that equals $L_T$ with the only exception that $b$ and $c$ are swapped.
+    We can follow from our observations above, that the distance between $T$ and $\hat T$ is $d(T, \hat T) = 1$ and that $\csort$ needs one move more for a path from $\hat T$ to $R$ than from $T$ to $R$.
+    This results in $d_c(\hat T, R) = d(T,R) + 1$.
+
+    So we can apply the induction hypothesis on $\hat T$ and $R$ and see that $d(\hat T,R) = l+1$.
+    If it now were $d(T,R) < l$, it would hold $d(\hat T,R) \leq d(T,R) + d(T,\hat T) < l + 1$ which contradicts the induction hypothesis.
+    We can conclude $d(T,R) = l$, which completes the proof for the case that $a$ is not one of the first two elements of $L_{T'}$.
+
+    Let us now consider the other case:
+    of the two elements $a$ and $c$, that are compared but not swapped, one, say $a$, is either the first or the second one in $L_{T'}$.
+    Then the list looks like this:
+
+    \vspace{12pt}
+    \begin{tabular}{c|c|c|c|c|c|c|c|c|}
+        \cline{2-8}
+        $L_{T'}$: & $a$ & $b$ & $c$ & $\ldots$ & $x_{k-1}$ & $\ldots$ & $x_1$\\
+        \cline{2-8}
+    \end{tabular}
+    \vspace{12pt}
+
+    If there is no swap of either $a$ or $b$ with $c$, we can construct a tree $\hat T$ with caterpillar distance $d_c(\hat T, R) = l+1$ and $d(T,\hat T) = 1$ in a similar way as in the previous case.
+    In the list $L_T$ representing the start tree $T$, either $a$ or $b$ must be neighbour of $c$.
+    This is due to the fact that we are currently considering the first comparison of elements where there is no swap.
+    Without loss of generality we assume that $a$ is neighbour of $c$ in $L_T$.
+    Then an exchange of $a$ and $c$ in $L_T$ yields a list $L_{\hat T}$ representing a tree $\hat T$ with the desired properties.
+    As in the previous case we can then apply the induction hypothesis on $\hat T$ and conclude that there is a shortest path between $T$ and $R$ that only consists of caterpillar trees.
 \end{proof}
 
 
