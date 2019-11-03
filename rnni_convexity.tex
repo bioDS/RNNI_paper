@@ -65,38 +65,37 @@
 
 \end{abstract}
 
-The nearest neighbour interchange ($\nni$) graph, defined on the set of phylogenetic trees with adjacency relation given by the interchange operation of two sister clades, has been known in mathematical biology literature for nearly 50 years \autocite{Robinson1971, Moore-Goodman-Barnabas1973}.
+The nearest neighbour interchange ($\nni$) graph, defined on the set of phylogenetic trees with adjacency relation given by the interchange operation of two sister clades, has been known in mathematical biology literature for nearly 50 years \autocite{Robinson1971-ql,Moore1973-kk}.
 Considered with the metric given by the length of a shortest path (graph-distance), this graph becomes a metric space.
-Its geometry has been extensively studied \autocite{...}.
-An important property of the $\nni$ graph is that computing distance is NP-hard \autocite{...}.
-As a result no algorithm exists to compute the distance in practical time \autocite{...Whidden may be}.
+Its geometry has been extensively studied \autocite{Dasgupta2000-xa, Li1996-zw, Gordon2013-fw, De_Jong2016-al}.
+An important property of the $\nni$ graph is that computing distance is NP-hard \autocite{Dasgupta2000-xa}.
+As a result no algorithm exists to compute the distance in practical time.
 A consequence is that tree search and sampling algorithms pose a significant challenge even for moderately sized trees \autocite{...}.
 
-More recent advances in computational phylogenetics introduce various classes of molecular clock models \autocite{...} and made possible computational inference of phylogenetic time-trees \autocite{...}.
+More recent advances in computational phylogenetics introduce various classes of molecular clock models \autocite{Yoder2000-ks,Drummond2006-nl,Drummond2010-yf} and made possible computational inference of phylogenetic time-trees \autocite{...}.
 However, mathematical challenges that come with this seemingly inessential change in parametrisation (genomic distance VS time distance) of trees have only recently been brought to attention \autocite{Gavryushkin2016-uu}.
 \textcite{Gavryushkin2018-ol} have proposed an extension of the $\nni$ graph to the class of discrete time-trees.
 The simplest such extension introduces the $\rnni$ graph on the set of ranked phylogenetic trees.
 Considered with the graph-distance $\rnni$ becomes a metric space and inherits the geometric and algorithmic challenges that the $\nni$ space has been traditionally facing.
 Surprisingly, most of them cannot be settled by directly translating results or applying techniques developed for $\nni$ \autocite{Gavryushkin2018-ol}.
 
-\todo{LC: mention some results here and how they make $\rnni$ differ from $\nni$}
-This distinguishes $\rnni$ from $\nni$ where this does not hold.
-One further result, presented in Section~\ref{section:diameter}, directly following from the proof of Theorem~\ref{thm:caterpillar_convex}, is the diameter of $\rnni$.
-Finally, we disprove the so-called Strong Split Theorem, conjectured in \autocite{Gavryushkin2018-ol}.
-However, the Weak Split Theorem remains a conjecture.
-Furthermore, we propose an alternative (even weaker) version of the conjecture, the Cluster Theorem (Section~\ref{section:cluster_theorem}).
-
-
-
-In this paper, we consider the $\rnni$ space on the ranked phylogenetic trees with all taxa being of equal rank.
-An example of such a tree is depicted in Figure~\ref{fig:...}.
+In this paper, we consider the $\rnni$ space on ranked phylogenetic trees with all taxa being of equal rank.
+An example of such a tree is depicted in Figure~\ref{fig:ranked_tree}.
 In the terminology of \autocite{Gavryushkin2018-ol}, the space considered in this paper is the space of ranked ultrametric phylogenetic trees $\rnniu$.
 We postpone accurate definitions until later in this section.
 
-[Figure of ranked tree]
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.25\textwidth]{ranked_tree}
+    \vspace{12pt}
+	\caption{A ranked tree with $6$ taxa.}
+	\label{fig:ranked_tree}
+\end{figure}
 
 In line with the research programme proposed in \autocite{Gavryushkin2018-ol}, we investigate the geometry and algorithmic complexity of the $\rnni$ space.
-Specifically, in this paper we establish the exact radius and diameter of the space, [... -- Lena, please finish this including the approximate algorithm that works exactly on small spaces (Lena: is it already in the text?)]
+Specifically, in this paper we establish the exact radius and diameter of the space.
+We also show that the subset of caterpillar trees is convex in $\rnni$.
+Moreover, we can provide an approximate algorithm that computes exact distances for small trees.
 The question of whether there exists a polynomial algorithm for computing the $\rnni$ distance remains an open problem.
 
 In the rest of this chapter we formally introduce non-standard definitions necessary for this paper.
@@ -107,6 +106,7 @@ Ranked trees $(T_1, \rank_1)$ and $(T_2, \rank_2)$ are different if trees $T_1$ 
 Since all trees in this paper are ranked trees, we will abuse the notation and drop the ranking from the notation.
 We will also refer to a ranked tree simply by tree.
 For a tree $T$, we will use $\rank_T$ to refer to its ranking.
+A ranked tree $T$ without its leaf labels will be called \emph{tree topology}.
 
 Our definition of a ranked tree implies a natural notion of the edge length.:
 A tree edge $(u,v)$ of $T$ has length $l$ if $|\rank_T(v) - \rank_T(u)| = l$.
@@ -139,7 +139,6 @@ We use the notation $d(T, R)$ throughout the paper to denote the graph distance 
 Within this section we will at first described how we can compute exact distances between trees in the $\rnni$ graph (Section~\ref{section:alg_RNNI_graph}) by using results of \autocite{Gavryushkin2018-ol}.
 Afterwards, we introduce two algorithms, namely $\findpath$ (Section~\ref{section:alg_findpath}) and $\csort$ (Section~\ref{section:alg_csort}), for computing paths between two given trees in $\rnni$.
 The first one takes arbitrary trees as input while the latter one is restricted to trees with a certain tree topology.
-\todo{LC: Do we need to define tree topology?}
 We will use them later to prove some geometric properties of the $\rnni$ graph in Section~\ref{section:geometry}.
 Additionally we will present the algorithm $\mdtree$, which produces a tree that is far away from the given input tree.
 What we mean by far away depends on the input tree and will be discussed after introducing this algorithm in Section~\ref{section:alg_mdtree}.
@@ -262,9 +261,7 @@ Since it computes a path between two arbitrary trees in $\rnni$, we can use the 
 A natural question is how well this estimates the actual distance in $\rnni$.
 To answer this question for small trees, we implemented $\findpath$.
 \todo{LC: github - link}
-For computing the actual $\rnni$ distances we used the the algorithm for computing the $\rnni$ graph as described in Section~\ref{section:alg_RNNI_graph}.
-\todo{LC: How do we compare the distances?}
-
+For computing the actual $\rnni$ distances we used the algorithm for computing the $\rnni$ graph as described in Section~\ref{section:alg_RNNI_graph}.
 
 
 \subsection{$\csort$}
@@ -437,15 +434,6 @@ With the knowledge that an $\rnni$ move on $T$ can change the rank of $\parent_T
 Since $d(T{\big|}_n,R{\big|}_n) \leq |p{\big|}_n|$ and $|p| = d(T,R)$, the desired inequality follows.
 \end{proof}
 
-\todo{LC: We don't use the following Proposition anywhere in the paper. Do we want to keep it?}
-
-Using the same argument as in the proof of Lemma~\ref{lemma:distance_delete_taxon} we can establish Proposition~\ref{proposition:lower_bound_distance} that provides a lower bound on the distance between trees.
-
-\begin{proposition}
-If trees $T$ and $R$ and taxon $x$ are such that $|\rank_T(\parent_T(x)) - \rank_R(\parent_R(x))| = \delta$ then $d(T,R) \geq \delta$.
-\label{proposition:lower_bound_distance}
-\end{proposition}
-
 
 \subsection{The set of caterpillar trees}
 \label{section:caterpillar_convex}
@@ -454,8 +442,7 @@ In this section we restrict our attention to the set of caterpillar trees, which
 This type of tree is of particular interest in $\rnni$ because shortest paths between such trees in $\rnni$ differ from those in classical $\nni$ space.
 This in combination with the importance of caterpillar trees in the proof of $\np$-hardness of $\nni$ distances in \autocite{Dasgupta2000-xa} suggests that understanding the geometry of paths between caterpillar trees helps investigating the complexity of computing $\rnni$ distances.
 In particular, we are going to prove that one can always find a shortest path between two caterpillar trees that contains caterpillar trees only, meaning that the set of caterpillar trees is convex in $\rnni$.
-We discovered this by computing caterpillar paths with $\csort$ and comparing them with shortest path in $\rnni$, computed by the exact algorithm as explained in Section~\ref{section:alg_RNNI_graph}.
-\todo{LC: Do we explain how we did this in the alg section? If not, we need to add an explanation here!}
+We discovered this by computing caterpillar paths with $\csort$ and comparing them with shortest path in $\rnni$, computed by the exact algorithm discussed in Section~\ref{section:alg_RNNI_graph}.
 In the following we demonstrate why finding shortest paths between caterpillar trees builds the basis for understanding the difference between $\nni$ and $\rnni$.
 
 Therefore, we compare shortest paths between caterpillar trees in $\nni$ with those in $\rnni$.
@@ -658,9 +645,7 @@ Note that the results provided in this section are only true if the input tree o
 \end{proof}
 
 In Section~\ref{alg:max_dist_tree} we already discussed that $\mdtree$ is a non-deterministic algorithm.
-In fact, the output tree of $\mdtree$ can have any tree topology
-\todo{LC: Do we need to define 'tree topology'?}
-, since there is no restriction on where to add the new taxon in the already existing tree in Line~\ref{alg:mdtree_lineAddTaxon} of Algorithm~\ref{alg:max_dist_tree}.
+In fact, the output tree of $\mdtree$ can have any tree topology, since there is no restriction on where to add the new taxon in the already existing tree in Line~\ref{alg:mdtree_lineAddTaxon} of Algorithm~\ref{alg:max_dist_tree}.
 This means that for each caterpillar input tree $\mdtree$ can compute a tree with any tree topology that has maximum distance from the input tree.
 And because permuting labels of trees does not change the distance between them, there exists for every tree $R$ on $n$ taxa a caterpillar tree $T$ with distance $d(T,R) = \Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
 This gives us Corollary~\ref{corollary:radius}.
@@ -772,7 +757,15 @@ With this approach it is possible to show that the Cluster Theorem holds for up 
 
 
 \section{Ideas}
-\todo{This section is just a rough draft. Are there ideas we want to keep? Shall this become an 'open problems/future work' section?}
+
+[This section includes some ideas that we could possibly include in the paper]
+
+Using the same argument as in the proof of Lemma~\ref{lemma:distance_delete_taxon} we can establish Proposition~\ref{proposition:lower_bound_distance} that provides a lower bound on the distance between trees.
+
+\begin{proposition}
+If trees $T$ and $R$ and taxon $x$ are such that $|\rank_T(\parent_T(x)) - \rank_R(\parent_R(x))| = \delta$ then $d(T,R) \geq \delta$.
+\label{proposition:lower_bound_distance}
+\end{proposition}
 
 
 The paths computed by $\findpath$ depend on the order of input trees $T$ and $R$:
