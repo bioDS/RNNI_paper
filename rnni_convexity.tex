@@ -191,8 +191,7 @@ Therefore, we need to find the smallest cluster containing all elements of $C_k$
 This node is denoted by $\mrca_{T'}(C_k)$ (short for \emph{most recent common ancestor}).
 The rank of $\mrca_{T'}(C_k)$ in $T'$ is higher than the rank of the node inducing $C_k$ in $R$, because $C_1, \ldots, C_{k-1}$ are already present in $T'$ and we assume that $C_k$ is not.
 Now perform an $\rnni$ move that decreases the rank of $\mrca_{T'}(C_k)$.
-\todo{We haven't seen Lemma 1 yet.}
-With Lemma~\ref{lemma:mrca_move} we know that such an $\rnni$ move always exists as long as $T'$ does not induce the cluster $C_k$.
+The existence of such a move is not obvious but we will see later (Lemma~\ref{lemma:mrca_move}) that this kind of move always exists as long as $T'$ does not induce the cluster $C_k$.
 So we can perform such moves until a tree $T''$ is reached with $\mrca_{T''}(C_k)$ inducing $C_k$ and having has the same rank $k$ in $T''$ as in $R$.
 Appending all trees on this path from $T'$ to $T''$ and repeating this procedure for all clusters of $R$ results in a path $p$ from $T$ to $R$.
 
