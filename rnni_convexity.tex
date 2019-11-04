@@ -215,9 +215,11 @@ Appending all trees on this path from $T'$ to $T''$ and repeating this procedure
 The following lemma shows that $\findpath$ gives a path between the two input trees, indeed, by proving that there is always an $\rnni$ move possible as described in Line~\ref{alg:findpath:line:move_set_down} of Algorithm~\ref{alg:find_path}.
 
 \begin{lemma}
-Let $T$ and $R = [C_1, \ldots, C_{n-2}]$ be two trees and $p:= \findpath (T,R)$ a path from $T$ to $R$.
-Let $T' \neq T,R$ be a tree on $p$ such that $C_1, \ldots, C_{k-1}$ are induced by internal nodes of $T'$, but $C_k$ is not.
-Then there is always exactly one $\rnni$ move on $T'$ that results in a tree $T''$ such that $\mrca_{T''}(C_i) < \mrca_{T'}(C_i)$.
+Let $T$ and $R = [C_1, \ldots, C_{n-2}]$ be two trees and $p = \findpath (T,R)$.
+Let $T'$ be a tree on $p$ different from both $T$ and $R$ such that $C_1, \ldots, C_{k-1}$ are induced by internal nodes of $T'$, but $C_k$ is not.
+Then there exists exactly one $\rnni$ move on $T'$ that results in a tree $T''$ such that
+\todo{What's $i$?}
+$\mrca_{T''}(C_i) < \mrca_{T'}(C_i)$.
 \label{lemma:mrca_move}
 \end{lemma}
 
