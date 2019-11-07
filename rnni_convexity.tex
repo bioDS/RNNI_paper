@@ -178,12 +178,17 @@ As all trees on $n$ taxa share all trivial clusters, we will use the notion clus
 Note that the list of all non-trivial clusters of a tree, sorted according to the rank of the corresponding node, defines the tree unambiguously.
 We will refer to this list of $n-2$ clusters for a given tree on $n$ taxa as a \emph{cluster representation} of the tree.
 
+\todo{I suggest to rewrite this paragraph following the standard structure:\\
+\emph{Step $0$. $T_0 = T$, ...\\
+Step $k+1$. $T_{k+1}$ is defined...}}
 We are now ready to introduce $\findpath$ (Algorithm~\ref{alg:find_path}), an efficient algorithm for computing paths between any two given trees $T$ and $R$ in $\rnni$.
 Let $[C_1, \ldots, C_{n-2}]$ be the cluster representation of $R$ (the ``destination'' tree).
 Then $C_i$ is induced by the node of rank $i$ for $i = 1, \ldots, n-2$.
 $\findpath$ computes a path $p$ which initially consists of $T$ only and is extended stepwise.
 In order to do this, the clusters $C_1, \ldots, C_{n-2}$ of $R$ are considered in their order.
-Let $T'$ be the last tree of $p$ when arriving at cluster $C_k$.
+Let $T'$ be the last tree of $p$ when
+\todo{This term is not clear or defined.}
+arriving at cluster $C_k$.
 We assume that the clusters $C_1, \ldots, C_{k-1}$ are induced by nodes of rank $1, \ldots, k-1$ in $T'$, respectively.
 In the first step it is $T' = T$ and $C_k = C_1$.
 The aim is now to find a sequence of $\rnni$ moves, starting at $T'$, that do not change the clusters $C_1, \ldots, C_{k-1}$, but result in a tree containing clusters $C_1, \ldots, C_{k}$.
@@ -191,10 +196,15 @@ Therefore, we need to find the smallest cluster containing all elements of $C_k$
 This node is denoted by $\mrca_{T'}(C_k)$ (short for \emph{most recent common ancestor}).
 The rank of $\mrca_{T'}(C_k)$ in $T'$ is higher than the rank of the node inducing $C_k$ in $R$, because $C_1, \ldots, C_{k-1}$ are already present in $T'$ and we assume that $C_k$ is not.
 Now perform an $\rnni$ move that decreases the rank of $\mrca_{T'}(C_k)$.
+\todo{I think it is obvious.
+I suggest to remove this Lemma and save it somewhere in case we get an too sensitive referee.
+Tag a commit?
+Or branch? -- whatever works.}
 The existence of such a move is not obvious but we will see later (Lemma~\ref{lemma:mrca_move}) that this kind of move always exists as long as $T'$ does not induce the cluster $C_k$.
 So we can perform such moves until a tree $T''$ is reached with $\mrca_{T''}(C_k)$ inducing $C_k$ and having has the same rank $k$ in $T''$ as in $R$.
 Appending all trees on this path from $T'$ to $T''$ and repeating this procedure for all clusters of $R$ results in a path $p$ from $T$ to $R$.
 
+\todo{$p = p+T'$: Do we really want to be updating this in every while loop?}
 \begin{algorithm}[H]
 \caption{$\findpath$($T,R$)}
 \label{alg:find_path}
@@ -215,7 +225,9 @@ Appending all trees on this path from $T'$ to $T''$ and repeating this procedure
 The following lemma shows that $\findpath$ gives a path between the two input trees, indeed, by proving that there is always an $\rnni$ move possible as described in Line~\ref{alg:findpath:line:move_set_down} of Algorithm~\ref{alg:find_path}.
 
 \begin{lemma}
-Let $T$ and $R = [C_1, \ldots, C_{n-2}]$ be two trees and $p = \findpath (T,R)$.
+Let $T$ and $R = [C_1, \ldots, C_{n-2}]$ be two trees and
+\todo{This lemma is to prove that FindPath is an (deterministic) algorithm, so we cannot relay on this.}
+$p = \findpath (T,R)$.
 Let $T'$ be a tree on $p$ different from both $T$ and $R$ such that $C_1, \ldots, C_{k-1}$ are induced by internal nodes of $T'$, but $C_k$ is not.
 Then there exists exactly one $\rnni$ move on $T'$ that results in a tree $T''$ such that
 \todo{What's $i$?}
@@ -267,46 +279,46 @@ They result in the trees on the right as described in the proof of Lemma~\ref{le
 
 \end{proof}
 
-With Lemma~\ref{lemma:mrca_move} we can conclude that $\findpath$ is a deterministic algorithm.
-Its running time is quadratic in the number of taxa.
-Since it computes a path between two arbitrary trees in $\rnni$, we can use the length of such a path as approximation for the distance between the trees.
-A natural question is how well this estimates the actual distance in $\rnni$.
-To answer this question for small trees, we implemented $\findpath$.
+Note that the uniqueness of the $\rnni$ move in Line~\ref{alg:findpath:line:move_set_down} of Algorithm~\ref{alg:find_path} implies that the algorithm is deterministic.
+The running time of the algorithm is quadratic in the number of taxa.
+
+Because the algorithm returns a path between pairs of trees in $\rnni$, the length of the path approximates the $\rnni$ distance from above.
+A natural question then is how accurate this approximation is.
+To answer this question for small trees, we have implemented the algorithm $\findpath$
 \todo{LC: github - link}
-For computing the actual $\rnni$ distances we used the algorithm for computing the $\rnni$ graph as described in Section~\ref{section:alg_RNNI_graph}.
+\autocite{}
+and compared the results with the true distance found using the algorithm from Section~\ref{section:alg_RNNI_graph}.
 
 
 \subsection{$\csort$}
 \label{section:alg_csort}
 
-
-For introducing an algorithm to compute paths between caterpillar trees, we need further notations.
-In this section we aim to investigate properties of paths between \emph{caterpillar trees} where each internal node has at least one child that is a leaf.
-A path $p$ between two caterpillar trees $T$ and $R$ that only consists of caterpillar trees is called \emph{caterpillar path}.
-If $p$ is shortest among all caterpillar paths between these trees we call it \emph{shortest caterpillar path}, and the length of $p$ will be denoted by $d_c(T,R)$ and called \emph{caterpillar distance}.
+In this section we aim to investigate properties of paths between \emph{caterpillar trees}, each internal node of which is adjacent to at least one leaf.
+A path $p$ between two caterpillar trees $T$ and $R$ that only consists of caterpillar trees is called a \emph{caterpillar path}.
+If $p$ is the shortest pass among all caterpillar paths between $T$ and $R$ we call it a \emph{shortest caterpillar path}, and denote the length of $p$ by $d_c(T,R)$, which we call the \emph{caterpillar distance}.
 
 Let us now introduce a representation of caterpillar trees as lists of taxa.
 This representation is basically a simplification of the cluster representation for caterpillar trees and works as follows.
-For a caterpillar tree with cluster representation $T = [C_1, \ldots, C_{n-2}]$ it is $C_i \subset C_{i+1}$ with $|C_i| = |C_{i+1}|$ for all $i = 1, \ldots, n-3$.
+\todo{I don't follow these two sentences.}
+For a caterpillar tree with a cluster representation $T = [C_1, \ldots, C_{n-2}]$ it is $C_i \subset C_{i+1}$ with $|C_i| = |C_{i+1}|$ for all $i = 1, \ldots, n-3$.
 Therefore, the list of taxa $L_T = [x_1, x_2, \ldots, x_n]$ with $x_1<x_2$ uniquely represents the caterpillar tree $T = [C_1, \ldots, C_{n-2}]$ with $C_i = \{x_1, \ldots, x_{i+1}\}$.
 In this list representing a caterpillar tree the taxa are ordered non-decreasing, according to the ranks of their parents.
 Note that the only two elements in such a list that have parents of equal rank are the first two elements $x_1$ and $x_2$.
-That is why we order them in the list such that $x_1 < x_2$ to make the list representation of caterpillar trees unique.
-We will call a pair of two taxa that share their parent \emph{cherry}.
-We will use this list representation to show how one can adapt the classical \emph{Bubble Sort} algorithm \autocite{Knuth1997-pi} to compute caterpillar paths.
+That is why we order them in the list such that
+\todo{Are we assuming taxa is ordered?}
+$x_1 < x_2$
+to make the list representation of caterpillar trees unique.
+We will call a pair of two taxa that share their parent a \emph{cherry}.
 
-We are now going to explain what kind of $\rnni$ moves are possible between caterpillar trees and see how such a move changes the list representation of a tree.
-At first it is important to realise that the only possible $\rnni$ moves between caterpillar trees are $\nni$ moves, since there is no pair of internal nodes with rank difference one that is not connected by an edge.
-$\nni$ moves between caterpillar trees correspond to swaps of two neighboured elements in the list representation.
-The only exception of this are $\nni$ moves on the lowest internal edge, that is the edge connecting the internal nodes of rank one and two.
-There are two $\nni$ moves possible on this edge that result in caterpillar trees, while there is for every other edge only one $\nni$ move that results in a caterpillar tree.
-Corresponding to the $\nni$ moves on the lowest internal edge are exchanges of either the first or the second element with the third element in the list representation.
+%We are now going to explain what kind of $\rnni$ moves are possible between caterpillar trees and see how such a move changes the list representation of a tree.
+%At first it is important to realise that the only possible $\rnni$ moves between caterpillar trees are $\nni$ moves, since there is no pair of internal nodes with rank difference one that is not connected by an edge.
+%$\nni$ moves between caterpillar trees correspond to swaps of two neighboured elements in the list representation.
+%The only exception of this are $\nni$ moves on the lowest internal edge, that is the edge connecting the internal nodes of rank one and two.
+%There are two $\nni$ moves possible on this edge that result in caterpillar trees, while there is for every other edge only one $\nni$ move that results in a caterpillar tree.
+%Corresponding to the $\nni$ moves on the lowest internal edge are exchanges of either the first or the second element with the third element in the list representation.
 
-By using this knowledge we can compute shortest caterpillar paths by modifying Bubble Sort as described in the following.
-We call this algorithm $\csort$ (Algorithm~\ref{alg:csort}).
-
-Let $T$ and $R$ be the input trees for $\csort$.
-We assume that they are given in their list representation $L_T$ and $L_R$ as described above and want to compute a path from $L_T$ to $L_R$.
+The algorithm $\csort$ (Algorithm~\ref{alg:csort}) is a natural modification of the classical \emph{Bubble Sort} algorithm \autocite{Knuth1997-pi} to compute caterpillar paths.
+Let $T$ and $R$ be the input trees given by their list representations $L_T$ and $L_R$.
 This path $p$ is built stepwise by adding a new list to the end of $p$.
 We call the last element of $p$ at any step $L_{T'}$, representing a tree $T'$ and when we say we update $L_{T'}$, we modify this list and append the new version of $L_{T'}$ to $p$.
 
