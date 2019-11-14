@@ -471,3 +471,138 @@
   year      =  2000,
   language  = "en"
 }
+
+@ARTICLE{Ronquist2003-eq,
+  title       = "{MrBayes} 3: Bayesian phylogenetic inference under mixed
+                 models",
+  author      = "Ronquist, Fredrik and Huelsenbeck, John P",
+  abstract    = "MrBayes 3 performs Bayesian phylogenetic analysis combining
+                 information from different data partitions or subsets evolving
+                 under different stochastic evolutionary models. This allows
+                 the user to analyze heterogeneous data sets consisting of
+                 different data types-e.g. morphological, nucleotide, and
+                 protein-and to explore a wide variety of structured models
+                 mixing partition-unique and shared parameters. The program
+                 employs MPI to parallelize Metropolis coupling on Macintosh or
+                 UNIX clusters.",
+  journal     = "Bioinformatics",
+  publisher   = "Oxford Univ Press",
+  volume      =  19,
+  number      =  12,
+  pages       = "1572--1574",
+  month       =  aug,
+  year        =  2003,
+  original_id = "cbde3d79-17bc-0795-a58b-9fac91428887"
+}
+
+@UNPUBLISHED{Bouckaert2018-yr,
+  title    = "{BEAST} 2.5: An Advanced Software Platform for Bayesian
+              Evolutionary Analysis",
+  author   = "Bouckaert, Remco and Vaughan, Timothy G and Barido-Sottani,
+              Joelle and Duchene, Sebastian and Fourment, Mathieu and
+              Gavryushkina, Alexandra and Heled, Joseph and Jones, Graham and
+              Kuhnert, Denise and de Maio, Nicola and Matschiner, Michael and
+              Mendes, Fabio K and Muller, Nicola and Ogilvie, Huw A and du
+              Plessis, Louis and Popinga, Alex and Rambaut, Andrew and
+              Rasmussen, David and Siveroni, Igor and Suchard, Marc and Wu,
+              Chieh-Hsi and Xie, Dong and Zhang, Chi and Stadler, Tanja and
+              Drummond, Alexei J",
+  abstract = "Elaboration of Bayesian phylogenetic inference methods has
+              continued at pace in recent years with major new advances in
+              nearly all aspects of the joint modelling of evolutionary data.
+              It is increasingly appreciated that some evolutionary questions
+              can only be adequately answered by combining evidence from
+              multiple independent sources of data, including genome sequences,
+              sampling dates, phenotypic data, radiocarbon dates, fossil
+              occurrences, and biogeographic range information among others.
+              Including all relevant data into a single joint model is very
+              challenging both conceptually and computationally. Advanced
+              computational software packages that allow robust development of
+              compatible (sub-)models which can be composed into a full model
+              hierarchy have played a key role in these developments.
+              Developing such software frameworks is increasingly a major
+              scientific activity in its own right, and comes with specific
+              challenges, from practical software design, development and
+              engineering challenges to statistical and conceptual modelling
+              challenges. BEAST 2 is one such computational software platform,
+              and was first announced over 4 years ago. Here we describe a
+              series of major new developments in the BEAST 2 core platform and
+              model hierarchy that have occurred since the first release of the
+              software, culminating in the recent 2.5 release.",
+  journal  = "bioRxiv",
+  pages    = "474296",
+  month    =  nov,
+  year     =  2018,
+  language = "en"
+}
+
+@ARTICLE{Hadfield2018-xp,
+  title     = "Nextstrain: real-time tracking of pathogen evolution",
+  author    = "Hadfield, James and Megill, Colin and Bell, Sidney M and
+               Huddleston, John and Potter, Barney and Callender, Charlton and
+               Sagulenko, Pavel and Bedford, Trevor and Neher, Richard A",
+  abstract  = "Summary: Understanding the spread and evolution of pathogens is
+               important for effective public health measures and surveillance.
+               Nextstrain consists of a database of viral genomes, a
+               bioinformatics pipeline for phylodynamics analysis, and an
+               interactive visualization platform. Together these present a
+               real-time view into the evolution and spread of a range of viral
+               pathogens of high public health importance. The visualization
+               integrates sequence data with other data types such as
+               geographic information, serology, or host species. Nextstrain
+               compiles our current understanding into a single accessible
+               location, open to health professionals, epidemiologists,
+               virologists and the public alike. Availability and
+               implementation: All code (predominantly JavaScript and Python)
+               is freely available from github.com/nextstrain and the
+               web-application is available at nextstrain.org.",
+  journal   = "Bioinformatics",
+  publisher = "academic.oup.com",
+  volume    =  34,
+  number    =  23,
+  pages     = "4121--4123",
+  month     =  dec,
+  year      =  2018,
+  language  = "en"
+}
+
+@ARTICLE{Whidden2018-tk,
+  title         = "Systematic Exploration of the High Likelihood Set of
+                   Phylogenetic Tree Topologies",
+  author        = "Whidden, Chris and Claywell, Brian C and Fisher, Thayer and
+                   Magee, Andrew F and Fourment, Mathieu and Matsen, IV,
+                   Frederick A",
+  abstract      = "Bayesian Markov chain Monte Carlo explores tree space
+                   slowly, in part because it frequently returns to the same
+                   tree topology. An alternative strategy would be to explore
+                   tree space systematically, and never return to the same
+                   topology. In this paper, we present an efficient
+                   parallelized method to map out the high likelihood set of
+                   phylogenetic tree topologies via systematic search, which we
+                   show to be a good approximation of the high posterior set of
+                   tree topologies. Here `likelihood' of a topology refers to
+                   the tree likelihood for the corresponding tree with
+                   optimized branch lengths. We call this method `phylogenetic
+                   topographer' (PT). The PT strategy is very simple: starting
+                   in a number of local topology maxima (obtained by
+                   hill-climbing from random starting points), explore out
+                   using local topology rearrangements, only continuing through
+                   topologies that are better than than some likelihood
+                   threshold below the best observed topology. We show that the
+                   normalized topology likelihoods are a useful proxy for the
+                   Bayesian posterior probability of those topologies. By using
+                   a non-blocking hash table keyed on unique representations of
+                   tree topologies, we avoid visiting topologies more than once
+                   across all concurrent threads exploring tree space. We
+                   demonstrate that PT can be used directly to approximate a
+                   Bayesian consensus tree topology. When combined with an
+                   accurate means of evaluating per-topology marginal
+                   likelihoods, PT gives an alternative procedure for obtaining
+                   Bayesian posterior distributions on phylogenetic tree
+                   topologies.",
+  month         =  nov,
+  year          =  2018,
+  archivePrefix = "arXiv",
+  primaryClass  = "q-bio.PE",
+  eprint        = "1811.11007"
+}
