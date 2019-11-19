@@ -75,7 +75,7 @@ A consequence is that tree search and sampling algorithms pose a significant cha
 \todo{LC: Alex, is this the citation you wanted?}
 \autocite{Whidden2018-tk}.
 
-More recent advances in computational phylogenetics introduce various classes of molecular clock models \autocite{Yoder2000-ks,Drummond2006-nl,Drummond2010-yf} and made possible computational inference of phylogenetic time-trees \autocite{Ronquist2003-eq, Bouckaert2018-yr, Hadfield2018-xp}.
+More recent advances in computational phylogenetics introduce various classes of molecular clock models \autocite{Yoder2000-ks,Drummond2006-nl,Drummond2010-yf} and made computational inference of phylogenetic time-trees possible \autocite{Ronquist2003-eq, Bouckaert2018-yr, Hadfield2018-xp}.
 However, mathematical challenges that come with this seemingly inessential change in parametrisation (genomic distance VS time distance) of trees have only recently been brought to attention \autocite{Gavryushkin2016-uu}.
 These differences motivated \textcite{Gavryushkin2018-ol} to propose an extension of the $\nni$ graph to the class of discrete time-trees.
 The simplest such extension introduces the $\rnni$ graph on the set of ranked phylogenetic trees.
@@ -96,29 +96,30 @@ We postpone accurate definitions until later in this section.
 \end{figure}
 
 In line with the research programme proposed in \autocite{Gavryushkin2018-ol}, we investigate the geometry and algorithmic complexity of the $\rnni$ space.
-Specifically, in this paper we establish the exact radius and diameter of the space.
-We also show that the subset of caterpillar trees is convex in $\rnni$, thus settling one of the open problems proposed in \autocite{Gavryushkin2018-ol}.
-Furthermore, we provide an approximate algorithm that computes exact distances for small trees.
+Specifically, in this paper we establish the exact radius and diameter of the space (Section~\ref{section:diameter}).
+We also show that the subset of caterpillar trees is convex in $\rnni$ (Section~\ref{section:caterpillar_convex}), thus settling one of the open problems proposed in \autocite{Gavryushkin2018-ol}.
+For establishing these geometric properties we are using algorithms that will be introduced in Section~\ref{section:algorithms}.
+We will in particular provide an approximate algorithm that computes exact distances for small trees.
 The question of whether there exists a polynomial algorithm for computing the $\rnni$ distance remains an open problem.
 
 In the rest of this chapter we formally introduce the terminology used in this paper.
 
-A \emph{ranked phylogenetic tree} is a pair consisting of a rooted binary phylogenetic tree $T$ on the set $X = \{1, \ldots, n\}$ of \emph{taxa} for $n \in \mathbb N$, and a (total) rank function that maps all leaves of $T$ to $0$, all internal nodes of $T$ onto the set $\{1, \ldots, n-1\}$, and respects the partial order on the nodes given by the tree.
+A \emph{ranked phylogenetic tree} is a pair consisting of a rooted binary phylogenetic tree $T$ on the set $X = \{1, \ldots, n\}$ of \emph{taxa} for $n \in \mathbb N$, and a (total) rank function that maps all leaves of $T$ to $0$, all internal nodes of $T$ onto elements of the set $\{1, \ldots, n-1\}$, and respects the partial order on the nodes given by the tree.
 The latter means that if $u$ and $v$ are two internal nodes of $T$ such that there exists a path from a taxon $x \in X$ to the root which first passes through $u$ and then through $v$ then $\rank(u) < \rank(v)$.
 Ranked trees $(T_1, \rank_1)$ and $(T_2, \rank_2)$ are different if trees $T_1$ and $T_2$ are different or $T_1 = T_2$ and $\rank_1 \neq \rank_2$.
 Since all trees in this paper are ranked trees, we will abuse the notation and drop the rank function from the notation.
-We will also be simply saying tress to mean ranked phylogenetic trees.
+We will also simply say trees to mean ranked phylogenetic trees.
 For a tree $T$, we will use $\rank_T$ to refer to its ranking.
 A ranked tree $T$ without its leaf labels will be called \emph{tree topology}.
 
-Our definition of a ranked tree implies a natural notion of the edge length -- we call $|\rank_T(v) - \rank_T(u)|$ the length of an edge $(u, v)$.
+Our definition of a ranked tree implies a natural notion of edge length -- we call $|\rank_T(v) - \rank_T(u)|$ the length of an edge $(u, v)$.
 
 Now we are ready to define the tree space which is the subject of study in this paper, the $\rnni$ graph.
 
 The vertex set of the $\rnni$ graph is the set of all ranked trees on $n$ taxa.
 We introduce two types of operation ($\rnni$ \emph{moves}) on trees (see Figure~\ref{fig:RNNI}) and say that two trees are adjacent in the $\rnni$ graph if they are connected by an operation of either type.
 The first type of operation is called a \emph{rank move} and defined by swapping the ranks of two internal nodes that are not adjacent in the tree.
-Formally, if $u$ and $v$ are such nodes of a tree $T$ that $|\rank_T(u) - \rank_T(v)| = 1$ and $(u, v)$ is not an edge in $T$ then the tree $R$ obtained from $T$ by only changing $\rank_R(u) = \rank_T(v)$ and $\rank_R(v) = \rank_T(u)$ is said to be obtained by a rank move.
+Formally, if $u$ and $v$ are nodes of a tree $T$ such that $|\rank_T(u) - \rank_T(v)| = 1$ and $(u, v)$ is not an edge in $T$ then the tree $R$ obtained from $T$ by only changing $\rank_R(u) = \rank_T(v)$ and $\rank_R(v) = \rank_T(u)$ is said to be obtained by a rank move.
 The second type of operation is called an $\nni$ \emph{move} and defined in the usual way, that is, two trees $T$ and $R$ are said to be connected by an $\nni$ move if there exist internal edges $e$ in $T$ and $f$ in $R$ both of length one such that the trees obtained by shrinking $e$ and $f$ to internal nodes coincide.
 
 We use the notation $d(T, R)$ throughout the paper to denote the graph distance between trees in $\rnni$, that is, $d(T, R)$ is the length of a shortest $\rnni$ path between tree $T$ and $R$.
@@ -128,11 +129,9 @@ We use the notation $d(T, R)$ throughout the paper to denote the graph distance 
 \includegraphics[width=0.8\textwidth]{RNNI}
 \vspace{12pt}
 \caption{Two types of operation that define edges of the $\rnni$ graph.
-The move at the top left is a rank move while the trees in the triangle are connected by $\nni$ moves.}
+The rank move swaps the ranks of the two nodes in the tree on the left such that $\nni$ moves are possible on the edge between the two nodes marked by black dots.}
 \label{fig:RNNI}
 \end{figure}
-
-\todo[inline]{LC: Explain structure of paper}
 
 
 \section{Algorithms}
@@ -150,7 +149,7 @@ While this algorithm is interesting on its own (e.g.\ for simulation studies), w
 \label{section:alg_RNNI_graph}
 
 \textcite[Section 3.3]{Gavryushkin2018-ol} constructed an exact algorithm for computing the $\rnni$ graph.
-\todo{Do we make use of tanglegrams?}
+\todo{Do we make use of tanglegrams? - LC: No}
 \todo{GitHub link?}
 We implemented this algorithm and used it for computing this graph for trees on up to seven taxa.
 \todo{LC: $7$ or $8$? - I'll need to check this}
