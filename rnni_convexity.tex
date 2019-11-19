@@ -139,29 +139,18 @@ The rank move swaps the ranks of the two nodes in the tree on the left such that
 
 We start this section with a discussion of the algorithm proposed in \autocite{Gavryushkin2018-ol} to compute the exact $\rnni$ distance between trees by pre-computing the $\rnni$ graph.
 Then we introduce two algorithms, $\findpath$ (Section~\ref{section:alg_findpath}) and $\csort$ (Section~\ref{section:alg_csort}), for computing paths between two given trees in $\rnni$.
-The first of these algorithms takes arbitrary trees as an input while the latter is restricted to trees with a certain tree topology.
-Both of these algorithms will become an important ingredient to establish several geometric properties of the $\rnni$ graph in Section~\ref{section:geometry}.
+These algorithms will become an important ingredient to establish several geometric properties of the $\rnni$ graph in Section~\ref{section:geometry}.
 Finally we will present the algorithm $\mdtree$, which produces a tree that is far away from the given input tree (see Section~\ref{section:alg_mdtree} for details).
 While this algorithm is interesting on its own (e.g.\ for simulation studies), we will again apply the algorithm to study the geometry of the $\rnni$ space.
 
-
-\subsection{Computing the $\rnni$ graph}
-\label{section:alg_RNNI_graph}
-
-\textcite[Section 3.3]{Gavryushkin2018-ol} constructed an exact algorithm for computing the $\rnni$ graph.
+For comparing approximate distances computed by $\findpath$ (Section~\ref{section:alg_findpath}) with exact distances and for supporting Conjecture~\ref{conjecture:cluster_theorem}, we aim to compute exact distances in $\rnni$ for small trees.
+Therefore we will use the algorithm for computing the $\rnni$ graph that is given in \textcite[Section 3.3]{Gavryushkin2018-ol}.
 \todo{Do we make use of tanglegrams? - LC: No}
 \todo{GitHub link?}
-We implemented this algorithm and used it for computing this graph for trees on up to seven taxa.
-\todo{LC: $7$ or $8$? - I'll need to check this}
-Once the graph is computed, one can get distances by using algorithms such as Floyd-Warshall \autocite{Floyd1962-ew} or Dijkstra \autocite{Dijkstra1959-ph}.
+Once the graph is computed one can use common algorithms for computing shortest paths~\autocite{Floyd1962-ew,Dijkstra1959-ph}.
 However, the large number of vertices in $\rnni$ is an obstacle when it comes to computing distances.
-Since there are $\frac{n!(n-1)!}{2^{n-1}}$ vertices in the $\rnni$ graph \autocite{Gavryushkin2018-ol}, we already run out of space when we want to save all pairwise distances for trees on seven taxa.
-\todo{Is this the hint we're using tanglegrams?
-Either way this statement is too vague and requires more detail.
-Also, ``run out of space'' should be a bit less frank.
-Finally, think whether you want single out this paragraph as a special subsection?
-Either way you should say why you need this implementation.}
-Therefore, we compute distances between certain pairs of trees and use the symmetry of $\rnni$ to draw conclusions about the remaining distances.
+Since there are $\frac{n!(n-1)!}{2^{n-1}}$ vertices in the $\rnni$ graph \autocite{Gavryushkin2018-ol}, we are just able to use the $\rnni$ graph on up to six taxa for our analyses.
+We will get into further details when we discuss particular problems in Section~\ref{section:alg_findpath} and~\ref{section:cluster_theorem}.
 
 
 \subsection{$\findpath$}
