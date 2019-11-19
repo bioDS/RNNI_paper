@@ -188,17 +188,17 @@ By following this procedure, the end tree of $p$ after step $n-2$ will be $R$, a
 It is important but easy to see that the output path of $\findpath$ is unique for a given pair of trees, which means that it is a deterministic algorithm.
 This is due to the fact that there exists exactly one $\rnni$ move that decreases the rank of the most recent common ancestor of a subset $C_k$ of the taxon set of a tree as long as $C_k$ is not induced by an internal node of that tree.
 
-\todo{$p = p+T'$: Do we really want to be updating this in every while loop?}
+\todo{$p = p+T'$: Do we really want to be updating this in every while loop? - LC: Yes, I guess so}
 \begin{algorithm}[H]
 \caption{$\findpath$($T,R$)}
 \label{alg:find_path}
 \begin{algorithmic}[1]
 \STATE $T' := T$
 \STATE $p := [T']$
-\FOR {$i = 1, \dots, n-2$}
-\STATE Let $C_i$ be the cluster induced by the node with rank $i$ in $R$ \label{alg:find_path:line:cluster}
-\WHILE {$\rank_{T'}(\mrca_{T'}(C_i))>i$}
-\STATE Update $T'$: Decrease $\rank_{T'}(\mrca_{T'}(C_i))$ by an $\rnni$ move \label{alg:findpath:line:move_set_down}
+\FOR {$k = 1, \dots, n-2$}
+\STATE Let $C_k$ be the cluster induced by the node with rank $k$ in $R$ \label{alg:find_path:line:cluster}
+\WHILE {$\rank_{T'}(\mrca_{T'}(C_k))>k$}
+\STATE Update $T'$: Decrease $\rank_{T'}(\mrca_{T'}(C_k))$ by an $\rnni$ move \label{alg:findpath:line:move_set_down}
 \STATE $p = p+T'$
 \ENDWHILE
 \ENDFOR
@@ -209,55 +209,53 @@ This is due to the fact that there exists exactly one $\rnni$ move that decrease
 The following lemma shows that $\findpath$ gives a path between the two input trees, indeed, by proving that there is always an $\rnni$ move possible as described in Line~\ref{alg:findpath:line:move_set_down} of Algorithm~\ref{alg:find_path}.
 
 \begin{lemma}
-Let $T$ and $R = [C_1, \ldots, C_{n-2}]$ be two trees and
-\todo{This lemma is to prove that FindPath is an (deterministic) algorithm, so we cannot relay on this.}
-$p = \findpath (T,R)$.
-Let $T'$ be a tree on $p$ different from both $T$ and $R$ such that $C_1, \ldots, C_{k-1}$ are induced by internal nodes of $T'$, but $C_k$ is not.
-Then there exists exactly one $\rnni$ move on $T'$ that results in a tree $T''$ such that
-\todo{What's $i$?}
-$\mrca_{T''}(C_i) < \mrca_{T'}(C_i)$.
+Let $T = [C_1, \ldots, C_{k-1}, B_{k}, \ldots, B_{n-2}]$ and $R = [C_1, \ldots, C_{k-1}, C_k, \ldots, C_{n-2}]$ be two trees where $C_k \neq B_k, \ldots, B_{n-2}$.
+Then there exists exactly one $\rnni$ move on $T$ that results in a tree $T'$ such that $\mrca_{T'}(C_k) < \mrca_{T}(C_k)$.
 \label{lemma:mrca_move}
 \end{lemma}
 
 \begin{proof}
-Let $T, R$ and $T'$ be trees as defined in the lemma and $[C_1, \ldots, C_{n-2}]$ the cluster representation of $R$.
-We want to prove that there is exactly one $\rnni$ move on $T'$ that results in a tree $T''$ where $\mrca_{T''}(C_k) < \mrca_{T'}(C_k)$.
-Notice, that the only $\rnni$ move on $T$ that could decrease the rank of $\mrca_{T'}(C_k)$ are $\nni$ movs on the edge between $\mrca_{T'}(C_k)$ and its child (if this edge has length one), or a rank move between $\mrca_{T'}(C_k)$ and the node with rank one less.
+Let $T$ and $R$ be trees as defined in the lemma.
+Notice that the only $\rnni$ move on $T$ that could decrease the rank of $\mrca_T(C_k)$ are $\nni$ moves on the edge between $\mrca_T(C_k)$ and its child (if this edge has length one), or a rank move between $\mrca_T(C_k)$ and the node with rank one less.
 Therefore, we will now distinguish these two cases:
-Either there is an edge $(v,w)$ between nodes $v = \mrca_{T'}(C_k)$ and $w$ with rank $rank_{T'}(w) = rank_{T'}(v) - 1$, or there is no such edge.
+Either there is an edge $(v,w)$ between nodes $v = \mrca_T(C_k)$ and $w$ with rank $rank_T(w) = rank_T(v) - 1$, or there is no such edge.
 
-In the latter case the only $\rnni$ move that could increase the rank of $v$ is a rank move swapping the ranks of $v$ and $w$.
+In the latter case the only $\rnni$ move that could decrease the rank of $v$ is a rank move swapping the ranks of $v$ and $w$.
 
-If there is an edge $(v,w)$ in $T'$ there are two $\nni$ moves possible on this edge.
-We are now going to explain why only one of these two $\nni$ moves changes the rank of this most recent common ancestor.
-By definition we know that $C_1, \ldots, C_{k-1}$ are induced by the nodes of rank $1, \ldots, k-1$, respectively, in $T'$ already.
-It is important to notice that $C_k$ either is the disjoint union $C_k = C_i \dot\cup C_j$ for $i,j < k$ or $C_k = C_i \dot\cup \{x\}$ for a taxon $x \in X \setminus (C_1 \cup \ldots \cup C_{k-1})$.
+Let us now assume that there is an edge $(v,w)$ in $T$.
+Let $T_v$ be the subtree that is rooted in the child of $v$ that is not $w$ and let $T_{w_1}$ and $T_{w_2}$ be the subtrees rooted in the children of $w$.
+We are now going to explain why only one of these two $\nni$ moves changes the rank of $\mrca_T(C_k)$.
+It is important to notice that $C_k$ either is the disjoint union of two of the clusters $C_1, \ldots, C_{k-1}$ or the union of one of those clusters with a single taxon that is not included in any of those clusters.
+In general we can say that $C_k = S_1 \dot\cup S_2$ is the union of two subsets of taxon set of $T$ such each of these subsets is contained in one of the subtrees $T_v, T_{w_1}$, or $T_{w_2}$.
+In fact, $S_1$ and $S_2$ are contained in two different of these subtrees.
+Now it is easy to see that just one of the $\nni$ moves on $(v,w)$ (illustrated in Figure~\ref{fig:mrca_move}) decreases the rank of $\mrca_T(C_k)$.
 
-Let us at first assume that $C_k = C_i \dot\cup C_j$ for some $i,j < k$.
-The tree $T'$ looks like the tree depicted in the left of Figure~\ref{fig:mrca_move} where $T_w^1$ and $T_w^2$ are the two subtrees rooted in the children of $w$ and $T_v$ is the subtree whose root is child of $v$ and does not include $w$.
-Since we know that all clusters $C_1,\ ldots, C_{k-1}$ are induced by some nodes in $T'$, each of these clusters must be a subset of the taxon set of one of the three subtrees $T_w^1,T_w^2$, or $T_v$.
-In particular, there can't be elements of the same cluster $C_m$ in more than one of these subtrees.
-This and the fact that $v = \mrca_{T'}(C_i \dot\cup C_j)$ yields that either $C_i$ or $C_j$ is subset of the taxon set of $T_v$ and the other cluster is subset of the taxon set of either $T_w^1$ or $T_w^2$.
-
-Without loss of generality we assume that $C_i$ is included in $T_v$.
-Otherwise, change the indices $i$ and $j$.
-Then $C_i$ is a subset of the taxon set of either $T_w^1$ or $T_w^2$.
-Therefore, just one of the two $\nni$ moves on $(v,w)$, as depicted in Figure~\ref{fig:mrca_move}, moves the most recent common ancestor of $C_k = C_i \dot \cup C_j$ down.
-
-Now we consider the case that $C_k = C_i \dot\cup \{x\}$ for a taxon $x \in X \setminus (C_1 \cup \ldots \cup C_{k-1})$.
-For the same reason as above, $C_i$ is in subset of the taxon set of one of the subtrees $T_w^1, T_w^2$ or $T_v$ of $\hat T$ as depicted in Figure~\ref{fig:mrca_move}.
-Similarly $x$ is taxon of one of these three subtrees in a way that either $C_i$ or $x$ is included in $T_v$, because $v = \mrca_{T'}(C_i \dot \cup \{x\})$.
-So there is just one of the two subtrees $T_w^1$ and $T_w^2$ that neither includes $C_j$ nor $x$.
-As in the previous case, just one of the two $\nni$ moves on $(v,w)$ as illustrated in Figure~\ref{fig:mrca_move} decreases the rank of $\mrca_{T'}(C_i \dot \cup \{x\})$.
-
-We can conclude that in any case there is exactly one $\rnni$ move possible on $T'$ that decreases the rank of $\mrca_{T'}(C_k)$ in Line~\ref{alg:findpath:line:move_set_down} of Algorithm~\ref{alg:find_path}.
+% It is important to notice that $C_k$ either is the disjoint union $C_k = C_i \dot\cup C_j$ for $i,j < k$ or $C_k = C_i \dot\cup \{x\}$ for a taxon $x \in X \setminus (C_1 \cup \ldots \cup C_{k-1})$.
+%
+% Let us at first assume that $C_k = C_i \dot\cup C_j$ for some $i,j < k$.
+% The tree $T$ looks like the tree depicted in the left of Figure~\ref{fig:mrca_move} where $T_w^1$ and $T_w^2$ are the two subtrees rooted in the children of $w$ and $T_v$ is the subtree whose root is child of $v$ and does not include $w$.
+% Since we know that all clusters $C_1,\ ldots, C_{k-1}$ are induced by some nodes in $T$, each of these clusters must be a subset of the taxon set of one of the three subtrees $T_w^1,T_w^2$, or $T_v$.
+% In particular, there can't be elements of the same cluster $C_m$ in more than one of these subtrees.
+% This and the fact that $v = \mrca_{T}(C_i \dot\cup C_j)$ yields that either $C_i$ or $C_j$ is subset of the taxon set of $T_v$ and the other cluster is subset of the taxon set of either $T_w^1$ or $T_w^2$.
+%
+% Without loss of generality we assume that $C_i$ is included in $T_v$.
+% Otherwise, change the indices $i$ and $j$.
+% Then $C_i$ is a subset of the taxon set of either $T_w^1$ or $T_w^2$.
+% Therefore, just one of the two $\nni$ moves on $(v,w)$, as depicted in Figure~\ref{fig:mrca_move}, moves the most recent common ancestor of $C_k = C_i \dot \cup C_j$ down.
+%
+% Now we consider the case that $C_k = C_i \dot\cup \{x\}$ for a taxon $x \in X \setminus (C_1 \cup \ldots \cup C_{k-1})$.
+% For the same reason as above, $C_i$ is in subset of the taxon set of one of the subtrees $T_w^1, T_w^2$ or $T_v$ of $\hat T$ as depicted in Figure~\ref{fig:mrca_move}.
+% Similarly $x$ is taxon of one of these three subtrees in a way that either $C_i$ or $x$ is included in $T_v$, because $v = \mrca_{T'}(C_i \dot \cup \{x\})$.
+% So there is just one of the two subtrees $T_w^1$ and $T_w^2$ that neither includes $C_j$ nor $x$.
+% As in the previous case, just one of the two $\nni$ moves on $(v,w)$ as illustrated in Figure~\ref{fig:mrca_move} decreases the rank of $\mrca_{T}(C_i \dot \cup \{x\})$.
+%
+% We can conclude that in any case there is exactly one $\rnni$ move possible on $T$ that decreases the rank of $\mrca_{T}(C_k)$ in Line~\ref{alg:findpath:line:move_set_down} of Algorithm~\ref{alg:find_path}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{mrca_move}
 \vspace{12pt}
-\caption{Two $\nni$ moves that are possible on the edge $(v,w)$ of the tree $T'$.
-They result in the trees on the right as described in the proof of Lemma~\ref{lemma:mrca_move}.}
+\caption{Two $\nni$ moves that are possible on the edge $(v,w)$ of the tree $T'$ with subtrees $T_v, T_{w_1}, T_{w_2}$ as described in the proof of Lemma~\ref{lemma:mrca_move}.}
 \label{fig:mrca_move}
 \end{figure}
 
@@ -271,8 +269,8 @@ A natural question then is how accurate this approximation is.
 To answer this question for small trees, we have implemented the algorithm $\findpath$
 \todo{LC: github - link}
 \autocite{}
-and compared the results with the true distance found using the algorithm from Section~\ref{section:alg_RNNI_graph}.
-
+and compared the results with the true distance found using the algorithm from Section~\ref{section:algorithms}.
+By doing this we could show that $\findpath$ computes correct distances for all trees on up to six taxa.
 
 \subsection{$\csort$}
 \label{section:alg_csort}
