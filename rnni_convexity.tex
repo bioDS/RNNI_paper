@@ -156,6 +156,9 @@ We will get into further details when we discuss particular problems in Section~
 \subsection{$\findpath$}
 \label{section:alg_findpath}
 
+Within this section we are presenting $\findpath$, an efficient algorithm for computing paths, and therefore approximating distances, between any given pair of trees in $\rnni$.
+As we will see in Section~\ref{section:geometry}, it is useful for gaining insights into geometric properties of the $\rnni$ graph.
+
 Before introducing the algorithm we need the following definitions.
 Each node $v$ of a tree defines a \emph{cluster} $C$, which is the set of taxa descending from $v$.
 We then say that $v$ \emph{induces} $C$.
@@ -164,31 +167,26 @@ As all trees on $n$ taxa share all trivial clusters, we will use the notion clus
 Note that the list of all non-trivial clusters of a tree, sorted according to the rank of the corresponding node, defines the tree unambiguously.
 We will refer to this list of $n-2$ clusters for a given tree on $n$ taxa as a \emph{cluster representation} of the tree.
 
-\todo{I suggest to rewrite this paragraph following the standard structure:\\
-\emph{Step $0$. $T_0 = T$, ...\\
-Step $k+1$. $T_{k+1}$ is defined...}}
-We are now ready to introduce $\findpath$ (Algorithm~\ref{alg:find_path}), an efficient algorithm for computing paths between any two given trees $T$ and $R$ in $\rnni$.
+We are now ready to explain how $\findpath$ (Algorithm~\ref{alg:find_path}) computes a path between two input trees $T$ and $R$.
 Let $[C_1, \ldots, C_{n-2}]$ be the cluster representation of $R$ (the ``destination'' tree).
 Then $C_i$ is induced by the node of rank $i$ for $i = 1, \ldots, n-2$.
-$\findpath$ computes a path $p$ which initially consists of $T$ only and is extended stepwise.
-In order to do this, the clusters $C_1, \ldots, C_{n-2}$ of $R$ are considered in their order.
-Let $T'$ be the last tree of $p$ when
-\todo{This term is not clear or defined.}
-arriving at cluster $C_k$.
-We assume that the clusters $C_1, \ldots, C_{k-1}$ are induced by nodes of rank $1, \ldots, k-1$ in $T'$, respectively.
-In the first step it is $T' = T$ and $C_k = C_1$.
-The aim is now to find a sequence of $\rnni$ moves, starting at $T'$, that do not change the clusters $C_1, \ldots, C_{k-1}$, but result in a tree containing clusters $C_1, \ldots, C_{k}$.
-Therefore, we need to find the smallest cluster containing all elements of $C_k$ in $T'$.
-This node is denoted by $\mrca_{T'}(C_k)$ (short for \emph{most recent common ancestor}).
-The rank of $\mrca_{T'}(C_k)$ in $T'$ is higher than the rank of the node inducing $C_k$ in $R$, because $C_1, \ldots, C_{k-1}$ are already present in $T'$ and we assume that $C_k$ is not.
-Now perform an $\rnni$ move that decreases the rank of $\mrca_{T'}(C_k)$.
-\todo{I think it is obvious.
-I suggest to remove this Lemma and save it somewhere in case we get an too sensitive referee.
-Tag a commit?
-Or branch? -- whatever works.}
-The existence of such a move is not obvious but we will see later (Lemma~\ref{lemma:mrca_move}) that this kind of move always exists as long as $T'$ does not induce the cluster $C_k$.
-So we can perform such moves until a tree $T''$ is reached with $\mrca_{T''}(C_k)$ inducing $C_k$ and having has the same rank $k$ in $T''$ as in $R$.
-Appending all trees on this path from $T'$ to $T''$ and repeating this procedure for all clusters of $R$ results in a path $p$ from $T$ to $R$.
+$\findpath$ computes a path which initially consists of $T_0 = T$ only and is extended stepwise as described in the following.
+
+Step $0$. $p = [T_0]$.
+Consider the node in $T_0$ that induces the smallest cluster containing all elements of $C_1$.
+This node is denoted by $\mrca_{T_0}(C_1)$ (short for \emph{most recent common ancestor}).
+By performing an $\rnni$ move that decreases the rank of $\mrca_{T_0}(C_1)$, we receive a tree $T_1$ that is then appended to $p$.
+Now we repeatedly perform $\rnni$ moves that move the most recent common ancestor of $C_1$ down in order to extend $p$ to $p = [T_0, \ldots, T_l]$ for some $l$ such that $C_1$ is induced by the internal node of rank one in $T_l$.
+
+Step $k$. $p = [T_0, \ldots, T_l]$ where $l$ is the total number of trees that have been added to $p$ in the previous $k-1$ steps.
+Therefore the internal nodes in $T_l$ with ranks $1, \ldots, k-1$ induce clusters $C_1, \ldots, C_{k-1}$, respectively.
+Now the cluster of interest is $C_k$.
+As in the first step $p$ is extended by performing a series of $\rnni$ moves that decrease the rank of $\mrca_{T_l}(C_k)$ stepwise.
+Afterwards it is $p = [T_0, \ldots, T_{l'}]$ where the $k$ lowest internal nodes of $T_{l'}$ induce clusters $C_1, \ldots, C_{k}$.
+
+By following this procedure, the end tree of $p$ after step $n-2$ will be $R$, as it contains all clusters of $R$.
+It is important but easy to see that the output path of $\findpath$ is unique for a given pair of trees, which means that it is a deterministic algorithm.
+This is due to the fact that there exists exactly one $\rnni$ move that decreases the rank of the most recent common ancestor of a subset $C_k$ of the taxon set of a tree as long as $C_k$ is not induced by an internal node of that tree.
 
 \todo{$p = p+T'$: Do we really want to be updating this in every while loop?}
 \begin{algorithm}[H]
