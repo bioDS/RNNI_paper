@@ -428,37 +428,35 @@ Since $d(T{\big|}_n,R{\big|}_n) \leq |p{\big|}_n|$ and $|p| = d(T,R)$, the desir
 \subsection{The set of caterpillar trees}
 \label{section:caterpillar_convex}
 
-In this section we restrict our attention to the set of caterpillar trees, which we will represent throughout this section in the simplified list representation as introduced in Section~\ref{section:alg_csort}.
+In this section we restrict our attention to the set of caterpillar trees.
+Throughout this section the simplified list representation for these trees as introduced in Section~\ref{section:alg_csort} will be used.
 This type of tree is of particular interest in $\rnni$ because shortest paths between such trees in $\rnni$ differ from those in classical $\nni$ space.
-This in combination with the importance of caterpillar trees in the proof of $\np$-hardness of $\nni$ distances in \autocite{Dasgupta2000-xa} suggests that understanding the geometry of paths between caterpillar trees helps investigating the complexity of computing $\rnni$ distances.
-In particular, we are going to prove that one can always find a shortest path between two caterpillar trees that contains caterpillar trees only, meaning that the set of caterpillar trees is convex in $\rnni$.
-We discovered this by computing caterpillar paths with $\csort$ and comparing them with shortest path in $\rnni$, computed by the exact algorithm discussed in Section~\ref{section:alg_RNNI_graph}.
+Following this observation and the importance of caterpillar trees in the proof of $\np$-hardness of $\nni$ distances in \autocite{Dasgupta2000-xa}, understanding the geometry of paths between caterpillar trees seems essential for investigating the complexity of computing $\rnni$ distances.
 In the following we demonstrate why finding shortest paths between caterpillar trees builds the basis for understanding the difference between $\nni$ and $\rnni$.
 
-Therefore, we compare shortest paths between caterpillar trees in $\nni$ with those in $\rnni$.
-In $\nni$, building a cherry and moving it may give a path that is shorter than a path where the taxa move separately in as it is illustrated out in Figure~\ref{fig:NNI_vs_RNNI}.
+Let us compare shortest paths between caterpillar trees in $\nni$ with those in $\rnni$.
+It can happen in $\nni$ that building a cherry and moving it may give a path that is shorter than a path where the taxa move separately in as it is illustrated out in Figure~\ref{fig:NNI_vs_RNNI}.
 There is only one move needed to build and resolve a cherry, respectively, while the number of moves for moving the cherry is the same as for moving a single taxon in $\nni$.
-But in $\rnni$ space there are additional rank moves needed to change the rank of the internal node of the cherry before an $\nni$ move can resolve it.
+In $\rnni$ space however, there are additional rank moves needed to change the rank of the internal node of the cherry before an $\nni$ move can resolve it.
 This is due to the fact that $\nni$ moves are only allowed on edges of length one in $\rnni$.
-Hence a path where taxa move separately and no second cherry is built, is shortest in $\rnni$.
+As a consequence a path where taxa move separately and no new cherry is built is shortest in $\rnni$.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{NNI_vs_RNNI}
 \vspace{12pt}
 \caption{Paths between caterpillar trees $T$ and $R$: The solid paths are paths in $\rnni$, the dashed one is a path that is only possible in the plain $\nni$ graph.
-The upper path, which is the $\rnni$ path that is the natural extension of the shortest $\nni$ path, is longer than a shortest $\rnni$ path as the one at the bottom.}
+The upper path is a natural extension of the shortest $\nni$ path in $\rnni$.
+It is longer than a shortest $\rnni$ path as the one at the bottom which consists of caterpillar trees only.}
 \label{fig:NNI_vs_RNNI}
 \end{figure}
 
-The above observation suggests that there is always a caterpillar path that is a shortest path between any two caterpillar trees in $\rnni$.
-Indeed, we are going to prove Theorem~\ref{thm:caterpillar_convex} within this section, which states that the set of caterpillar trees is convex in $\rnni$.
+The above observation suggests that there is a caterpillar path that is a shortest path between any two caterpillar trees in $\rnni$.
+Indeed, we are going to prove within this section that the set of caterpillar trees is convex in $\rnni$ (Theorem~\ref{thm:caterpillar_convex}).
 Note that this is not true for the $\nni$ space, which is clear from the example in Figure~\ref{fig:NNI_vs_RNNI}.
 
-Lemma~\ref{lemma:caterpillar_dist=diameter} regards caterpillar trees with distance $\frac{(n-1)(n-2)}{2}$ and will be needed for proving the convexity of the set of caterpillar trees in $\rnni$.
+The following lemma regards caterpillar trees with distance $\frac{(n-1)(n-2)}{2}$ and will be needed for proving the convexity of the set of caterpillar trees in $\rnni$.
 Notice that $\frac{(n-1)(n-2)}{2}$ is the upper bound for the diameter of $\rnni$ by Lemma~\ref{lemma:diameter_bound}.
-
-Within this chapter we will again use the list representation for caterpillar trees, which is a simplified version of the cluster representation of trees, as explained in Section~\ref{section:alg_csort}.
 
 \begin{lemma}
 Let $T$ and $R$ be two caterpillar trees.
@@ -470,17 +468,17 @@ $T$ and $R$ have distance $d(T,R) = \frac{(n-1)(n-2)}{2}$ if, and only if, they 
 Let $T$ and $R$ be caterpillar trees.
 Let us first prove that if $d(T,R) = \frac{(n-1)(n-2)}{2}$, it follows $d_c(T,R) = \frac{(n-1)(n-2)}{2}$.
 This easily follows from algorithm $\csort$:
-In each loop $i=1, \ldots, n-2$ of Algorithm~\ref{alg:csort} there are at most $n-1-i$ exchanges of taxa.
-This is due to the fact that after loop number $i$ the last $i$ elements in the list representation of the current tree on $p$ are sorted correctly as in the destination tree.
-Hence there are no more exchanges of pairs of taxa needed within the last $i-1$ of the sequences in loop $i$, and so only $n-1-i$ swaps of elements might appear within the first $n-i$ elements of the list.
-It follows that the maximum length of a path computed by $\csort$ is $\sum\limits_{k=1}^{n-2} k = \frac{(n-1)(n-2)}{2}$.
+In each loop $i=1, \ldots, n-2$ of $\csort$ (Algorithm~\ref{alg:csort}) there are at most $n-1-i$ pairs of taxa that swap positions.
+This is due to the fact that after loop number $i$ the last $i$ elements in the list representation of the current tree on $p$ are in the same place as in the destination tree.
+As a result there are no further exchanges of pairs of taxa within the last $i-1$ taxa of the tree in loop $i$, which means that at most $n-1-i$ pairs of taxa exchange then.
+It follows that the maximum length of a path computed by $\csort$ is $\sum\limits_{i=1}^{n-2} n-1-i = \frac{(n-1)(n-2)}{2}$.
 Since there cannot be a caterpillar path shorter than $d(T,R) = \frac{(n-1)(n-2)}{2}$, it follows $d_c(T,R) = \frac{(n-1)(n-2)}{2}$.
 
 For proving the other direction of the statement, let now $T$ and $R$ have caterpillar distance $d_c(T,R) = \frac{(n-1)(n-2)}{2}$.
 We prove $d(T,R) = \frac{(n-1)(n-2)}{2}$ by induction on the number of taxa $n$ of $T$ and $R$:
 
 Induction basis: $n=3$\\
-There exist three trees on three taxa: $[1,2,3], [1,3,2]$ and $[2,3,1]$.
+There are three trees on three taxa.
 They all have distance one from another and are caterpillar trees.
 So it is $d(T,R) = d_c(T,R) = 1$ for all pairs of trees $T,R$ on $n=3$ taxa.
 
@@ -488,17 +486,16 @@ Induction step: $n \to n+1$\\
 Induction hypothesis: For caterpillar trees $T, R$ on $n$ taxa with caterpillar distance $d_c(T,R) = \frac{(n-1)(n-2)}{2}$ it is $d(T,R) = \frac{(n-1)(n-2)}{2}$.\\
 Without loss of generality we can assume that $T$ is the caterpillar tree $[1,2,3,\ldots,n+1]$.
 Let $R$ be a caterpillar tree with distance $\frac{n(n-1)}{2}$ to $T$.
-Then each of the $\frac{n(n-1)}{2}$ pairs of taxa that is considered when running $\csort$ to compute a path $p$ from $T$ to $R$ exchanges.
-In particular, taxon $n+1$ exchanges with a taxon in each of the $n+1$ loops in $\csort$.
-We can conclude that taxon $n+1$, whose parent has highest rank in $T$, is part of the cherry of $R$.
+It follows that in each loop of $\csort$ the maximum number of taxon swaps is reached which implies that every taxon will swap with taxon $n+1$ at some point.
+We can conclude that this taxon $n+1$ is part of the cherry of $R$.
 Let us now consider the trees $T{\big|}_n$ to $R{\big|}_n$ that result from $T$ and $R$ by deleting taxon $n+1$.
 $\csort$ computes a path from $T{\big|}_n$ to $R{\big|}_n$ that contains the same exchanges of taxa as $p$, except for the $n-1$ ones on $p$ that involve taxon $n+1$.
 Hence, the caterpillar distance is $d_c(T{\big|}_n, R{\big|}_n) = \frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2}$.
 So we can apply the induction hypothesis on $T{\big|}_n$ and $R{\big|}_n$ and know that $d(T{\big|}_n,R{\big|}_n) = \frac{(n-1)(n-2)}{2}$.
 
 We are now using this observation to prove that the distance between $T$ and $R$ equals $\frac{n(n-1)}{2}$.
-It is obvious that it gives an upper bound for the distance as it is $\Delta(\rnni_{n+1}) \leq \frac{n(n-1)}{2}$ for the $\rnni$ graph $\rnni_{n+1}$ on $n+1$ taxa by Lemma~\ref{lemma:diameter_bound}.
-So we now need to prove that $\frac{n(n-1)}{2}$ is a lower bound for the distance between $T$ and $R$ as well.
+This obviously gives an upper bound for the distance as it is $\Delta(\rnni_{n+1}) \leq \frac{n(n-1)}{2}$ for the $\rnni$ graph on $n+1$ taxa by Lemma~\ref{lemma:diameter_bound}.
+It is left to prove that $\frac{n(n-1)}{2}$ is a lower bound for the distance between $T$ and $R$ as well.
 According to Lemma~\ref{lemma:distance_delete_taxon}, the distance between $T{\big|}_n$ and $R{\big|}_n$ is at least $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - |\rank_T(\parent_T(n+1)) - \rank_R(\parent_R(n+1))|$.
 We also know $|\rank_T(\parent_T(n+1)) - \rank_R(\parent_R(n+1))| = n-1$.
 Suppose, contrary to our claim, that there is a path from $T$ to $R$ of length less than $\frac{n(n-1)}{2}$.
