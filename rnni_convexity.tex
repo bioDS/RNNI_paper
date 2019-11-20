@@ -281,10 +281,12 @@ For introducing this algorithm we need the following definitions.
 A path $p$ between two caterpillar trees $T$ and $R$ that only consists of caterpillar trees is called a \emph{caterpillar path}.
 If $p$ is the shortest path among all caterpillar paths between $T$ and $R$ we call it a \emph{shortest caterpillar path}, and denote the length of $p$ by $d_c(T,R)$, which we call the \emph{caterpillar distance}.
 
-Let us now introduce a representation of caterpillar trees as lists of taxa, which is a simplification of the cluster representation for caterpillar trees and works as follows.
-In the list representing a caterpillar tree its taxa are ordered non-decreasing, according to the ranks of their parents.
-Note that the only two elements in such a list that have parents of equal rank are the first two elements $l_1$ and $l_2$.
-As we assume to have taxon set $X = \{1, \ldots, n\}$, we assume that they are order in the list such that $l_1 < l_2$, according to their ordering as natural numbers.
+The special topology of caterpillar trees gives a natural preorder of taxa that uniquely represents a caterpillar tree.
+That is, for a caterpillar tree $T = [\{x_1, x_2\}, \{x_1, x_2, x_3\}, \ldots, \{x_1, \ldots, x_n\}]$ the taxa are preordered according to the ranks of their parents such that $x_1 = x_2 \leq x_3 \leq \ldots \leq x_n$.
+From now on when we say that a taxon is below another one we refer to this preorder.
+Furthermore, we can use this preorder to create a list representation of caterpillar trees.
+For the tree $T$ above this list is $[x_1, x_2, \ldots, x_n]$.
+As we consider the taxon set $X = \{1, \ldots, n\}$, we assume that they are ordered in the list such that $x_1 < x_2$, according to their ordering as natural numbers.
 This ensures that the list representation of caterpillar trees is unique.
 
 %We are now going to explain what kind of $\rnni$ moves are possible between caterpillar trees and see how such a move changes the list representation of a tree.
@@ -295,24 +297,20 @@ This ensures that the list representation of caterpillar trees is unique.
 %Corresponding to the $\nni$ moves on the lowest internal edge are exchanges of either the first or the second element with the third element in the list representation.
 
 The algorithm $\csort$ (Algorithm~\ref{alg:csort}) is a natural modification of the classical \emph{Bubble Sort} algorithm \autocite{Knuth1997-pi}.
-Let $T$ and $R$ be the input trees given by their list representations $L_T$ and $L_R$ as introduced above.
-The output path $p$ is built stepwise by adding a new list to the end of $p$.
-We call the last element of $p$ at any step $L_{T'}$, representing a tree $T'$ and when we say we update $L_{T'}$, we modify this list and append the new version of $L_{T'}$ to $p$.
+A path $p$ between two given trees $T$ and $R$ is computed by sorting the list representations of $T$ and $R$ as it is done in Bubble Sort.
+The general idea is to update the list representing $T$ by considering it from beginning to end and swap two neighboured taxa if they appear in a different order in $R$ than in the current list.
+Note that each swap of taxa results in a new tree that is added to the path $p$.
+After passing the whole list the last element, which is the uppermost taxon, is at the same position as in $R$.
+By repeating this at most $n-1$ times all elements the resulting list represents $R$.
 
-As in the Bubble Sort algorithm, we go through the list $L_{T'}$ and swap two elements if they appear in different orders in $L_{T'}$ and $L_R$.
-Each swap of elements is an update of $T'$ and extends the path $p$ by one element.
-We compare pairs of list elements from the start of the list until its end, and repeat this until the whole list is sorted, just as in classical Bubble Sort.
-Our algorithm $\csort$ only differs from Bubble Sort when considering the first three elements of the list.
-As we discussed above, both the first and second element of $L_{T'}$ can exchange with its third element.
-Therefore, we need to consider these moves separately to all other moves.
-Most importantly, we need to make sure that these moves are performed in a way that leads to a shortest caterpillar path.
-We can guarantee this if the moves are done as described in the following.
-Let $x_1, x_2$ and $x_3$ be the first three elements of $L_{T'}$, in this order.
-If $x_1$ ($x_2$) is the last element of those three in $L_R$, we update $L_{T'}$ by swapping $x_1$ ($x_2$) and $x_3$.
-By doing this we make sure that there will be no point on $p$ where $x_1$ and $x_2$ swap positions, which would cause an additional $\nni$ move that can be avoided if we perform the moves as described.
+We use this main principle of Bubble Sort for computing shortest caterpillar paths with $\csort$, but there are special consideration needed for the first three taxa.
+The reason for this is that both $\nni$ moves on the lowest internal edge of a caterpillar tree result in caterpillar trees.
+For computing a shortest caterpillar path the moves on the first three taxa $x_1, x_2, x_3$ need to be done as described in the following.
+If $x_1$ ($x_2$) is the uppermost taxon of those three in $R$, we update the current tree by swapping $x_1$ ($x_2$) and $x_3$.
+By doing this we make sure that there will be no point on $p$ where $x_1$ and $x_2$ swap positions, as this is an additional $\nni$ move that can be avoided.
 
-Because all moves between caterpillar trees are $\nni$ moves, all pairs of taxa that are not in the same order in $L_T$ and $L_R$ need to swap at some point on any path between $L_T$ and $L_R$.
-And since only elements that are direct neighbours in a sequence are allowed to swap, with the only exception being the first three elements, the path computed by $\csort$ is a shortest caterpillar path.
+Because all moves between caterpillar trees are $\nni$ moves, all pairs of taxa that are not in the same order in $T$ and $R$ need to swap at some point on any path between these trees.
+And since only elements that are direct neighbours in a sequence are allowed to swap, with the only exception being the first three elements, the path computed by $\csort$ is a shortest caterpillar path indeed.
 
 \begin{algorithm}[H]
 \caption{$\csort$($T,R$)}
@@ -340,9 +338,7 @@ And since only elements that are direct neighbours in a sequence are allowed to 
 \end{algorithm}
 
 The running time of $\csort$ is the same as for Bubble Sort, that is quadratic in $n$.
-Within Section~\ref{section:caterpillar_convex} we will use $\csort$ for some proofs.
-Therefore it is important to notice that at the end of each loop $i$ starting in Line~\ref{alg:csort:line:loop} of Algorithm~\ref{alg:csort}, the last $i$ elements of $L_{T'}$ are the same as the ones in $L_R$.
-This is a well known property of Bubble Sort that $\csort$ inherits from it.
+Though simple, this algorithm will be crucial for some proofs in Section~\ref{section:caterpillar_convex}.
 
 
 \subsection{$\mdtree$}
