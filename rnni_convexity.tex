@@ -275,22 +275,17 @@ By doing this we could show that $\findpath$ computes correct distances for all 
 \subsection{$\csort$}
 \label{section:alg_csort}
 
-In this section we aim to investigate properties of paths between \emph{caterpillar trees}, each internal node of which is adjacent to at least one leaf.
+In this section we introduce an algorithm to compute paths between \emph{caterpillar trees}, which are trees where each internal node is adjacent to at least one leaf.
+As a result caterpillar trees have only one \emph{cherry}, which is a pair of taxa that share their parent.
+For introducing this algorithm we need the following definitions.
 A path $p$ between two caterpillar trees $T$ and $R$ that only consists of caterpillar trees is called a \emph{caterpillar path}.
-If $p$ is the shortest pass among all caterpillar paths between $T$ and $R$ we call it a \emph{shortest caterpillar path}, and denote the length of $p$ by $d_c(T,R)$, which we call the \emph{caterpillar distance}.
+If $p$ is the shortest path among all caterpillar paths between $T$ and $R$ we call it a \emph{shortest caterpillar path}, and denote the length of $p$ by $d_c(T,R)$, which we call the \emph{caterpillar distance}.
 
-Let us now introduce a representation of caterpillar trees as lists of taxa.
-This representation is basically a simplification of the cluster representation for caterpillar trees and works as follows.
-\todo{I don't follow these two sentences.}
-For a caterpillar tree with a cluster representation $T = [C_1, \ldots, C_{n-2}]$ it is $C_i \subset C_{i+1}$ with $|C_i| = |C_{i+1}|$ for all $i = 1, \ldots, n-3$.
-Therefore, the list of taxa $L_T = [x_1, x_2, \ldots, x_n]$ with $x_1<x_2$ uniquely represents the caterpillar tree $T = [C_1, \ldots, C_{n-2}]$ with $C_i = \{x_1, \ldots, x_{i+1}\}$.
-In this list representing a caterpillar tree the taxa are ordered non-decreasing, according to the ranks of their parents.
-Note that the only two elements in such a list that have parents of equal rank are the first two elements $x_1$ and $x_2$.
-That is why we order them in the list such that
-\todo{Are we assuming taxa is ordered?}
-$x_1 < x_2$
-to make the list representation of caterpillar trees unique.
-We will call a pair of two taxa that share their parent a \emph{cherry}.
+Let us now introduce a representation of caterpillar trees as lists of taxa, which is a simplification of the cluster representation for caterpillar trees and works as follows.
+In the list representing a caterpillar tree its taxa are ordered non-decreasing, according to the ranks of their parents.
+Note that the only two elements in such a list that have parents of equal rank are the first two elements $l_1$ and $l_2$.
+As we assume to have taxon set $X = \{1, \ldots, n\}$, we assume that they are order in the list such that $l_1 < l_2$, according to their ordering as natural numbers.
+This ensures that the list representation of caterpillar trees is unique.
 
 %We are now going to explain what kind of $\rnni$ moves are possible between caterpillar trees and see how such a move changes the list representation of a tree.
 %At first it is important to realise that the only possible $\rnni$ moves between caterpillar trees are $\nni$ moves, since there is no pair of internal nodes with rank difference one that is not connected by an edge.
@@ -299,9 +294,9 @@ We will call a pair of two taxa that share their parent a \emph{cherry}.
 %There are two $\nni$ moves possible on this edge that result in caterpillar trees, while there is for every other edge only one $\nni$ move that results in a caterpillar tree.
 %Corresponding to the $\nni$ moves on the lowest internal edge are exchanges of either the first or the second element with the third element in the list representation.
 
-The algorithm $\csort$ (Algorithm~\ref{alg:csort}) is a natural modification of the classical \emph{Bubble Sort} algorithm \autocite{Knuth1997-pi} to compute caterpillar paths.
-Let $T$ and $R$ be the input trees given by their list representations $L_T$ and $L_R$.
-This path $p$ is built stepwise by adding a new list to the end of $p$.
+The algorithm $\csort$ (Algorithm~\ref{alg:csort}) is a natural modification of the classical \emph{Bubble Sort} algorithm \autocite{Knuth1997-pi}.
+Let $T$ and $R$ be the input trees given by their list representations $L_T$ and $L_R$ as introduced above.
+The output path $p$ is built stepwise by adding a new list to the end of $p$.
 We call the last element of $p$ at any step $L_{T'}$, representing a tree $T'$ and when we say we update $L_{T'}$, we modify this list and append the new version of $L_{T'}$ to $p$.
 
 As in the Bubble Sort algorithm, we go through the list $L_{T'}$ and swap two elements if they appear in different orders in $L_{T'}$ and $L_R$.
