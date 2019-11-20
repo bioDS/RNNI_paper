@@ -345,38 +345,31 @@ Though simple, this algorithm will be crucial for some proofs in Section~\ref{se
 \label{section:alg_mdtree}
 
 The algorithm we are going to introduce here will be important for finding the radius of the $\rnni$ graph.
-In Section~\ref{section:diameter} we will prove that it computes a tree with maximum distance from a given caterpillar tree (Lemma~\ref{lemma:max_dist_caterpillar}), which implies that the radius of $\rnni$ equals its diameter (Corollary~\ref{corollary:radius}).
-Therefore, it is called $\mdtree$ (Maximum Distance Tree).
+It is called $\mdtree$, which stands for Maximum Distance Tree, as it computes a tree with maximum distance if the input tree is a caterpillar tree.
+This will be discussed in Section~\ref{section:diameter}.
 
-$\mdtree$ works as follows for an input tree $T$:
-At first, all taxa of $T$ are sorted in a list $L$ such that the ranks of their parents are non-decreasing.
-This representation is somehow similar to the list representation of caterpillar trees, but it is ambiguous since we do not specify in which order taxa appear in the list that share their parent.
-If the input is a caterpillar tree, it follows that $L[0]$ and $L[1]$ are the cherry taxa of $T$, in an arbitrary order, and the parent of taxon $L[i]$ has rank $i$ in $T$ for all $i = 2, \ldots, n-1$.
-$\mdtree$ builds the output tree $R$ as follows:
-Initially, $R$ only consists of a cherry with taxa $L[0]$ and $L[1]$ such that the parent of these taxa has rank $n-1$.
-All following taxa in $L$ are added to $R$ sequentially, according to their order in $L$, by creating a new internal node at one of the existing branches in $R$ such that this new node has rank one less than the previously lowest internal node in $R$.
-
-Algorithm~\ref{alg:max_dist_tree} provides pseudocode for this algorithm.
-We will see in Section~\ref{section:diameter} that it computes trees with maximum distance form any given caterpillar tree.
-But if the given tree is an arbitrary tree, the output tree might not have maximum distance to the input tree.
+$\mdtree$ (Algorithm~\ref{alg:max_dist_tree}) works as follows:
+At first, all taxa of the input tree $T$ are sorted in a list $L = [l_1, \ldots, l_n]$ such that the ranks of their parents are non-decreasing.
+Though this representation appears similar to the list representation of caterpillar trees, it is ambiguous since we do not specify how to order cherry taxa.
+$\mdtree$ constructs an output tree $R$ as follows:
+Initially, $R$ only consists of a cherry with taxa $l_1$ and $l_2$ such that the parent of these taxa has rank $n-1$.
+The remaining taxa are added to $R$ sequentially, according to their order in $L$, by creating a new internal node at one of the existing branches in $R$ such that this new node has rank one less than the previously lowest internal node in $R$.
 
 \begin{algorithm}[H]
 \caption{$\mdtree(T)$}
 \label{alg:max_dist_tree}
 \begin{algorithmic}[1]
-\STATE $R$ only contains cherry taxa $a, b$ of $T$ and has internal node with rank $n-1$
-\STATE In list $L$ all taxa $\{1,\ldots,n\}\setminus\{a,b\}$ are ordered such that the ranks of their parents in $T$ do not decrease \label{alg:mdtree_lineL}
-\FOR {taxon $a$ in $L$}
-\STATE Add an internal node as parent of $a$ on an edge in $R$ such that the new internal node has rank one less than the previously lowest internal node \label{alg:mdtree_lineAddTaxon}
+\STATE Construct list $L=[l_1, \ldots, l_n]$ of all taxa, ordered such that the ranks of their parents in $T$ do not decrease \label{alg:mdtree_lineL}
+\STATE Build tree $R$ with only two taxa $l_1, l_2$ that are children of the root, an internal node with rank $n-1$
+\FOR {$i = 1, \ldots, n$}
+\STATE Add an internal node as parent of $l_i$ on an edge in $R$ such that the new internal node has rank one less than the previously lowest internal node \label{alg:mdtree_lineAddTaxon}
 \ENDFOR
 \RETURN $R$
 \end{algorithmic}
 \end{algorithm}
 
-An important property of $\mdtree$, which we will use later on in Section~\ref{section:diameter}, is the fact that this algorithm is non-deterministic.
-Because the list computed in Line~\ref{alg:mdtree_lineL} the and the attachment edge of the new taxon in the tree in Line~\ref{alg:mdtree_lineAddTaxon} are not uniquely determined, the output tree $R$ of $\mdtree$ is not unique.
-
-
+Both the list computed in Line~\ref{alg:mdtree_lineL} the and the attachment edge of the new taxon in the tree in Line~\ref{alg:mdtree_lineAddTaxon} are not uniquely determined within $\mdtree$.
+Therefore, this algorithm is non-deterministic which is an important observation needed in Section~\ref{section:diameter} where this algorithm is used for finding the radius of $\rnni$.
 
 \section{Geometry of $\rnni$}
 \label{section:geometry}
