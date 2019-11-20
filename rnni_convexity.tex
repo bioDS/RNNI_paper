@@ -579,21 +579,19 @@ As in the previous case we can then apply the induction hypothesis on $\hat T$ a
 \label{section:diameter}
 
 With the results of Section~\ref{section:caterpillar_convex} we can easily get the exact diameter of the $\rnni$ graph and hence improve the bounds for the diameter given in Theorem 7 of \autocite{Gavryushkin2018-ol}.
-At first we consider the diameter of the $\rnni$ graph.
-Lemma~\ref{lemma:diameter_bound} already gives an upper bound for the diameter.
-We will now show that this is not only a bound, but the exact diameter of $\rnni$.
+In the following we show that the upper bound of the diameter provided by Lemma~\ref{lemma:diameter_bound} actually is the exact diameter of $\rnni$.
 
 \begin{lemma}
-There are two caterpillar trees in $\rnniu$ with distance $\frac{(n-1)(n-2)}{2}$.
+There are two caterpillar trees in $\rnni$ with distance $\frac{(n-1)(n-2)}{2}$.
 \label{lemma:caterpillar_diameter}
 \end{lemma}
 
 \begin{proof}
-Let $T = [1,n,2,3,\ldots,n-1]$ and $R = [n-1,n,n-2,n-3, \ldots, 1]$ be two caterpillar trees.
+Let $T = [1,2,3,\ldots,n]$ and $R = [n-1,n,n-2,n-3, \ldots, 1]$ be two caterpillar trees.
 According to Theorem~\ref{thm:caterpillar_convex}, there is a shortest path between $T$ and $R$ that is a caterpillar path.
 We can compute a shortest caterpillar path by using $\csort$ as explained in Section~\ref{section:caterpillar_convex}.
-When running this algorithm to compute a path from $T$ to $R$, each taxon $i$ ($i \in \{1, \ldots, n\}$) swaps $n-1-i$ times with its upper neighbour.
-Therefore, the length of a shortest caterpillar path is $\sum\limits_{i=1}^{n-1}(n-1-i) = \sum\limits_{i=0}^{n-2}i = \frac{(n-1)(n-2)}{2}$.
+When running this algorithm to compute a path from $T$ to $R$, each taxon $i$ ($i = 1, \ldots, n-1$) swaps $n-1-i$ times with its upper neighbour.
+Therefore, the length of a shortest caterpillar path is $\sum\limits_{i=1}^{n-1}(n-1-i)  = \frac{(n-1)(n-2)}{2}$.
 \end{proof}
 
 \begin{corollary}
@@ -607,7 +605,7 @@ Note that the results provided in this section are only true if the input tree o
 
 \begin{lemma}
 Let $T$ be a caterpillar tree.
-A tree $R = \mdtree(T)$ has distance $d(T,R) = \Delta(\rnni)$ to $T$.
+Any tree $R = \mdtree(T)$ has distance $d(T,R) = \Delta(\rnni)$ to $T$.
 \label{lemma:max_dist_caterpillar}
 \end{lemma}
 
@@ -623,19 +621,19 @@ Since it is $d(T,R) = d(T,R') = 1 = \Delta(\rnni_3)$, the lemma is true for tree
 Induction step: $n \to n+1$\\
 Induction hypothesis: For a caterpillar tree $T$ on $n$ taxa $\mdtree$ computes a tree $R$ with distance $d(T,R) = \frac{(n-1)(n-2)}{2}$.\\
 Let us now assume that $T$ is a tree on $n+1$ taxa.
-In the list $L$ produced Line~\ref{alg:mdtree_lineL} in $\mdtree(T)$ (Algorithm~\ref{alg:max_dist_tree}) taxon $n+1$ is the last one, because its parent, the root, has the highest rank in $T$.
+In the list $L$ computed in $\mdtree$ (Line~\ref{alg:mdtree_lineL} of Algorithm~\ref{alg:max_dist_tree}) taxon $n+1 $ is the last one as its parent, the root, has the highest rank in $T$.
 This means that this taxon $n+1$ is the last one added to $R$ as in Line~\ref{alg:mdtree_lineAddTaxon} of this algorithm and therefore, it has parent with rank one in $R$.
 Because the parent of $n+1$ has rank $n$ in $T$ and rank $1$ in $R$, we can conclude from Lemma~\ref{lemma:distance_delete_taxon} that for $T$ and $R$ restricted to taxa $1,\ldots,n$ it holds: $d(T|_n,R|_n) \leq d(T,R) - (n-1)$.
 It is not hard to see that $R|_n$ can be received from $T|_n$ by applying $\mdtree$:
-$R|_n$ can be constructed from input tree $T|_n$ in the same way as $R$ can be constructed from $T$, since the list $L$ computed in Line~\ref{alg:mdtree_lineL} of Algorithm~\ref{alg:max_dist_tree} for $T|_n$ is the same as the one for $T$, just the last element is missing.
+$R|_n$ can be constructed from input tree $T|_n$ in the same way as $R$ can be constructed from $T$, since the list $L$ computed in Line~\ref{alg:mdtree_lineL} of Algorithm~\ref{alg:max_dist_tree} for $T|_n$ is the same as the one for $T$, but without the last element.
 So we can follow from the induction hypothesis and Lemma~\ref{lemma:distance_delete_taxon} that it is $d(T,R) \geq d(T|_n,R|_n) + (n-1) = \frac{(n-1)(n-2)}{2} = \frac{n(n-1)}{2}$, which concludes the proof of the lemma.
 \end{proof}
 
 In Section~\ref{alg:max_dist_tree} we already discussed that $\mdtree$ is a non-deterministic algorithm.
-In fact, the output tree of $\mdtree$ can have any tree topology, since there is no restriction on where to add the new taxon in the already existing tree in Line~\ref{alg:mdtree_lineAddTaxon} of Algorithm~\ref{alg:max_dist_tree}.
+In fact, the output tree of $\mdtree$ can have any tree topology, since there is no restriction on where to add the new taxon in the already existing tree (Line~\ref{alg:mdtree_lineAddTaxon} of Algorithm~\ref{alg:max_dist_tree}).
 This means that for each caterpillar input tree $\mdtree$ can compute a tree with any tree topology that has maximum distance from the input tree.
-And because permuting labels of trees does not change the distance between them, there exists for every tree $R$ on $n$ taxa a caterpillar tree $T$ with distance $d(T,R) = \Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
-This gives us Corollary~\ref{corollary:radius}.
+And as permuting labels of trees does not change the distance between them, there is for every tree $R$ on $n$ taxa a caterpillar tree $T$ with distance $d(T,R) = \Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
+Following this, we get Corollary~\ref{corollary:radius}.
 
 \begin{corollary}
 The radius of the $\rnni$ graph is $rad(\rnni) = \Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
