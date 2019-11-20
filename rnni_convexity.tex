@@ -379,9 +379,9 @@ Therefore, we will use the algorithms introduced in the previous section.
 They enable us to prove that there is always a shortest path between two caterpillar trees that only consists of caterpillar trees (Theorem~\ref{thm:caterpillar_convex}) in Section~\ref{section:caterpillar_convex}.
 In other words, the set of caterpillar trees is \emph{convex} in $\rnni$.
 In Section~\ref{section:diameter} we will investigate diameter and radius of the $\rnni$ graph.
-Interestingly, the \emph{diameter}, that is the maximum distance $\Delta(\rnni) = \max \{d(T, R) \mid T, R \in \rnni\}$ between any two trees in the graph, of $\rnni$ equals its \emph{radius} $rad(\rnni) = \min\limits_T \max\limits_R d(T,R)$ in $\rnni$.
+Interestingly, the \emph{diameter} of $\rnni$, that is the maximum distance $\Delta(\rnni) = \max \{d(T, R) \mid T, R \in \rnni\}$ between any two trees in the graph, equals its \emph{radius} $rad(\rnni) = \min\limits_T \max\limits_R d(T,R)$.
 After proving this, we are going to consider the so-called Split Theorem, which was raised in \autocite{Gavryushkin2018-ol}.
-We will give a counterexample to disprove their version of the Split Theorem and claim an alternative version.
+We will give a counterexample to disprove their version of the Split Theorem and claim an alternative version, the Cluster Theorem (Conjecture~\ref{conjecture:cluster_theorem}).
 
 Before we get into the details of these geometric properties of $\rnni$, we need to prove some statements that will be used a few times within this geometry section.
 
@@ -392,16 +392,16 @@ It is $\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$ for $n \geq 3$.
 
 \begin{proof}
 Since the diameter is bounded from above by the maximum length of a path computed by $\findpath$, it is enough to find this maximum.
-The worst-case execution of $\findpath$ would require each of the $n-2$ clusters $C_i$, considered in Line~\ref{alg:find_path:line:cluster} of Algorithm~\ref{alg:find_path}, to be moved by $n-1-i$ $\rnni$ operations in $T'$.
-This can happen if each cluster $C_i$ has the root as $\mrca_{T'}(C_i)$.
-Then the rank of this most recent common ancestor must be changed from $n-1$ to $i$, which requires $n-1-i$ operations, according to Lemma~\ref{lemma:mrca_move}.
-Hence, the maximum length of such a path is bounded by $\sum\limits_{i = 1}^{n-2} i = \frac{(n-2)(n-1)}{2}$.
+Let us assume that $T$ and $R = [C_1, \ldots, C_{n-2}]$ are trees for which $\findpath$ computes a path of maximum length.
+That means that if $T'$ is the last tree of $p$ at the beginning of loop number $i$ in the execution of $\findpath(T,R)$, $\mrca_{T'}(C_i)$ is the root.
+Thus, there are $n-1-i$ $\rnni$ operations needed to move $C_i$ to its correct position.
+Hence, the maximum length of a path computed by $\findpath$ is bounded by $\sum\limits_{i = 1}^{n-2} n-1-i = \frac{(n-2)(n-1)}{2}$.
 \end{proof}
 
 The following lemma relates distances between trees on $n$ and $n+1$ taxa and is an important tool for inductive arguments.
 We use the notion $\parent_T(x)$ to refer to the node adjacent to taxon $x$ in tree $T$.
 $T{\big|}_n$ denotes the restriction of tree $T$ to the set of taxa $\{1, \ldots, n\}$.
-In particular if $T$ is a tree on taxa $1, \ldots, n+1$ the tree $T{\big|}_n$ is obtained by deleting taxon $n+1$ and suppressing the thereby created node of degree two.
+In particular if $T$ is a tree on taxa $\{1, \ldots, n+1\}$ the tree $T{\big|}_n$ is obtained by deleting taxon $n+1$ and suppressing the thereby created node of degree two.
 
 \begin{lemma}
 Let $T$ and $R$ be two trees on taxa $\{1, \ldots, n+1\}$.
@@ -413,7 +413,7 @@ Then $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - \delta$, where $\delta = |\rank_T(
 Let $T$ and $R$ be trees as described in the lemma.
 First observe that the rank of the internal node $\parent_T(n+1)$ can only be changed by performing a rank move that involves $\parent_T(n+1)$ or an $\nni$ move on an edge adjacent to $\parent_T(n+1)$.
 Second observe that any $\rnni$ move can change the rank of $\parent_T(n+1)$ by at most one.
-So we can follow that an $\rnni$ on $T$ move can decrease the rank of $\parent_T(n+1)$ by at most one.
+So we can follow that an $\rnni$ move on $T$ can decrease the rank of $\parent_T(n+1)$ by at most one.
 
 Let $p$ be a shortest path from $T$ to $R$ and $p{\big|}_n$ the path resulting from deleting taxon $n+1$ from all trees on $p$.
 Then $p{\big|}_n$ is a path from $T{\big|}_n$ to $R{\big|}_n$.
