@@ -61,7 +61,12 @@
 \begin{document}
 
 \begin{abstract}
-
+Within this paper we consider a graph of ranked trees, that are rooted binary phylogenetic trees where internal nodes are ordered.
+The ranking of these internal nodes can be seen as a discretisation of trees where internal nodes are assigned divergence times.
+For phylogenetic reconstruction such as Markov Chain Monte Carlo (MCMC) methods, it is important to understand the geometry of tree spaces.
+This motivates our work, which focusses on understanding the geometry of the space of ranked trees, the so-called ranked nearest neighbour interchange ($\rnni$) graph.
+Moreover, we are interested in understanding the complexity of computing distances in this graph.
+We will see that even though there are similarities between the $\rnni$ graph on ranked trees and the classical nearest neighbour interchange ($\nni$) graph on unranked phylogenetic trees, some significant differences between these tree spaces suggest that there is a difference in the complexity of computing distances.
 \end{abstract}
 
 \maketitle
@@ -710,7 +715,7 @@ if two trees $T$ and $R$ contain the same cluster $C$, then $C$ is present as cl
 For providing further evidence that the Cluster Theorem holds in $\rnni$, we can show computationally that it holds for the $\rnni$ graph on small trees with up to six taxa.
 We did this by computing subgraph of $\rnni$ only containing trees that share a cluster and compare distances within this graph with distances in the whole $\rnni$ graph \autocite{}.
 \todo{LC: github link}
-We computed these graphs according to the algorithm of \autocite{Gavryushkin2018-ol}, discussed in Section~\ref{section:algorithms}.
+We computed these graphs according to the algorithm of \autocite{Gavryushkin2018-ol} as discussed in Section~\ref{section:algorithms}.
 
 % \todo{LC: We still need to check 7 taxa.}
 % We are doing this in the following way.
@@ -784,6 +789,17 @@ We computed these graphs according to the algorithm of \autocite{Gavryushkin2018
 % \end{theorem}
 
 \section{Discussion}
+
+Within this paper we established some geometric properties of the $\rnni$ graph.
+We furthermore pointed out some differences between this graph on ranked trees and the well studied $\nni$ graph on unranked trees.
+This is of particular interest for analysing the complexity of computing distances in $\rnni$ as this problem is known to be $\np$-complete in $\nni$.
+Our finding that the set of caterpillar trees is convex in $\rnni$ (Theorem~\ref{thm:caterpillar_convex}) suggests that there is a difference in complexity between these two tree spaces.
+This leaves hope that computing distances in $\rnni$ is, contrary to this problem in $\nni$, not $\np$-complete.
+The question of how hard this problem actually is still remains open and will be subject of further research.
+
+Our work in this paper highlights the importance of algorithms for computing paths in $\rnni$ in order to prove geometric properties such as diameter and radius.
+One of the algorithms that has been introduced, $\findpath$, computed exact distances for all pairs of trees on up to six taxa.
+For future investigations of the $\rnni$ space this algorithm might be a useful tool.
 
 \printbibliography
 
