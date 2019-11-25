@@ -60,14 +60,21 @@
 
 \begin{document}
 
+
 \begin{abstract}
-Within this paper we consider a graph of ranked trees, that are rooted binary phylogenetic trees where internal nodes are ordered.
-The ranking of these internal nodes can be seen as a discretisation of trees where internal nodes are assigned divergence times.
-For phylogenetic reconstruction such as Markov Chain Monte Carlo (MCMC) methods, it is important to understand the geometry of tree spaces.
-This motivates our work, which focusses on understanding the geometry of the space of ranked trees, the so-called ranked nearest neighbour interchange ($\rnni$) graph.
-Moreover, we are interested in understanding the complexity of computing distances in this graph.
-We will see that even though there are similarities between the $\rnni$ graph on ranked trees and the classical nearest neighbour interchange ($\nni$) graph on unranked phylogenetic trees, some significant differences between these tree spaces suggest that there is a difference in the complexity of computing distances.
+In this paper we study the graph of ranked phylogenetic trees where the adjacency relation is given by a local rearrangement of the tree structure.
+Our work is motivated by tree inference algorithms, such as maximum likelihood and Markov Chain Monte Carlo methods, where the geometry of the search space plays a central role for efficiency and practicality of the optimisation.
+We hence focus on understanding the geometry of the space (graph) of ranked trees, the so-called ranked nearest neighbour interchange ($\rnni$) graph.
+\todo{Geometry summary}
+Specifically, we...
+
+We also study the problem of computing distances between trees in this graph.
+Since the $\rnni$ graph is a generalisation of the classical nearest neighbour interchange ($\nni$) graph to ranked phylogenetic trees, we specifically focus on the properties that have already been established for $\nni$.
+Surprisingly, our results suggest that the complexity of computing distances in the two graphs is likely to be different.
+\todo{Algorithms summary}
+Specifically, we...
 \end{abstract}
+
 
 \maketitle
 
