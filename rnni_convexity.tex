@@ -261,11 +261,12 @@ The running time of the algorithm is quadratic in the number of taxa.
 
 Because the algorithm returns a path between pairs of trees in $\rnni$, the length of the path approximates the $\rnni$ distance from above.
 A natural question then is how accurate this approximation is.
-To answer this question for small trees, we have implemented the algorithm $\findpath$
+We have computationally shown that the algorithm $\findpath$ finds the correct distance for trees up to six taxa.
+Specifically, we have implemented $\findpath$
 \todo{LC: github - link}
 \autocite{}
-and compared the results with the true distance found using the algorithm from Section~\ref{section:algorithms}.
-By doing this we could show that $\findpath$ computes correct distances for all trees on up to six taxa.
+and compared the results with the true $\rnni$ distance as explained earlier in this section.
+
 
 \subsection{$\csort$}
 \label{section:alg_csort}
