@@ -77,8 +77,7 @@ Its geometry has been extensively studied \autocite{Dasgupta2000-xa, Li1996-zw, 
 An important property of the $\nni$ graph is that computing distance is NP-hard \autocite{Dasgupta2000-xa}.
 As a result no algorithm exists to compute the distance in practical time.
 A consequence is that tree search and sampling algorithms pose a significant challenge even for moderately sized trees
-\todo{LC: Alex, is this the citation you wanted?}
-\autocite{Whidden2018-tk}.
+\autocite{Whidden2016-kl}.
 
 More recent advances in computational phylogenetics introduce various classes of molecular clock models \autocite{Yoder2000-ks,Drummond2006-nl,Drummond2010-yf} and made computational inference of phylogenetic time-trees possible \autocite{Ronquist2003-eq, Bouckaert2018-yr, Hadfield2018-xp}.
 However, mathematical challenges that come with this seemingly inessential change in parametrisation (genomic distance VS time distance) of trees have only recently been brought to attention \autocite{Gavryushkin2016-uu}.
@@ -177,13 +176,15 @@ Let $[C_1, \ldots, C_{n-2}]$ be the cluster representation of $R$ (the ``destina
 Then $C_i$ is induced by the node of rank $i$ for $i = 1, \ldots, n-2$.
 $\findpath$ computes a path which initially consists of $T_0 = T$ only and is extended stepwise as described in the following.
 
-Step $0$. $p = [T_0]$.
+Step $0$.
+$p = [T_0]$.
 Consider the node in $T_0$ that induces the smallest cluster containing all elements of $C_1$.
 This node is denoted by $\mrca_{T_0}(C_1)$ (short for \emph{most recent common ancestor}).
 By performing an $\rnni$ move that decreases the rank of $\mrca_{T_0}(C_1)$, we receive a tree $T_1$ that is then appended to $p$.
 Now we repeatedly perform $\rnni$ moves that move the most recent common ancestor of $C_1$ down in order to extend $p$ to $p = [T_0, \ldots, T_l]$ for some $l$ such that $C_1$ is induced by the internal node of rank one in $T_l$.
 
-Step $k$. $p = [T_0, \ldots, T_l]$ where $l$ is the total number of trees that have been added to $p$ in the previous $k-1$ steps.
+Step $k$.
+$p = [T_0, \ldots, T_l]$ where $l$ is the total number of trees that have been added to $p$ in the previous $k-1$ steps.
 Therefore the internal nodes in $T_l$ with ranks $1, \ldots, k-1$ induce clusters $C_1, \ldots, C_{k-1}$, respectively.
 Now the cluster of interest is $C_k$.
 As in the first step $p$ is extended by performing a series of $\rnni$ moves that decrease the rank of $\mrca_{T_l}(C_k)$ stepwise.
@@ -672,7 +673,7 @@ Therefore, a path where the two caterpillar subtrees of $T$ and $R$ are sorted s
 \vspace{12pt}
 \caption{Example of a shortest path between two trees $T$ and $R$ in $\nni$.
 All leaves labelled with dots represent taxa in $\{1, \ldots, n\}$, squares represent taxa in $\{n+1, \ldots, 2n\}$.
-In \autocite{Li1996-zw} it is proven that there is such a labelling that ensures that there is no shortest path in $\nni$ where the clusters (dots vs. squares) shared between $T$ and $R$ are preserved.
+In \autocite{Li1996-zw} it is proven that there is such a labelling that ensures that there is no shortest path in $\nni$ where the clusters (dots vs.\ squares) shared between $T$ and $R$ are preserved.
 Instead, the depicted path where $n$ cherries are built and then sorted before being resolved is a shortest path}
 \label{fig:NNI_NP_proof}
 \end{figure}
@@ -755,7 +756,8 @@ We computed these graphs according to the algorithm of \autocite{Gavryushkin2018
 % \centering
 % \includegraphics[width=0.7\textwidth]{findpath_not_symmetric}
 % \vspace{12pt}
-% \caption{Two paths computed by $\findpath$. At the top $\findpath(T,R)$, at the bottom $\findpath(R,T)$}
+% \caption{Two paths computed by $\findpath$.
+% At the top $\findpath(T,R)$, at the bottom $\findpath(R,T)$}
 % \label{fig:findpath_not_symmetric}
 % \end{figure}
 %
