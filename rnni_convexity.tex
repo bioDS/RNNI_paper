@@ -276,6 +276,7 @@ As a result caterpillar trees have only one \emph{cherry}, which is a pair of ta
 A path between two caterpillar trees that only consists of caterpillar trees is called a \emph{caterpillar path}.
 We can identify a caterpillar tree $T = [\{x_1, x_2\}, \{x_1, x_2, x_3\}, \ldots, \{x_1, \ldots, x_n\}]$ with the list of its taxa $[x_1, x_2, \ldots, x_n]$, assuming that $x_1 < x_2$ as natural numbers (recall that the set of taxa is $\{1, \ldots, n\}$).
 
+\todo{Lena: Think if we want to change the following two paragraphs to when we first pull $x_n$ up, then $x_{n-1}$, etc.}
 The algorithm $\csort$ (Algorithm~\ref{alg:csort}) is a natural modification of the classical \emph{Bubble Sort} algorithm \autocite{Knuth1997-pi}.
 A path $p$ between two given trees $T$ and $R$ is computed by sorting the list representations of $T$ and $R$ as it is done in Bubble Sort.
 The general idea is to update the list representing $T$ by considering it from beginning to end and swap two neighboured taxa if they appear in a different order in $R$ than in the current list.
@@ -289,8 +290,9 @@ For computing a shortest caterpillar path the moves on the first three taxa $x_1
 If $x_1$ ($x_2$) is the uppermost taxon of those three in $R$, we update the current tree by swapping $x_1$ ($x_2$) and $x_3$.
 By doing this we make sure that there will be no point on $p$ where $x_1$ and $x_2$ swap positions, as this is an additional $\nni$ move that can be avoided.
 
-Because all moves between caterpillar trees are $\nni$ moves, all pairs of taxa that are not in the same order in $T$ and $R$ need to swap at some point on any path between these trees.
-And since only elements that are direct neighbours in a sequence are allowed to swap, with the only exception being the first three elements, the path computed by $\csort$ is a shortest caterpillar path indeed.
+The path $p$ returned by the algorithm $\csort$ is a shortest caterpillar path because every tree modification on $p$ reduces the number of inversions of taxa in $T$ and $R$.
+\todo{Lena: If you decide to change the algorithm, mention here that what we've implemented is different from what is described here.}
+Note that any algorithm with this property returns a shortest caterpillar path.
 
 \begin{algorithm}[H]
 \caption{$\csort$($T,R$)}
@@ -298,7 +300,6 @@ And since only elements that are direct neighbours in a sequence are allowed to 
 \begin{algorithmic}[1]
 \STATE $T':= T$, $p := [T']$
 \STATE $L_{T'}:=$ list representation of $T'$, $L_R:=$ list representation of $R$
-% \STATE $L_{\hat T} :=$ list representation of $\hat T$, $L_R :=$ list representation of $R$
 \FOR {$i=1,\ldots,n-2$} \label{alg:csort:line:loop}
 \STATE $j = 0$ \COMMENT{Special case: cherry}
 \IF {$L_{T'}[0]$ is last element of $L_{T'}[0],L_{T'}[1],L_{T'}[2]$ in $L_R$}
@@ -307,7 +308,6 @@ And since only elements that are direct neighbours in a sequence are allowed to 
 \STATE Update $\hat T$: swap $L_{T'}[1]$ and $L_{T'}[2]$
 \ENDIF
 \STATE $j = 2$
-% \IF {$L_R^{-1}[L_{\hat T}[j]] > L_R^{-1}[L_{\hat T}[j+1]]$}
 \WHILE {order of $L_{T'}[j]$ and $L_{T'}[j+1]$ different in $R$}
 \STATE Update $T'$: Swap $L_{T'}[j]$ and $L_{T'}[j+1]$
 \STATE $p = p+T', j = j + 1$
@@ -318,8 +318,9 @@ And since only elements that are direct neighbours in a sequence are allowed to 
 \end{algorithm}
 
 The running time of $\csort$ is the same as for Bubble Sort, that is quadratic in $n$.
-Though simple, this algorithm will be crucial for some proofs in Section~\ref{section:caterpillar_convex}.
 
+It is not obvious that the path between $T$ and $R$ returned by $\csort$ has the least possible length among all $\rnni$ paths (not only caterpillar paths), that is, the length of $d(T, R)$.
+This fact will be established in Theorem~\ref{}.
 
 \subsection{$\mdtree$}
 \label{section:alg_mdtree}
@@ -332,7 +333,7 @@ $\mdtree$ (Algorithm~\ref{alg:max_dist_tree}) works as follows:
 At first, all taxa of the input tree $T$ are sorted in a list $L = [l_1, \ldots, l_n]$ such that the ranks of their parents are non-decreasing.
 Though this representation appears similar to the list representation of caterpillar trees, it is ambiguous since we do not specify how to order cherry taxa.
 $\mdtree$ constructs an output tree $R$ as follows:
-Initially, $R$ only consists of a cherry with taxa $l_1$ and $l_2$ such that the parent of these taxa has rank $n-1$.
+Initially, $R$ only consists two taxa $l_1$ and $l_2$, the most recent common ancestor of which will eventually be of rank $n - 1$.
 The remaining taxa are added to $R$ sequentially, according to their order in $L$, by creating a new internal node at one of the existing branches in $R$ such that this new node has rank one less than the previously lowest internal node in $R$.
 
 \begin{algorithm}[H]
@@ -350,6 +351,7 @@ The remaining taxa are added to $R$ sequentially, according to their order in $L
 
 Both the list computed in Line~\ref{alg:mdtree_lineL} the and the attachment edge of the new taxon in the tree in Line~\ref{alg:mdtree_lineAddTaxon} are not uniquely determined within $\mdtree$.
 Therefore, this algorithm is non-deterministic which is an important observation needed in Section~\ref{section:diameter} where this algorithm is used for finding the radius of $\rnni$.
+
 
 \section{Geometry of $\rnni$}
 \label{section:geometry}
