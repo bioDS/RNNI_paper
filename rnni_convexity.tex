@@ -67,14 +67,17 @@
 In this paper we study the graph of ranked phylogenetic trees where the adjacency relation is given by a local rearrangement of the tree structure.
 Our work is motivated by tree inference algorithms, such as maximum likelihood and Markov Chain Monte Carlo methods, where the geometry of the search space plays a central role for efficiency and practicality of the optimisation.
 We hence focus on understanding the geometry of the space (graph) of ranked trees, the so-called ranked nearest neighbour interchange ($\rnni$) graph.
-%TODO
-Specifically, we...
+Specifically, we introduce some algorithms for computing paths in the $\rnni$ graph and use them to establish properties such as diameter and radius of this graph.
 
 We also study the problem of computing distances between trees in this graph.
 Since the $\rnni$ graph is a generalisation of the classical nearest neighbour interchange ($\nni$) graph to ranked phylogenetic trees, we specifically focus on the properties that have already been established for $\nni$.
 Surprisingly, our results suggest that the complexity of computing distances in the two graphs is likely to be different.
 %TODO
-Specifically, we...
+% Alex: The proof for $\np$ hardness of $\nni$ uses trees that have two caterpillar trees as subtrees (See Fig5).
+% I'm not sure whether it's known that computing distances just between caterpillar trees is not polynomial in $\nni$.
+% Do I need to be more specific about this here?
+% And shall I use the term 'caterpillar trees' here?
+We prove that within a particular subset of trees distances can be computed in polynomial time in $\rnni$ while this is not known to be true in $\nni$.
 \end{abstract}
 
 
@@ -138,6 +141,7 @@ The second type of operation is called an $\nni$ \emph{move} and defined in the 
 We use the notation $d(T, R)$ throughout the paper to denote the graph distance between trees in $\rnni$, that is, $d(T, R)$ is the length of a shortest $\rnni$ path between tree $T$ and $R$.
 
 \begin{figure}[H]
+\todo{Alex: Is it OK to use 'shortest $\rnni$ paths' here?}
 \centering
 \includegraphics[width=0.8\textwidth]{RNNI}
 \vspace{12pt}
@@ -146,7 +150,13 @@ The rank move swaps the rank of the two highlighted nodes and the $\nni$ moves a
 \label{fig:RNNI}
 \end{figure}
 
-\todo{Paper structure}
+The rest of this paper is structured as follows.
+Within the next section we introduce three algorithms for exploring the $\rnni$ graph.
+We use these algorithms in Section~\ref{section:geometry} for proving some geometrical properties of this graph, such as diameter and radius.
+Specifically, we will prove in Section~\ref{section:caterpillar_convex} that for a subset of $\rnni$ trees, distances can be computed in polynomial time.
+This already suggests that there is a difference in complexity of computing distances between the $\rnni$ graph and the classical $\nni$ graph.
+\todo{Alex: Is it OK to use 'shortest $\rnni$ paths' here?}
+We will discuss this further in Section~\ref{section:cluster_theorem} where we disprove a conjecture raised in \autocite{Gavryushkin2018-ol} and provide an alternative version, which makes a claim about the similarity of trees on shortest $\rnni$ paths.
 
 
 \section{Algorithms}
@@ -320,7 +330,7 @@ Note that any algorithm with this property returns a shortest caterpillar path.
 The running time of $\csort$ is the same as for Bubble Sort, that is quadratic in $n$.
 
 It is not obvious that the path between $T$ and $R$ returned by $\csort$ has the least possible length among all $\rnni$ paths (not only caterpillar paths), that is, the length of $d(T, R)$.
-This fact will be established in Theorem~\ref{}.
+This fact will be established in Theorem~\ref{thm:caterpillar_convex}.
 
 \subsection{$\mdtree$}
 \label{section:alg_mdtree}
