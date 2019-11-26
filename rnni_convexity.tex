@@ -273,24 +273,8 @@ and compared the results with the true $\rnni$ distance as explained earlier in 
 
 In this section we introduce an algorithm to compute paths between \emph{caterpillar trees}, which are trees where each internal node is adjacent to at least one leaf.
 As a result caterpillar trees have only one \emph{cherry}, which is a pair of taxa that share their parent.
-For introducing this algorithm we need the following definitions.
-A path $p$ between two caterpillar trees $T$ and $R$ that only consists of caterpillar trees is called a \emph{caterpillar path}.
-If $p$ is the shortest path among all caterpillar paths between $T$ and $R$ we call it a \emph{shortest caterpillar path}, and denote the length of $p$ by $d_c(T,R)$, which we call the \emph{caterpillar distance}.
-
-The special topology of caterpillar trees gives a natural preorder of taxa that uniquely represents a caterpillar tree.
-That is, for a caterpillar tree $T = [\{x_1, x_2\}, \{x_1, x_2, x_3\}, \ldots, \{x_1, \ldots, x_n\}]$ the taxa are preordered according to the ranks of their parents such that $x_1 = x_2 \leq x_3 \leq \ldots \leq x_n$.
-From now on when we say that a taxon is below another one we refer to this preorder.
-Furthermore, we can use this preorder to create a list representation of caterpillar trees.
-For the tree $T$ above this list is $[x_1, x_2, \ldots, x_n]$.
-As we consider the taxon set $X = \{1, \ldots, n\}$, we assume that they are ordered in the list such that $x_1 < x_2$, according to their ordering as natural numbers.
-This ensures that the list representation of caterpillar trees is unique.
-
-%We are now going to explain what kind of $\rnni$ moves are possible between caterpillar trees and see how such a move changes the list representation of a tree.
-%At first it is important to realise that the only possible $\rnni$ moves between caterpillar trees are $\nni$ moves, since there is no pair of internal nodes with rank difference one that is not connected by an edge.
-%$\nni$ moves between caterpillar trees correspond to swaps of two neighboured elements in the list representation.
-%The only exception of this are $\nni$ moves on the lowest internal edge, that is the edge connecting the internal nodes of rank one and two.
-%There are two $\nni$ moves possible on this edge that result in caterpillar trees, while there is for every other edge only one $\nni$ move that results in a caterpillar tree.
-%Corresponding to the $\nni$ moves on the lowest internal edge are exchanges of either the first or the second element with the third element in the list representation.
+A path between two caterpillar trees that only consists of caterpillar trees is called a \emph{caterpillar path}.
+We can identify a caterpillar tree $T = [\{x_1, x_2\}, \{x_1, x_2, x_3\}, \ldots, \{x_1, \ldots, x_n\}]$ with the list of its taxa $[x_1, x_2, \ldots, x_n]$, assuming that $x_1 < x_2$ as natural numbers (recall that the set of taxa is $\{1, \ldots, n\}$).
 
 The algorithm $\csort$ (Algorithm~\ref{alg:csort}) is a natural modification of the classical \emph{Bubble Sort} algorithm \autocite{Knuth1997-pi}.
 A path $p$ between two given trees $T$ and $R$ is computed by sorting the list representations of $T$ and $R$ as it is done in Bubble Sort.
@@ -456,7 +440,7 @@ Notice that $\frac{(n-1)(n-2)}{2}$ is the upper bound for the diameter of $\rnni
 
 \begin{lemma}
 Let $T$ and $R$ be two caterpillar trees.
-$T$ and $R$ have distance $d(T,R) = \frac{(n-1)(n-2)}{2}$ if, and only if, they have caterpillar distance $d_c(T,R) = \frac{(n-1)(n-2)}{2}$.
+Then $d(T,R) = \frac{(n-1)(n-2)}{2}$ if and only if $d_c(T,R) = \frac{(n-1)(n-2)}{2}$, where $d_c$ is the length of the shortest caterpillar path.
 \label{lemma:caterpillar_dist=diameter}
 \end{lemma}
 
@@ -470,7 +454,7 @@ As a result there are no further exchanges of pairs of taxa within the last $i-1
 It follows that the maximum length of a path computed by $\csort$ is $\sum\limits_{i=1}^{n-2} n-1-i = \frac{(n-1)(n-2)}{2}$.
 Since there cannot be a caterpillar path shorter than $d(T,R) = \frac{(n-1)(n-2)}{2}$, it follows $d_c(T,R) = \frac{(n-1)(n-2)}{2}$.
 
-For proving the other direction of the statement, let now $T$ and $R$ have caterpillar distance $d_c(T,R) = \frac{(n-1)(n-2)}{2}$.
+For proving the other direction of the statement, assume that $d_c(T,R) = \frac{(n-1)(n-2)}{2}$.
 We prove $d(T,R) = \frac{(n-1)(n-2)}{2}$ by induction on the number of taxa $n$ of $T$ and $R$:
 
 Induction basis: $n=3$\\
@@ -478,15 +462,15 @@ There are three trees on three taxa.
 They all have distance one from another and are caterpillar trees.
 So it is $d(T,R) = d_c(T,R) = 1$ for all pairs of trees $T,R$ on $n=3$ taxa.
 
-Induction step: $n \to n+1$\\
-Induction hypothesis: For caterpillar trees $T, R$ on $n$ taxa with caterpillar distance $d_c(T,R) = \frac{(n-1)(n-2)}{2}$ it is $d(T,R) = \frac{(n-1)(n-2)}{2}$.\\
+Induction step:\\
+Assume that $d_c(T,R) = \frac{(n-1)(n-2)}{2}$ implies $d(T,R) = \frac{(n-1)(n-2)}{2}$.\\
 Without loss of generality we can assume that $T$ is the caterpillar tree $[1,2,3,\ldots,n+1]$.
 Let $R$ be a caterpillar tree with distance $\frac{n(n-1)}{2}$ to $T$.
 It follows that in each loop of $\csort$ the maximum number of taxon swaps is reached which implies that every taxon will swap with taxon $n+1$ at some point.
 We can conclude that this taxon $n+1$ is part of the cherry of $R$.
 Let us now consider the trees $T{\big|}_n$ to $R{\big|}_n$ that result from $T$ and $R$ by deleting taxon $n+1$.
 $\csort$ computes a path from $T{\big|}_n$ to $R{\big|}_n$ that contains the same exchanges of taxa as $p$, except for the $n-1$ ones on $p$ that involve taxon $n+1$.
-Hence, the caterpillar distance is $d_c(T{\big|}_n, R{\big|}_n) = \frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2}$.
+Hence, $d_c(T{\big|}_n, R{\big|}_n) = \frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2}$.
 So we can apply the induction hypothesis on $T{\big|}_n$ and $R{\big|}_n$ and know that $d(T{\big|}_n,R{\big|}_n) = \frac{(n-1)(n-2)}{2}$.
 
 We are now using this observation to prove that the distance between $T$ and $R$ equals $\frac{n(n-1)}{2}$.
@@ -505,17 +489,12 @@ The set of caterpillar trees is convex.
 \end{theorem}
 
 \begin{proof}
-We prove this Theorem by backwards induction on the caterpillar distance $l = d_c(T,R)$ between caterpillar trees $T$ and $R$.
-For this backwards induction the maximum caterpillar distance $\frac{(n-1)(n-2)}{2}$ (Lemma~\ref{lemma:caterpillar_dist=diameter}) is the base case.
+We prove this theorem by backwards induction on the length of a shortest caterpillar path $d_c(T,R) = l$ ($l$ is the induction parameter) between trees $T$ and $R$.
+It follows from the proof of Lemma~\ref{lemma:caterpillar_dist=diameter} that the maximum possible value for $l$ is $\frac{(n-1)(n-2)}{2}$, which forms the induction basis.
+\todo{Lena: Make sure we ALWAYS use this terminology}
+Lemma~\ref{lemma:caterpillar_dist=diameter} also implies in this case that $d(T, R) = d_c(T, R)$, hence a caterpillar path between $T$ and $R$ of length $d(T, R)$.
 
-Induction basis: $l = \frac{(n-1)(n-2)}{2}$\\
-With Lemma~\ref{lemma:caterpillar_dist=diameter} one can see that for each pair of caterpillar trees $T$, $R$ with caterpillar distance $d_c(T,R) = \frac{(n-1)(n-2)}{2}$, it is $d(T,R) = d_c(T,R)$.
-Thus there is a shortest path between $T$ and $R$ that is a caterpillar path.
-
-Induction step: $l+1 \to l$\\
-Induction hypothesis: For each pair of caterpillar trees with caterpillar distance $l+1$ there is a shortest path between these trees that consists of caterpillar trees only, so the distance between these trees is $l+1$.
-
-Let $T$ and $R$ be caterpillar trees with caterpillar distance $l$.
+Let $T$ and $R$ be caterpillar trees such that $d_c(T, R) = l$.
 We consider the shortest caterpillar path between these trees computed by $\csort$.
 From now on we will consider the trees $T$ and $R$, as well as all other caterpillar trees within this proof, in their list representation $L_T$ and $L_R$ as introduced in Section~\ref{section:alg_csort}.
 
@@ -536,17 +515,16 @@ Let now $\hat T$ be a tree that equals $T$ with the only exception that $b$ and 
 We can follow from our observations above that the distance between $T$ and $\hat T$ is $d(T, \hat T) = 1$ and that $\csort$ needs one move more for a path from $\hat T$ to $R$ than from $T$ to $R$.
 This results in $d_c(\hat T, R) = d(T,R) + 1$.
 
-So we can apply the induction hypothesis on $\hat T$ and $R$ and see that $d(\hat T,R) = l+1$.
+The induction hypothesis for $\hat T$ and $R$ implies that $d(\hat T,R) = l+1$.
 If it now were $d(T,R) < l$, it would hold $d(\hat T,R) \leq d(T,R) + d(T,\hat T) < l + 1$ which contradicts the induction hypothesis.
-We can conclude $d(T,R) = l$, which completes the proof for the case that $a$ is not one of the first two elements of $L_{T'}$.
+We can conclude that $d(T,R) = l$, which completes the proof for the case that $a$ is not one of the first two elements of $L_{T'}$.
 
-Let us now consider the other case:
-of the two taxa that are compared but do not swap positions, one is part of the cherry current tree.
-Let $a$ and $b$ be the cherry taxa and $c$ their neighbour such that neither $a$ nor $b$ echanges with $c$.
+Let us now consider the other case: of the two taxa that are compared but do not swap positions, one is part of the cherry current tree.
+Let $a$ and $b$ be the cherry taxa and $c$ their neighbour such that neither $a$ nor $b$ exchanges with $c$.
 Then the list looks like this:
 \[[a, b, c, \ldots, x_k, \ldots, x_1]\]
 
-If there is no swap of either $a$ or $b$ with $c$, we can construct a tree $\hat T$ with caterpillar distance $d_c(\hat T, R) = l+1$ and $d(T,\hat T) = 1$ in a similar way as in the previous case.
+If there is no swap of either $a$ or $b$ with $c$, we can construct a tree $\hat T$ with $d_c(\hat T, R) = l+1$ and $d(T,\hat T) = 1$ in a similar way as in the previous case.
 In the list representing the start tree $T$, either $a$ or $b$ must be neighbour of $c$.
 This is due to the fact that we are currently considering the first comparison of elements where there is no swap.
 We can assume without loss of generality that $a$ is neighbour of $c$ in $T$.
