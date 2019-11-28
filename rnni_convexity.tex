@@ -282,7 +282,6 @@ As a result caterpillar trees have only one \emph{cherry}, which is a pair of ta
 A path between two caterpillar trees that only consists of caterpillar trees is called a \emph{caterpillar path}.
 We can identify a caterpillar tree $T = [\{x_1, x_2\}, \{x_1, x_2, x_3\}, \ldots, \{x_1, \ldots, x_n\}]$ with the list of its taxa $[x_1, x_2, \ldots, x_n]$, assuming that $x_1 < x_2$ as natural numbers (recall that the set of taxa is $\{1, \ldots, n\}$).
 
-\todo{Lena: Think if we want to change the following two paragraphs to when we first pull $x_n$ up, then $x_{n-1}$, etc.}
 The algorithm $\csort$ (Algorithm~\ref{alg:csort}) is a natural modification of the classical \emph{Bubble Sort} algorithm \autocite{Knuth1997-pi}.
 A path $p$ from $T$ to $R= [x_1, x_2, \ldots, x_n]$ is computed iteratively such that after $k$ steps the last $k$ taxa of $T$ and $R$ coincide.
 Specifically, in step $k$ ($k = 0, \ldots, n-3$) taxon $x_{n-k}$ is moved up to the position it has in $R$.
@@ -293,7 +292,6 @@ After $n-2$ steps we reach $R$.
 The path $p$ returned by the algorithm $\csort$ is a shortest caterpillar path because every tree modification on $p$ reduces the number of inversions of taxa in $T$ and $R$.
 \todo{Lena: If you decide to change the algorithm, mention here that what we've implemented is different from what is described here.}
 \todo{Alex: I changed the algorithm. It shouldn't be too much work to change the implementation and the pseudo-code here. Do you want to keep the old version or shall I change everything to the new version?}
-\end{description}}
 Note that any algorithm with this property returns a shortest caterpillar path.
 
 \begin{algorithm}[H]
@@ -324,16 +322,16 @@ The running time of $\csort$ is the same as for Bubble Sort, that is quadratic i
 It is not obvious that the path between $T$ and $R$ returned by $\csort$ has the least possible length among all $\rnni$ paths (not only caterpillar paths), that is, the length of $d(T, R)$.
 This fact will be established in Theorem~\ref{thm:caterpillar_convex}.
 
+
 \subsection{$\mdtree$}
 \label{section:alg_mdtree}
 
-The algorithm we are going to introduce here will be important for finding the radius of the $\rnni$ graph.
-It is called $\mdtree$, which stands for Maximum Distance Tree, as it computes a tree with maximum distance if the input tree is a caterpillar tree.
-This will be discussed in Section~\ref{section:diameter}.
+The algorithm $\mdtree$ (Maximum Distance Tree) will be an important tool for finding the radius of the $\rnni$ graph.
+It computes a tree with maximum distance if the input tree is a caterpillar tree, which we will prove in Section~\ref{section:diameter}.
 
 $\mdtree$ (Algorithm~\ref{alg:max_dist_tree}) works as follows:
 At first, all taxa of the input tree $T$ are sorted in a list $L = [l_1, \ldots, l_n]$ such that the ranks of their parents are non-decreasing.
-Though this representation appears similar to the list representation of caterpillar trees, it is ambiguous since we do not specify how to order cherry taxa.
+This list does uniquely identify trees since we do not specify how to order taxa that share a parent.
 $\mdtree$ constructs an output tree $R$ as follows:
 Initially, $R$ only consists two taxa $l_1$ and $l_2$, the most recent common ancestor of which will eventually be of rank $n - 1$.
 The remaining taxa are added to $R$ sequentially, according to their order in $L$, by creating a new internal node at one of the existing branches in $R$ such that this new node has rank one less than the previously lowest internal node in $R$.
@@ -351,8 +349,8 @@ The remaining taxa are added to $R$ sequentially, according to their order in $L
 \end{algorithmic}
 \end{algorithm}
 
-Both the list computed in Line~\ref{alg:mdtree_lineL} the and the attachment edge of the new taxon in the tree in Line~\ref{alg:mdtree_lineAddTaxon} are not uniquely determined within $\mdtree$.
-Therefore, this algorithm is non-deterministic which is an important observation needed in Section~\ref{section:diameter} where this algorithm is used for finding the radius of $\rnni$.
+Both the list computed in Line~\ref{alg:mdtree_lineL} and the attachment edge of the new taxon in the tree in Line~\ref{alg:mdtree_lineAddTaxon} are not uniquely determined within $\mdtree$.
+Therefore, this algorithm is non-deterministic, which is an important observation that we will use for finding the radius of $\rnni$ in Section~\ref{section:diameter}.
 
 
 \section{Geometry of $\rnni$}
