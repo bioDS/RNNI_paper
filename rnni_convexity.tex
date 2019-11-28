@@ -141,7 +141,6 @@ The second type of operation is called an $\nni$ \emph{move} and defined in the 
 We use the notation $d(T, R)$ throughout the paper to denote the graph distance between trees in $\rnni$, that is, $d(T, R)$ is the length of a shortest $\rnni$ path between tree $T$ and $R$.
 
 \begin{figure}[H]
-\todo{Alex: Is it OK to use 'shortest $\rnni$ paths' here?}
 \centering
 \includegraphics[width=0.8\textwidth]{RNNI}
 \vspace{12pt}
@@ -171,11 +170,11 @@ While these algorithms are interesting on their own (e.g.\ in simulation studies
 The algorithm $\findpath$ can be used to approximate the $\rnni$ distance.
 We will study the accuracy of this approximation by computing the exact $\rnni$ distance for small trees.
 Specifically, we will use the algorithm for computing the complete $\rnni$ graph that is given in \autocite[their Section 3.3]{Gavryushkin2018-ol}.
-\todo{GitHub link?}
 After pre-computing the graph, we use the standard algorithms~\autocite{Floyd1962-ew,Dijkstra1959-ph} for computing shortest paths.
 However, the large number of vertices in $\rnni$ is an obstacle when it comes to computing distances for larger trees.
 Since there are $\frac{n!(n-1)!}{2^{n-1}}$ vertices in the $\rnni$ graph \autocite{Gavryushkin2018-ol}, we compute the $\rnni$ graph on up to six taxa for our analyses.
 This computational result will also be used later in the paper to support Conjecture~\ref{conjecture:cluster_theorem}, a modification of Conjecture~9 in \autocite{Gavryushkin2018-ol}, which we prove to be false in this paper.
+Our implementations can be found on GitHub in \autocite{Collienne2019}.
 
 
 \subsection{$\findpath$}
@@ -272,10 +271,7 @@ The running time of the algorithm is quadratic in the number of taxa.
 Because the algorithm returns a path between pairs of trees in $\rnni$, the length of the path approximates the $\rnni$ distance from above.
 A natural question then is how accurate this approximation is.
 We have computationally shown that the algorithm $\findpath$ finds the correct distance for trees up to six taxa.
-Specifically, we have implemented $\findpath$
-\todo{LC: github - link}
-\autocite{}
-and compared the results with the true $\rnni$ distance as explained earlier in this section.
+Specifically, we have implemented $\findpath$ \autocite{Collienne2019} and compared the results with the true $\rnni$ distance as explained earlier in this section.
 
 
 \subsection{$\csort$}
@@ -694,8 +690,7 @@ if two trees $T$ and $R$ contain the same cluster $C$, then $C$ is present as cl
 
 
 For providing further evidence that the Cluster Theorem holds in $\rnni$, we can show computationally that it holds for the $\rnni$ graph on small trees with up to six taxa.
-We did this by computing subgraph of $\rnni$ only containing trees that share a cluster and compare distances within this graph with distances in the whole $\rnni$ graph \autocite{}.
-\todo{LC: github link}
+We did this by computing subgraph of $\rnni$ only containing trees that share a cluster and compare distances within this graph with distances in the whole $\rnni$ graph \autocite{Collienne2019}.
 We computed these graphs according to the algorithm of \autocite{Gavryushkin2018-ol} as discussed in Section~\ref{section:algorithms}.
 
 % \todo{LC: We still need to check 7 taxa.}
