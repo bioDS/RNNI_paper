@@ -284,20 +284,16 @@ We can identify a caterpillar tree $T = [\{x_1, x_2\}, \{x_1, x_2, x_3\}, \ldots
 
 \todo{Lena: Think if we want to change the following two paragraphs to when we first pull $x_n$ up, then $x_{n-1}$, etc.}
 The algorithm $\csort$ (Algorithm~\ref{alg:csort}) is a natural modification of the classical \emph{Bubble Sort} algorithm \autocite{Knuth1997-pi}.
-A path $p$ between two given trees $T$ and $R$ is computed by sorting the list representations of $T$ and $R$ as it is done in Bubble Sort.
-The general idea is to update the list representing $T$ by considering it from beginning to end and swap two neighboured taxa if they appear in a different order in $R$ than in the current list.
-Note that each swap of taxa results in a new tree that is added to the path $p$.
-After passing the whole list the last element, which is the uppermost taxon, is at the same position as in $R$.
-By repeating this at most $n-1$ times all elements the resulting list represents $R$.
-
-We use this main principle of Bubble Sort for computing shortest caterpillar paths with $\csort$, but there are special consideration needed for the first three taxa.
-The reason for this is that both $\nni$ moves on the lowest internal edge of a caterpillar tree result in caterpillar trees.
-For computing a shortest caterpillar path the moves on the first three taxa $x_1, x_2, x_3$ need to be done as described in the following.
-If $x_1$ ($x_2$) is the uppermost taxon of those three in $R$, we update the current tree by swapping $x_1$ ($x_2$) and $x_3$.
-By doing this we make sure that there will be no point on $p$ where $x_1$ and $x_2$ swap positions, as this is an additional $\nni$ move that can be avoided.
+A path $p$ from $T$ to $R= [x_1, x_2, \ldots, x_n]$ is computed iteratively such that after $k$ steps the last $k$ taxa of $T$ and $R$ coincide.
+Specifically, in step $k$ ($k = 0, \ldots, n-3$) taxon $x_{n-k}$ is moved up to the position it has in $R$.
+Here we say that a taxon moves up when it swaps position with its neighboured taxon, which corresponds to an $\nni$ move.
+Notice that there might be more than just one such move per step, which means that $p$ can be extended by more than one tree in each step.
+After $n-2$ steps we reach $R$.
 
 The path $p$ returned by the algorithm $\csort$ is a shortest caterpillar path because every tree modification on $p$ reduces the number of inversions of taxa in $T$ and $R$.
 \todo{Lena: If you decide to change the algorithm, mention here that what we've implemented is different from what is described here.}
+\todo{Alex: I changed the algorithm. It shouldn't be too much work to change the implementation and the pseudo-code here. Do you want to keep the old version or shall I change everything to the new version?}
+\end{description}}
 Note that any algorithm with this property returns a shortest caterpillar path.
 
 \begin{algorithm}[H]
