@@ -429,7 +429,7 @@ It is longer than a shortest $\rnni$ path as the one at the bottom that consists
 \label{fig:NNI_vs_RNNI}
 \end{figure}
 
-The above observation suggests that there is a caterpillar path that is a shortest path between any two caterpillar trees in $\rnni$.
+The above observation suggests that there is a caterpillar path of length $d(T,R)$ between any two caterpillar trees $T,R$ in $\rnni$.
 Indeed, we are going to prove within this section that the set of caterpillar trees is convex in $\rnni$ (Theorem~\ref{thm:caterpillar_convex}).
 Note that this is not true for the $\nni$ space, which is clear from the example in Figure~\ref{fig:NNI_vs_RNNI}.
 
@@ -475,46 +475,25 @@ The set of caterpillar trees is convex.
 
 \begin{proof}
 We prove this theorem by backwards induction on the length of a shortest caterpillar path $d_c(T,R) = l$ ($l$ is the induction parameter) between trees $T$ and $R$.
-It follows from the proof of Lemma~\ref{lemma:caterpillar_dist=diameter} that the maximum possible value for $l$ is $\frac{(n-1)(n-2)}{2}$, which forms the induction basis.
+We saw in the proof of Lemma~\ref{lemma:caterpillar_dist=diameter} that the maximum possible value for $l$ is $\frac{(n-1)(n-2)}{2}$, which forms the induction basis.
 \todo{Lena: Make sure we ALWAYS use this terminology}
-Lemma~\ref{lemma:caterpillar_dist=diameter} also implies in this case that $d(T, R) = d_c(T, R)$, hence a caterpillar path between $T$ and $R$ of length $d(T, R)$.
+Lemma~\ref{lemma:caterpillar_dist=diameter} also implies in this case that $d(T, R) = d_c(T, R)$, hence there is a caterpillar path between $T$ and $R$ of length $d(T, R)$.
 
-Let $T$ and $R$ be caterpillar trees such that $d_c(T, R) = l$.
-We consider the shortest caterpillar path between these trees computed by $\csort$.
-From now on we will consider the trees $T$ and $R$, as well as all other caterpillar trees within this proof, in their list representation $L_T$ and $L_R$ as introduced in Section~\ref{section:alg_csort}.
+Let $T$ and $R$ now be caterpillar trees such that $d_c(T, R) = l < \frac{(n-1)(n-2)}{2}$.
+For proving $d(T,R) = l$ we consider the shortest caterpillar path between these trees computed by $\csort$.
 
-Since $l < \frac{(n-1)(n-2)}{2}$, there must be a loop in $\csort$ (Line~\ref{alg:csort:line:loop} of Algorithm~\ref{alg:csort}) where not every pair of taxa that is compared exchanges.
-Let us consider the first pair of taxa $a,b$ that is compared but does not swap positions, where $a$ is below $b$.
-Since the first time that this happens, $a$ is either one of the first two elements in the sequence, or it previously swapped with an element $c$ that has been between $a$ and $b$ before.
+Since $l < \frac{(n-1)(n-2)}{2}$, there must be a step in $\csort$ where the taxon that is moved does not require the maximum number of moves, meaning that it is not part of the cherry at the beginning of this step.
+Let $x$ be the first taxon that has this property and is considered in step number $k$.
+Then there must be a taxon $y$ that is lower neighbour of $x$ in the tree at the beginning of step $k$.
+Since we assume that step $k$ is the first one that does not require the maximum number of $\nni$ moves, $y$ is lower neighbour of $x$ in $T$ as well.
 
-We start with considering the latter case.
-The list representation of the tree at the point where $a$ and $b$ are compared but not swapped, looks as follows:
-\[[\ldots, c, a, b, \ldots, x_k, \ldots, x_1]\]
+Let $\hat T$ be a tree that equals $T$ but with $x$ and $y$ being exchanged.
+Applying $\csort$ on $\hat T$ and $R$ results in almost the same path as the one computed by $\csort$ from $T$ to $R$, there is just one additional move in the beginning of step $k$ for swapping $x$ and $y$.
+It follows directly that $d(T, \hat T) = 1$ and $d_c(\hat T,R) = d_c(T,R) + 1 = l + 1$.
 
-Note that here we assume that the elements $x_1, \ldots, x_k$ are in the same place as they are in the destination tree $R$.
-It could be that $k=1$, which means that there are no such elements.
-
-Since $a$ and $c$ swap, but $a$ and $b$ do not, we can follow that $b$ and $c$ appear in $R$ in the same order as they do in the current tree.
-Furthermore, $c$ and $b$ must have been neighbours in $T$, because we assume that the comparison of $a$ and $b$ is the first one where the compared elements are not swapped in the sequence.
-Let now $\hat T$ be a tree that equals $T$ with the only exception that $b$ and $c$ are exchanged.
-We can follow from our observations above that the distance between $T$ and $\hat T$ is $d(T, \hat T) = 1$ and that $\csort$ needs one move more for a path from $\hat T$ to $R$ than from $T$ to $R$.
-This results in $d_c(\hat T, R) = d(T,R) + 1$.
-
-The induction hypothesis for $\hat T$ and $R$ implies that $d(\hat T,R) = l+1$.
-If it now were $d(T,R) < l$, it would hold $d(\hat T,R) \leq d(T,R) + d(T,\hat T) < l + 1$ which contradicts the induction hypothesis.
-We can conclude that $d(T,R) = l$, which completes the proof for the case that $a$ is not one of the first two elements of $L_{T'}$.
-
-Let us now consider the other case: of the two taxa that are compared but do not swap positions, one is part of the cherry current tree.
-Let $a$ and $b$ be the cherry taxa and $c$ their neighbour such that neither $a$ nor $b$ exchanges with $c$.
-Then the list looks like this:
-\[[a, b, c, \ldots, x_k, \ldots, x_1]\]
-
-If there is no swap of either $a$ or $b$ with $c$, we can construct a tree $\hat T$ with $d_c(\hat T, R) = l+1$ and $d(T,\hat T) = 1$ in a similar way as in the previous case.
-In the list representing the start tree $T$, either $a$ or $b$ must be neighbour of $c$.
-This is due to the fact that we are currently considering the first comparison of elements where there is no swap.
-We can assume without loss of generality that $a$ is neighbour of $c$ in $T$.
-Then an exchange of $a$ and $c$ in $T$ yields a tree $\hat T$ with the desired properties.
-As in the previous case we can then apply the induction hypothesis on $\hat T$ and conclude that there is a shortest path between $T$ and $R$ that only consists of caterpillar trees.
+Therefore, we can apply the induction hypothesis for $\hat T$ and $R$ and get $d(\hat T,R) = l+1$.
+If it now were $d(T,R) < l$, it would be $d(\hat T,R) \leq d(T,R) + d(T,\hat T) < l + 1$ which contradicts the induction hypothesis.
+We can conclude that $d(T,R) = l$, which completes the proof.
 \end{proof}
 
 
