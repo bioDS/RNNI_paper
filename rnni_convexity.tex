@@ -195,22 +195,15 @@ Then $C_i$ is induced by the node of rank $i$ for $i = 1, \ldots, n-2$.
 $\findpath$ computes a path by iteratively extending a sequence $p$ of trees starting from $T$.
 The algorithm terminates when $p$ is an $\rnni$ path from $T$ to $R$.
 
-\todo{Alex: go through these steps and proof of L1}
-Step $0$.
-$p = [T_0]$.
-Consider the node in $T_0$ that induces the smallest cluster containing all elements of $C_1$.
-This node is denoted by $\mrca_{T_0}(C_1)$ (short for \emph{most recent common ancestor}).
-By performing an $\rnni$ move that decreases the rank of $\mrca_{T_0}(C_1)$, we receive a tree $T_1$ that is then appended to $p$.
-Now we repeatedly perform $\rnni$ moves that move the most recent common ancestor of $C_1$ down in order to extend $p$ to $p = [T_0, \ldots, T_l]$ for some $l$ such that $C_1$ is induced by the internal node of rank one in $T_l$.
+\todo{Alex: go through the following two paragraphs and proof of L1}
+In step $k$ of $\findpath$ we consider the cluster $C_k$ for $k = 1, \ldots, n-2$.
+$p$ is extended in step $k$ by considering the last tree $T'$ on $p$ and finding the node in $T'$ that induces the smallest cluster containing all elements of $C_k$.
+This node is denoted by $\mrca_{T'}(C_k)$ (short for \emph{most recent common ancestor}).
+By performing an $\rnni$ move that decreases the rank of $\mrca_{T'}(C_k)$, we receive a tree that is then appended to $p$.
+Now we extend $p$ by repeatedly performing $\rnni$ moves on the last tree of $p$ that move the most recent common ancestor of $C_k$ down.
+In the end of step $k$, $C_k$ is induced by the internal node of rank $k$ in the last tree of $p$.
 
-Step $k$.
-$p = [T_0, \ldots, T_l]$ where $l$ is the total number of trees that have been added to $p$ in the previous $k-1$ steps.
-Therefore the internal nodes in $T_l$ with ranks $1, \ldots, k-1$ induce clusters $C_1, \ldots, C_{k-1}$, respectively.
-Now the cluster of interest is $C_k$.
-As in the first step $p$ is extended by performing a series of $\rnni$ moves that decrease the rank of $\mrca_{T_l}(C_k)$ stepwise.
-Afterwards it is $p = [T_0, \ldots, T_{l'}]$ where the $k$ lowest internal nodes of $T_{l'}$ induce clusters $C_1, \ldots, C_{k}$.
-
-By following this procedure, the end tree of $p$ after step $n-2$ will be $R$, as it contains all clusters of $R$.
+By following this procedure, the last of $p$ after step $n-2$ will be $R$, as it contains all clusters of $R$.
 It is important but easy to see that the output path of $\findpath$ is unique for a given pair of trees, which means that it is a deterministic algorithm.
 This is due to the fact that there exists exactly one $\rnni$ move that decreases the rank of the most recent common ancestor of a subset $C_k$ of the taxon set of a tree as long as $C_k$ is not induced by an internal node of that tree.
 
