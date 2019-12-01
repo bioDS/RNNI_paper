@@ -357,7 +357,7 @@ Therefore, this algorithm is non-deterministic, which is an important observatio
 \label{section:geometry}
 
 In this section we analyse shortest paths in $\rnni$ by using the algorithms introduced in the previous section.
-They enable us to prove that there is always a shortest path between two caterpillar trees that only consists of caterpillar trees (Theorem~\ref{thm:caterpillar_convex}) in Section~\ref{section:caterpillar_convex}.
+They enable us to prove that between caterpillar trees $T$ and $R$ there is always a caterpillar path of length $d(T,R)$ (Theorem~\ref{thm:caterpillar_convex}) in Section~\ref{section:caterpillar_convex}.
 In other words, the set of caterpillar trees is \emph{convex} in $\rnni$.
 In Section~\ref{section:diameter} we will investigate diameter and radius of the $\rnni$ graph.
 Interestingly, the \emph{diameter} of $\rnni$, that is the maximum distance $\Delta(\rnni) = \max \{d(T, R) \mid T, R \in \rnni\}$ between any two trees in the graph, equals its \emph{radius} $rad(\rnni) = \min\limits_T \max\limits_R d(T,R)$.
@@ -476,7 +476,6 @@ The set of caterpillar trees is convex.
 \begin{proof}
 We prove this theorem by backwards induction on the length of a shortest caterpillar path $d_c(T,R) = l$ ($l$ is the induction parameter) between trees $T$ and $R$.
 We saw in the proof of Lemma~\ref{lemma:caterpillar_dist=diameter} that the maximum possible value for $l$ is $\frac{(n-1)(n-2)}{2}$, which forms the induction basis.
-\todo{Lena: Make sure we ALWAYS use this terminology}
 Lemma~\ref{lemma:caterpillar_dist=diameter} also implies in this case that $d(T, R) = d_c(T, R)$, hence there is a caterpillar path between $T$ and $R$ of length $d(T, R)$.
 
 Let $T$ and $R$ now be caterpillar trees such that $d_c(T, R) = l < \frac{(n-1)(n-2)}{2}$.
@@ -511,10 +510,10 @@ There are two caterpillar trees in $\rnni$ with distance $\frac{(n-1)(n-2)}{2}$.
 
 \begin{proof}
 Let $T = [1,2,3,\ldots,n]$ and $R = [n-1,n,n-2,n-3, \ldots, 1]$ be two caterpillar trees.
-According to Theorem~\ref{thm:caterpillar_convex}, there is a shortest path between $T$ and $R$ that is a caterpillar path.
+According to Theorem~\ref{thm:caterpillar_convex}, there is a caterpillar path of length $d(T,R)$ between $T$ and $R$.
 We can compute a shortest caterpillar path by using $\csort$ as explained in Section~\ref{section:caterpillar_convex}.
 When running this algorithm to compute a path from $T$ to $R$, each taxon $i$ ($i = n, \ldots, 3$) swaps $i-2$ times with its upper neighbour.
-Therefore, the length of a shortest caterpillar path is $\sum\limits_{i=3}^{n}(i-2)  = \frac{(n-1)(n-2)}{2}$.
+Therefore, the length of a shortest caterpillar path, and therefore the distance between $T$ and $R$, is $\sum\limits_{i=3}^{n}(i-2)  = \frac{(n-1)(n-2)}{2}$.
 \end{proof}
 
 \begin{corollary}
