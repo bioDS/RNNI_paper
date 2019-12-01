@@ -258,7 +258,7 @@ Now it is easy to see that just one of the $\nni$ moves on $(v,w)$ (illustrated 
 \end{figure}
 \end{proof}
 
-Note that the uniqueness of the $\rnni$ move in Line~\ref{alg:findpath:line:move_set_down} of Algorithm~\ref{alg:find_path} also implies that the algorithm is deterministic.
+Note that the uniqueness of the $\rnni$ move in Line~\ref{alg:findpath:line:move_set_down} of the algorithm $\findpath$ also implies that the algorithm is deterministic.
 The running time of the algorithm is quadratic in the number of taxa.
 
 Because the algorithm returns a path between pairs of trees in $\rnni$, the length of the path approximates the $\rnni$ distance from above.
@@ -291,24 +291,42 @@ Note that any algorithm with this property returns a shortest caterpillar path.
 \caption{$\csort$($T,R$)}
 \label{alg:csort}
 \begin{algorithmic}[1]
-\STATE $T':= T$, $p := [T']$
-\STATE $L_{T'}:=$ list representation of $T'$, $L_R:=$ list representation of $R$
-\FOR {$i=1,\ldots,n-2$} \label{alg:csort:line:loop}
-\STATE $j = 0$ \COMMENT{Special case: cherry}
-\IF {$L_{T'}[0]$ is last element of $L_{T'}[0],L_{T'}[1],L_{T'}[2]$ in $L_R$}
-\STATE Update $T'$: swap $L_{T'}[0]$ and $L_{T'}[2]$
-\ELSIF {$L_{T'}[1]$ is last element of $L_{T'}[0],L_{T'}[1],L_{T'}[2]$ in $L_R$}
-\STATE Update $\hat T$: swap $L_{T'}[1]$ and $L_{T'}[2]$
-\ENDIF
-\STATE $j = 2$
-\WHILE {order of $L_{T'}[j]$ and $L_{T'}[j+1]$ different in $R$}
-\STATE Update $T'$: Swap $L_{T'}[j]$ and $L_{T'}[j+1]$
-\STATE $p = p+T', j = j + 1$
-\ENDWHILE
+\STATE $[x_1, x_2, \ldots, x_n] := R$, $T' := T$, $p = [T']$
+\FOR {$i=n, \ldots, 3$}
+    \FOR {$j=1, \ldots, i$}
+        \IF {$T'[j] = x_i$}
+            \STATE Update $T'$: swap $T'[j]$ and $T'[j+1]$
+            \STATE $p = p + T'$
+        \ENDIF
+    \ENDFOR
 \ENDFOR
 \RETURN $p$
 \end{algorithmic}
 \end{algorithm}
+
+% % Old version of algorithm csort that is closer to bubble sort
+% \begin{algorithm}[H]
+% \caption{$\csort$($T,R$)}
+% \label{alg:csort}
+% \begin{algorithmic}[1]
+% \STATE $T':= T$, $p := [T']$
+% \STATE $L_{T'}:=$ list representation of $T'$, $L_R:=$ list representation of $R$
+% \FOR {$i=1,\ldots,n-2$} \label{alg:csort:line:loop}
+% \STATE $j = 0$ \COMMENT{Special case: cherry}
+% \IF {$L_{T'}[0]$ is last element of $L_{T'}[0],L_{T'}[1],L_{T'}[2]$ in $L_R$}
+% \STATE Update $T'$: swap $L_{T'}[0]$ and $L_{T'}[2]$
+% \ELSIF {$L_{T'}[1]$ is last element of $L_{T'}[0],L_{T'}[1],L_{T'}[2]$ in $L_R$}
+% \STATE Update $\hat T$: swap $L_{T'}[1]$ and $L_{T'}[2]$
+% \ENDIF
+% \STATE $j = 2$
+% \WHILE {order of $L_{T'}[j]$ and $L_{T'}[j+1]$ different in $R$}
+% \STATE Update $T'$: Swap $L_{T'}[j]$ and $L_{T'}[j+1]$
+% \STATE $p = p+T', j = j + 1$
+% \ENDWHILE
+% \ENDFOR
+% \RETURN $p$
+% \end{algorithmic}
+% \end{algorithm}
 
 The running time of $\csort$ is the same as for Bubble Sort, that is quadratic in $n$.
 
