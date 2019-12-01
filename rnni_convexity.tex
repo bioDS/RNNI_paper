@@ -283,9 +283,7 @@ Notice that there might be more than just one such move per step, which means th
 After $n-2$ steps we reach $R$.
 
 The path $p$ returned by the algorithm $\csort$ is a shortest caterpillar path because every tree modification on $p$ reduces the number of inversions of taxa in $T$ and $R$.
-\todo{Lena: If you decide to change the algorithm, mention here that what we've implemented is different from what is described here.}
-\todo{Alex: I changed the algorithm. It shouldn't be too much work to change the implementation and the pseudo-code here. Do you want to keep the old version or shall I change everything to the new version?}
-Note that any algorithm with this property returns a shortest caterpillar path.
+Our implementation of this algorithm can be found on GitHub \autocite{Collienne2019}.
 
 \begin{algorithm}[H]
 \caption{$\csort$($T,R$)}
