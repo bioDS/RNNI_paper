@@ -144,7 +144,7 @@ We use the notation $d(T, R)$ throughout the paper to denote the graph distance 
 \centering
 \includegraphics[width=0.8\textwidth]{RNNI}
 \vspace{12pt}
-\caption{Two types of operation that define edges of the $\rnni$ graph,
+\caption{Two types of operation that define edges of the $\rnni$ graph.
 The rank move swaps the rank of the two highlighted nodes and the $\nni$ moves are performed on the blue edges.}
 \label{fig:RNNI}
 \end{figure}
@@ -722,16 +722,36 @@ We computed these graphs according to the algorithm of \autocite{Gavryushkin2018
 
 \section{Discussion}
 
-Within this paper we established some geometric properties of the $\rnni$ graph.
-We furthermore pointed out some differences between this graph on ranked trees and the well studied $\nni$ graph on unranked trees.
-This is of particular interest for analysing the complexity of computing distances in $\rnni$ as this problem is known to be $\np$-complete in $\nni$.
-Our finding that the set of caterpillar trees is convex in $\rnni$ (Theorem~\ref{thm:caterpillar_convex}) suggests that there is a difference in complexity between these two tree spaces.
-This leaves hope that computing distances in $\rnni$ is, contrary to this problem in $\nni$, not $\np$-complete.
-The question of how hard this problem actually is still remains open and will be subject of further research.
+The aim of this paper was to gain better understanding of the $\rnni$ space of ranked phylogenetic trees.
+Besides proving some geometrical properties of $\rnni$, we also introduce some algorithms in this paper.
+Our work highlights the importance of these algorithms as they are important for proving geometric properties such as diameter and radius of the $\rnni$ graph.
+The most important algorithm we introduced might be $\findpath$, which computes exact distances for all pairs of trees on up to six taxa.
+This algorithm might be a useful tool for future investigations of the $\rnni$ space.
 
-Our work in this paper highlights the importance of algorithms for computing paths in $\rnni$ in order to prove geometric properties such as diameter and radius.
-One of the algorithms that has been introduced, $\findpath$, computed exact distances for all pairs of trees on up to six taxa.
-For future investigations of the $\rnni$ space this algorithm might be a useful tool.
+We used the algorithms introduced in Section~\ref{section:algorithms} to prove some geometric properties of the $\rnni$ graph such as diameter and radius.
+Moreover, we discovered that the set of caterpillar trees is convex in $\rnni$ (Theorem~\ref{thm:caterpillar_convex}).
+With this result and the algorithm $\csort$ for computing shortest caterpillar paths (Section~\ref{section:alg_csort}) we can compute $\rnni$ distances between caterpillar trees in polynomial time.
+
+This fact that computing $\rnni$ distances between caterpillar trees only requires polynomial running time already suggests that there is a difference in complexity of computing distances in $\rnni$ and $\nni$.
+In Section~\ref{section:cluster_theorem} we supported this claim further by discussing the proof of $\np$-completeness of computing distances in $\nni$ and showing that this proof does not work for $\rnni$.
+Specifically, we claimed the Cluster Theorem (Conjetcure~\ref{conjecture:cluster_theorem}), which does not hold in $\nni$, but does hold in the $\rnni$ for trees on up to six taxa \autocite{Collienne2019}.
+Though the Cluster Theorem remains a conjecture, the results of this paper suggest that it is true.
+
+
+\subsection{Open Problems}
+
+In Section~\ref{section:cluster_theorem} we claim that the Cluster Theorem holds for $\rnni$.
+We could show that the previous version of it, the Split Theorem as it was conjectured in \autocite{Gavryushkin2018-ol}, is not true.
+If the Cluster Theorem actually is true still remains an open question.
+Proving it will be a big step towards finding the complexity of computing $\rnni$ distances.
+
+This question of whether computing $\rnni$ distances is $\np$-hard is another problem for future research.
+Though we did not aim to answer this question in this paper, we made some progress towards solving it by establishing some geometric properties of the $\rnni$ graph.
+Comparing these results with what is known for the plain $\nni$ graph makes us assume that the complexity of computing shortest path in $\rnni$ might differ from $\nni$.
+We also suspect that the fact that computing distances between caterpillar trees can be done in polynomial time might be the key for further investigation of the complexity of computing $\rnni$ distances.
+
+
+
 
 \printbibliography
 
