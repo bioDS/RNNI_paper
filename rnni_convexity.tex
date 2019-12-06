@@ -32,6 +32,7 @@
 \newcommand{\csort}{\textsc{Caterpillar Sort}}
 \newcommand{\findpath}{\textsc{FindPath}}
 \newcommand{\mdtree}{\textsc{MDTree}}
+\newcommand{\rad}{\textsc{R}}
 
 \newtheorem{definition}{Definition}
 \newtheorem{theorem}[definition]{Theorem}
@@ -343,18 +344,19 @@ Therefore, this algorithm is non-deterministic, which is an important observatio
 \section{Geometry of $\rnni$}
 \label{section:geometry}
 
-In this section we analyse shortest paths in $\rnni$ by using the algorithms introduced in the previous section.
-They enable us to prove that between caterpillar trees $T$ and $R$ there is always a caterpillar path of length $d(T,R)$ (Theorem~\ref{thm:caterpillar_convex}) in Section~\ref{section:caterpillar_convex}.
+The study of shortest paths in the $\rnni$ graph in this section is motivated by our aim to understand the geometry of $\rnni$ as a metric space.
+We will employ the algorithms developed in the previous section to aid our analysis of shortest paths.
+Those algorithms will, for example, enable us to prove that every pair of caterpillar trees $T$ and $R$ is connected by a caterpillar path of length $d(T,R)$ (Theorem~\ref{thm:caterpillar_convex} in Section~\ref{section:caterpillar_convex}).
 In other words, the set of caterpillar trees is \emph{convex} in $\rnni$.
-In Section~\ref{section:diameter} we will investigate diameter and radius of the $\rnni$ graph.
-Interestingly, the \emph{diameter} of $\rnni$, that is the maximum distance $\Delta(\rnni) = \max \{d(T, R) \mid T, R \in \rnni\}$ between any two trees in the graph, equals its \emph{radius} $rad(\rnni) = \min\limits_T \max\limits_R d(T,R)$.
-After proving this, we are going to consider the so-called Split Theorem, which was raised in \autocite{Gavryushkin2018-ol}.
-We will give a counterexample to disprove their version of the Split Theorem and claim an alternative version, the Cluster Theorem (Conjecture~\ref{conjecture:cluster_theorem}).
+In Section~\ref{section:diameter} we will investigate the diameter and radius of the $\rnni$ space.
+Interestingly, the \emph{diameter} of $\rnni$, that is the maximum distance $\Delta(\rnni) = \max \{d(T, R) \mid T, R \in \rnni\}$ between any two trees in the graph, equals its \emph{radius} $\rad(\rnni) = \min\limits_T \max\limits_R d(T,R)$.
+Next, we will consider the so-called Split Theorem \autocite{Gavryushkin2018-ol}, which states that every shared split of taxa is maintained along every shortest path.
+We will give a counterexample to the Split Theorem in $\rnni$ and consider the Weak Split Theorem that states that every shared split of taxa if maintained along a shortest path (see Conjecture~\ref{conjecture:cluster_theorem}).
 
-Before we get into details of these geometric properties of $\rnni$, we need to prove the following auxiliary results.
+We start with the following auxiliary results.
 
 \begin{lemma}
-It is $\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$ for $n \geq 3$.
+$\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$ for $n \geq 3$.
 \label{lemma:diameter_bound}
 \end{lemma}
 
@@ -541,7 +543,7 @@ And as permuting labels of trees does not change the distance between them, ther
 By this we obtain Corollary~\ref{corollary:radius}.
 
 \begin{corollary}
-The radius of the $\rnni$ graph is $rad(\rnni) = \Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
+The radius of the $\rnni$ graph is $\rad(\rnni) = \Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
 \label{corollary:radius}
 \end{corollary}
 
