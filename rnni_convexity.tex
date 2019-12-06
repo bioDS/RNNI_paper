@@ -160,6 +160,8 @@ $\findpath$ computes a $\rnni$ path between trees.
 $\csort$ computes a shortest $\rnni$ path between caterpillar trees (also known as ladder trees, see later in this section for accurate definitions).
 $\mdtree$ maximises the dissimilarity to find a remote tree given an arbitrary $\rnni$ tree.
 While these algorithms are interesting on their own (e.g.\ in simulation studies), they will also form an important ingredient to study the geometry of the $\rnni$ space later in this paper.
+For example, $\mdtree$ will be an important tool for finding the radius of the $\rnni$ graph, as the algorithms computes a tree with maximum distance if the input tree is a caterpillar tree.
+We will prove this fact in Section~\ref{section:diameter}.
 
 The algorithm $\findpath$ can be used to approximate the $\rnni$ distance.
 We will study the accuracy of this approximation by computing the exact $\rnni$ distance for small trees.
@@ -305,9 +307,6 @@ This fact will be established in Theorem~\ref{thm:caterpillar_convex}.
 
 \subsection{$\mdtree$}
 \label{section:alg_mdtree}
-
-The algorithm $\mdtree$ (Maximum Distance Tree) will be an important tool for finding the radius of the $\rnni$ graph.
-It computes a tree with maximum distance if the input tree is a caterpillar tree, which we will prove in Section~\ref{section:diameter}.
 
 $\mdtree$ (Algorithm~\ref{alg:max_dist_tree}) works as follows:
 At first, all taxa of the input tree $T$ are sorted in a list $L = [l_1, \ldots, l_n]$ such that the ranks of their parents are non-decreasing.
