@@ -297,30 +297,6 @@ Our Python implementation of this algorithm can be accessed at \autocite{Collien
 \end{algorithmic}
 \end{algorithm}
 
-% % Old version of algorithm csort that is closer to bubble sort
-% \begin{algorithm}[H]
-% \caption{$\csort$($T,R$)}
-% \label{alg:csort}
-% \begin{algorithmic}[1]
-% \STATE $T':= T$, $p := [T']$
-% \STATE $L_{T'}:=$ list representation of $T'$, $L_R:=$ list representation of $R$
-% \FOR {$i=1,\ldots,n-2$} \label{alg:csort:line:loop}
-% \STATE $j = 0$ \COMMENT{Special case: cherry}
-% \IF {$L_{T'}[0]$ is last element of $L_{T'}[0],L_{T'}[1],L_{T'}[2]$ in $L_R$}
-% \STATE Update $T'$: swap $L_{T'}[0]$ and $L_{T'}[2]$
-% \ELSIF {$L_{T'}[1]$ is last element of $L_{T'}[0],L_{T'}[1],L_{T'}[2]$ in $L_R$}
-% \STATE Update $\hat T$: swap $L_{T'}[1]$ and $L_{T'}[2]$
-% \ENDIF
-% \STATE $j = 2$
-% \WHILE {order of $L_{T'}[j]$ and $L_{T'}[j+1]$ different in $R$}
-% \STATE Update $T'$: Swap $L_{T'}[j]$ and $L_{T'}[j+1]$
-% \STATE $p = p+T', j = j + 1$
-% \ENDWHILE
-% \ENDFOR
-% \RETURN $p$
-% \end{algorithmic}
-% \end{algorithm}
-
 The running time of $\csort$ is the same as for Bubble Sort, that is quadratic in $n$.
 
 It is not obvious that the path between $T$ and $R$ returned by $\csort$ has the least possible length among all $\rnni$ paths (not only caterpillar paths), that is, the length of $d(T, R)$.
