@@ -80,7 +80,7 @@ Furthermore, our results suggest that the complexity of computing distances in t
 The nearest neighbour interchange ($\nni$) graph, defined on the set of phylogenetic trees with adjacency relation given by the interchange operation of two sister clades, has been known in mathematical biology literature for nearly 50 years \autocite{Robinson1971-ql,Moore1973-kk}.
 Considered with the metric given by the length of a shortest path (graph-distance), this graph becomes a metric space.
 Its geometry has been extensively studied \autocite{Dasgupta2000-xa, Li1996-zw, Gordon2013-fw, De_Jong2016-al}.
-An important property of the $\nni$ graph is that computing distance is NP-hard \autocite{Dasgupta2000-xa}.
+An important property of the $\nni$ graph is that computing distances is NP-hard \autocite{Dasgupta2000-xa}.
 As a result no algorithm exists to compute the distance in practical time.
 A consequence is that tree search and sampling algorithms pose a significant challenge even for moderately sized trees
 \autocite{Whidden2016-kl}.
@@ -146,9 +146,10 @@ The rank move swaps the rank of the two highlighted nodes and the $\nni$ moves a
 The rest of this paper is organised as follows.
 In Section~\ref{section:algorithms} we introduce three algorithms for exploring the $\rnni$ graph.
 We use these algorithms in Section~\ref{section:geometry} to establish several geometrical properties of this graph, such as its diameter and radius.
-Furthermore, we will prove in Section~\ref{section:caterpillar_convex} that distances can be computed in polynomial time in a subspace of the $\rnni$ space.
+Furthermore, we will establish in Section~\ref{section:caterpillar_convex} that a certain subspace of $\rnni$ is convex and design a polynomial-time algorithm for computing $\rnni$-distances in that subspace.
 This result suggests that the complexity of computing distances in $\rnni$ is different from that in the classical $\nni$ space.
 We will discuss this further in Section~\ref{section:cluster_theorem}, where we disprove a conjecture of \textcite{Gavryushkin2018-ol} and suggest its weaker version a plausible alternative.
+We will finish the paper with a discussion and open problems.
 
 
 \section{Algorithms}
