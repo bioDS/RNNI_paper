@@ -280,6 +280,7 @@ Notice that there might be more than just one such move per step, which means th
 After $n-2$ steps we reach $R$.
 
 The path $p$ returned by the algorithm $\csort$ is a shortest caterpillar path because every tree modification on $p$ reduces the number of inversions of taxa in $T$ and $R$.
+
 Our Python implementation of this algorithm can be accessed at \autocite{Collienne2019}.
 
 \begin{algorithm}[H]
@@ -308,30 +309,34 @@ This fact will be established in Theorem~\ref{thm:caterpillar_convex}.
 \subsection{$\mdtree$}
 \label{section:alg_mdtree}
 
-The idea behind this algorithm is to efficiently return a tree as for away from a given tree as possible.
-As we will see in Section~\ref{section:diameter}, $\mdtree$ achieves this exactly for caterpillar trees.
+The idea behind this algorithm is to efficiently return a tree as far away from a given tree as possible.
+As we will see in Section~\ref{section:diameter}, $\mdtree$ achieves this goal exactly for caterpillar trees.
 
-$\mdtree$ (Algorithm~\ref{alg:max_dist_tree}) works as follows:
-At first, all taxa of the input tree $T$ are sorted in a list $L = [l_1, \ldots, l_n]$ such that the ranks of their parents are non-decreasing.
-This list does uniquely identify trees since we do not specify how to order taxa that share a parent.
+$\mdtree$ (Algorithm~\ref{alg:max_dist_tree}) works as follows.
+Given an arbitrary tree $T$, order its taxa in a list $L = [l_1, \ldots, l_n]$ so that the ranks of their parents are non-decreasing with respect to this order.
+Note that this list is not uniquely determined by the tree.
 $\mdtree$ constructs an output tree $R$ as follows:
-Initially, $R$ only consists two taxa $l_1$ and $l_2$, the most recent common ancestor of which will eventually be of rank $n - 1$.
-The remaining taxa are added to $R$ sequentially, according to their order in $L$, by creating a new internal node at one of the existing branches in $R$ such that this new node has rank one less than the previously lowest internal node in $R$.
+Initially, $R$ only consists of two taxa $l_1$ and $l_2$, the most recent common ancestor of which will eventually be of rank $n - 1$.
+The remaining taxa are iteratively added to $R$ in the reversed order of $L$ starting from $l_n$.
+At every iteration, the taxon is attached to a new internal node created on one of the existing branches in $R$ so that this new attachment node has rank one.
+Note that $R$ is not uniquely determined due to the non-deterministic choice of the attachment edge.
 
 \begin{algorithm}[H]
 \caption{$\mdtree(T)$}
 \label{alg:max_dist_tree}
 \begin{algorithmic}[1]
-\STATE Construct list $L=[l_1, \ldots, l_n]$ of all taxa, ordered such that the ranks of their parents in $T$ do not decrease \label{alg:mdtree_lineL}
-\STATE Build tree $R$ with only two taxa $l_1, l_2$ that are children of the root, an internal node with rank $n-1$
-\FOR {$i = 1, \ldots, n$}
-\STATE Add an internal node as parent of $l_i$ on an edge in $R$ such that the new internal node has rank one less than the previously lowest internal node \label{alg:mdtree_lineAddTaxon}
+\STATE Construct list $L=[l_1, \ldots, l_n]$ of all taxa ordered with respect to the ranks of their parents in $T$
+\label{alg:mdtree_lineL}
+\STATE Build tree $R$ with two taxa $l_1, l_2$ that are children of the root
+\FOR {$i = n, \ldots, 3$}
+\STATE Extend $R$ by attaching $l_i$ to a newly created node of rank $1$ on an arbitrarily chosen edge
+\label{alg:mdtree_lineAddTaxon}
 \ENDFOR
 \RETURN $R$
 \end{algorithmic}
 \end{algorithm}
 
-Both the list computed in Line~\ref{alg:mdtree_lineL} and the attachment edge of the new taxon in the tree in Line~\ref{alg:mdtree_lineAddTaxon} are not uniquely determined within $\mdtree$.
+Note that the list computed in Line~\ref{alg:mdtree_lineL} of $\mdtree$, as well as the attachment edge of the new taxon in Line~\ref{alg:mdtree_lineAddTaxon} are not uniquely determined.
 Therefore, this algorithm is non-deterministic, which is an important observation that we will use for finding the radius of $\rnni$ in Section~\ref{section:diameter}.
 
 
@@ -346,7 +351,7 @@ Interestingly, the \emph{diameter} of $\rnni$, that is the maximum distance $\De
 After proving this, we are going to consider the so-called Split Theorem, which was raised in \autocite{Gavryushkin2018-ol}.
 We will give a counterexample to disprove their version of the Split Theorem and claim an alternative version, the Cluster Theorem (Conjecture~\ref{conjecture:cluster_theorem}).
 
-Before we get into the details of these geometric properties of $\rnni$, we need to prove some statements that will be used a few times within this geometry section.
+Before we get into details of these geometric properties of $\rnni$, we need to prove the following auxiliary results.
 
 \begin{lemma}
 It is $\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$ for $n \geq 3$.
