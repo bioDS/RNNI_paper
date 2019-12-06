@@ -308,6 +308,9 @@ This fact will be established in Theorem~\ref{thm:caterpillar_convex}.
 \subsection{$\mdtree$}
 \label{section:alg_mdtree}
 
+The idea behind this algorithm is to efficiently return a tree as for away from a given tree as possible.
+As we will see in Section~\ref{section:diameter}, $\mdtree$ achieves this exactly for caterpillar trees.
+
 $\mdtree$ (Algorithm~\ref{alg:max_dist_tree}) works as follows:
 At first, all taxa of the input tree $T$ are sorted in a list $L = [l_1, \ldots, l_n]$ such that the ranks of their parents are non-decreasing.
 This list does uniquely identify trees since we do not specify how to order taxa that share a parent.
