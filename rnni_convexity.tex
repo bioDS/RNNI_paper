@@ -351,7 +351,8 @@ In other words, the set of caterpillar trees is \emph{convex} in $\rnni$.
 In Section~\ref{section:diameter} we will investigate the diameter and radius of the $\rnni$ space.
 Interestingly, the \emph{diameter} of $\rnni$, that is the maximum distance $\Delta(\rnni) = \max \{d(T, R) \mid T, R \in \rnni\}$ between any two trees in the graph, equals its \emph{radius} $\rad(\rnni) = \min\limits_T \max\limits_R d(T,R)$.
 Next, we will consider the so-called Split Theorem \autocite{Gavryushkin2018-ol}, which states that every shared split of taxa is maintained along every shortest path.
-We will give a counterexample to the Split Theorem in $\rnni$ and consider the Weak Split Theorem that states that every shared split of taxa if maintained along a shortest path (see Conjecture~\ref{conjecture:cluster_theorem}).
+We will give a counterexample to the Split Theorem in $\rnni$ and consider a variant of the Weak Split Theorem that states that every shared split of taxa is maintained along a shortest path.
+We will call this statement the Clade Theorem, as it is slightly more natural to work with ranked trees in terms clades rather than splits (see Conjecture~\ref{conjecture:cluster_theorem}).
 
 We start with the following auxiliary results.
 
@@ -364,8 +365,8 @@ $\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$ for $n \geq 3$.
 Since the diameter is bounded from above by the maximum length of a path computed by $\findpath$, it is enough to find this maximum.
 Let us assume that $T$ and $R = [C_1, \ldots, C_{n-2}]$ are trees for which $\findpath$ computes a path of maximum length.
 It follows that in each step of $\findpath$ the most recent common ancestor of the cluster $C_k$ considered in that step is the root.
-Thus, there are $n-1-k$ $\rnni$ operations needed to move $C_k$ to its correct position.
-Hence, the maximum length of a path computed by $\findpath$ is bounded by $\sum\limits_{i = 1}^{n-2} n-1-i = \frac{(n-2)(n-1)}{2}$.
+Thus, there are $n-1-k$ $\rnni$ operations necessary to move $C_k$ to its correct position.
+Hence, the maximum length of a path computed by $\findpath$ is bounded by $\sum\limits_{i = 1}^{n-2} (n-1-i) = \frac{(n-2)(n-1)}{2}$.
 \end{proof}
 
 The following lemma relates distances between trees on $n$ and $n+1$ taxa and is an important tool for inductive arguments.
@@ -382,13 +383,12 @@ Then $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - \delta$, where $\delta = |\rank_T(
 \begin{proof}
 First observe that the rank of the internal node $\parent_T(n+1)$ can only be changed by performing a rank move that involves $\parent_T(n+1)$ or an $\nni$ move on an edge adjacent to $\parent_T(n+1)$.
 Second observe that any $\rnni$ move can change the rank of $\parent_T(n+1)$ by at most one.
-So we can follow that an $\rnni$ move on $T$ can decrease the rank of $\parent_T(n+1)$ by at most one.
+Hence an $\rnni$ move on $T$ can decrease the rank of $\parent_T(n+1)$ by at most one.
 
 Let $p$ be a shortest path from $T$ to $R$ and $p{\big|}_n$ the path resulting from deleting taxon $n+1$ from all trees on $p$.
-Then $p{\big|}_n$ is a path from $T{\big|}_n$ to $R{\big|}_n$ as the moves on $p$ that are left out to receive $p{\big|}_n$ are only ones involving the parent of taxon $n+1$, which do not affect the remaining $\rnni$ moves.
-
+Then $p{\big|}_n$ is a path from $T{\big|}_n$ to $R{\big|}_n$.
 Recall that $\delta$ is the difference in ranks between the parents of taxon $n+1$ in $T$ and $R$.
-With the knowledge that an $\rnni$ move on $T$ can change the rank of $\parent_T(n+1)$ by at most one, we can conclude that $|p{\big|}_n| \leq |p| - \delta$.
+Combining this with the observations above, we conclude that $|p{\big|}_n| \leq |p| - \delta$.
 Since $d(T{\big|}_n,R{\big|}_n) \leq |p{\big|}_n|$ and $|p| = d(T,R)$, the desired inequality follows.
 \end{proof}
 
@@ -397,24 +397,21 @@ Since $d(T{\big|}_n,R{\big|}_n) \leq |p{\big|}_n|$ and $|p| = d(T,R)$, the desir
 \label{section:caterpillar_convex}
 
 In this section we restrict our attention to the set of caterpillar trees.
-These trees are of particular interest because shortest paths between such trees in $\rnni$ differ from those in classical $\nni$ space, which we will show in the following.
-We will show later in this section that $\rnni$ distances between caterpillar trees can be computed in polynomial time, which underlines the importance of these trees once more and suggests that there is a difference in the complexity of computing distances in $\nni$ and $\rnni$.
-Throughout this section we represent these trees with lists as described in Section~\ref{section:alg_csort}.
+These trees are of particular interest because they are used to prove the computing the $\nni$ distance is an NP-hard problem.
+As we will see below, shortest paths between caterpillar trees in $\rnni$ differ from those in the classical $\nni$ space.
+We will show later in this section that $\rnni$ distances between caterpillar trees can be computed in polynomial time.
+Throughout this section we use the list representation of trees described in Section~\ref{section:alg_csort}.
 
-Let us compare shortest paths between caterpillar trees in $\nni$ with those in $\rnni$.
-In $\nni$ building a cherry and moving it may result a path that is shorter than a path where taxa move separately as it is illustrated out in Figure~\ref{fig:NNI_vs_RNNI}.
-In this example only one move is needed to build and resolve a cherry, respectively, while the number of moves for moving the cherry is the same as for moving a single taxon in $\nni$.
-In $\rnni$ space however, there are additional rank moves needed to change the rank of the internal node of the cherry before an $\nni$ move can resolve it.
-This is due to the fact that $\nni$ moves are only allowed on edges of length one in $\rnni$.
-As a consequence a path where taxa move separately and no new cherry is built is shortest in $\rnni$.
+Recall \autocite{Gavryushkin2018-ol} that to compute a shortest path between two caterpillar trees in $\nni$ sometimes requires first building a clade and then move the clade around the tree (see Figure~\ref{fig:NNI_vs_RNNI}).
+In $\rnni$ however, the necessity of additional rank moves invalidates this strategy.
+This is due to the fact that $\nni$ moves $\rnni$ are only allowed on edges of length one.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{NNI_vs_RNNI}
 \vspace{12pt}
-\caption{Paths between caterpillar trees $T$ and $R$: The solid paths are paths in $\rnni$, the dashed one is a path that is only possible in the plain $\nni$ graph.
-The upper path is a natural extension of the shortest $\nni$ path in $\rnni$.
-It is longer than a shortest $\rnni$ path as the one at the bottom that consists of caterpillar trees only.}
+\caption{Paths between caterpillar trees $T$ and $R$: Solid arrows indicate paths in $\rnni$, dashed arrow is a move only possible in $\nni$.
+Bottom path is a shortest $\rnni$ path.}
 \label{fig:NNI_vs_RNNI}
 \end{figure}
 
