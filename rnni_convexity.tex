@@ -415,12 +415,12 @@ Bottom path is a shortest $\rnni$ path.}
 \label{fig:NNI_vs_RNNI}
 \end{figure}
 
-The above observation suggests that there is a caterpillar path of length $d(T,R)$ between any two caterpillar trees $T,R$ in $\rnni$.
-Indeed, we are going to prove within this section that the set of caterpillar trees is convex in $\rnni$ (Theorem~\ref{thm:caterpillar_convex}).
-Note that this is not true for the $\nni$ space, which is clear from the example in Figure~\ref{fig:NNI_vs_RNNI}.
+These observations motivate the following general result.
+Every pair of trees $T, R$ in $\rnni$ are connected by a caterpillar path of length $d(T,R)$, that is, the set of caterpillar trees is convex in $\rnni$ (Theorem~\ref{thm:caterpillar_convex}).
+Note that this is not true in the $\nni$ space (Figure~\ref{fig:NNI_vs_RNNI}).
 
-The following lemma regards caterpillar trees with distance $\frac{(n-1)(n-2)}{2}$ and will be needed for proving the convexity of the set of caterpillar trees in $\rnni$.
-Notice that $\frac{(n-1)(n-2)}{2}$ is the upper bound for the diameter of $\rnni$ by Lemma~\ref{lemma:diameter_bound}.
+We need the following lemma.
+Recall that $\frac{(n-1)(n-2)}{2}$ is the upper bound of the diameter of $\rnni$ by Lemma~\ref{lemma:diameter_bound}.
 
 \begin{lemma}
 Let $T$ and $R$ be two caterpillar trees.
@@ -429,19 +429,13 @@ Then $d(T,R) = \frac{(n-1)(n-2)}{2}$ if and only if $d_c(T,R) = \frac{(n-1)(n-2)
 \end{lemma}
 
 \begin{proof}
-Let us explain that if $d(T,R) = \frac{(n-1)(n-2)}{2}$, we can follow $d_c(T,R) = \frac{(n-1)(n-2)}{2}$ by using $\csort$:
-In each step $i=0, \ldots, n-3$ of $\csort$ at most $n-2-i$ pairs of taxa swap positions.
-This is due to the fact that in worst case the taxon that is considered in step $k$ is moved from the cherry of the tree up to position $n-k$.
+First note that $d(T,R) = \frac{(n-1)(n-2)}{2}$ implies $d_c(T,R) = \frac{(n-1)(n-2)}{2}$.Indeed, in each step $i=0, \ldots, n-3$ of $\csort$ at most $n-2-i$ pairs of taxa swap positions, as in the worst case the taxon considered in step $k$ is moved from the cherry of the tree up to the position $n-k$.
 It follows that the maximum length of a path computed by $\csort$ is $\sum\limits_{i=0}^{n-3} n-2-i = \frac{(n-1)(n-2)}{2}$.
-Since there cannot be a caterpillar path shorter than $d(T,R) = \frac{(n-1)(n-2)}{2}$, it follows $d_c(T,R) = \frac{(n-1)(n-2)}{2}$.
 
 For proving the other direction of the statement, assume that $d_c(T,R) = \frac{(n-1)(n-2)}{2}$.
-We prove $d(T,R) = \frac{(n-1)(n-2)}{2}$ by induction on the number of taxa $n$ of $T$ and $R$:
+We prove that $d(T,R) = \frac{(n-1)(n-2)}{2}$ by induction on the number of taxa $n$. The induction basis for $n=3$ taxa is trivial as the $\rnni$ graph is a triangle on three caterpillar trees.
 
-For the induction basis we consider the $\rnni$ graph $n=3$ taxa which consists of three trees only.
-Since every of these trees is a caterpillar tree that is connected with both other trees by an edge, it is $d(T,R) = d_c(T,R) = 1$ for all pairs of trees $T,R$ on $n=3$ taxa.
-
-For the induction step we assume without loss of generality that $T$ is the caterpillar tree $[1,2,3,\ldots,n+1]$ and $R$ is a caterpillar tree with distance $\frac{n(n-1)}{2}$ to $T$.
+For the induction step we assume without loss of generality that $T$ is the caterpillar tree $[1,2,3,\ldots,n+1]$ and $R$ is a caterpillar tree at distance $\frac{n(n-1)}{2}$ to $T$.
 It follows that when applying $\csort$ onto $T,R$ the number of taxon swaps is maximum in each step, which implies that taxon $n+1$ is part of the cherry of $R$.
 Let us now consider the trees $T{\big|}_n$ to $R{\big|}_n$ that result from $T$ and $R$ by deleting taxon $n+1$.
 $\csort$ computes a path from $T{\big|}_n$ to $R{\big|}_n$ that contains the same $\nni$ moves as $p$, except for the $n-1$ ones on $p$ that involve taxon $n+1$.
