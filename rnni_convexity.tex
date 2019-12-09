@@ -433,9 +433,11 @@ First note that $d(T,R) = \frac{(n-1)(n-2)}{2}$ implies $d_c(T,R) = \frac{(n-1)(
 It follows that the maximum length of a path computed by $\csort$ is $\sum\limits_{i=0}^{n-3} n-2-i = \frac{(n-1)(n-2)}{2}$.
 
 For proving the other direction of the statement, assume that $d_c(T,R) = \frac{(n-1)(n-2)}{2}$.
-We prove that $d(T,R) = \frac{(n-1)(n-2)}{2}$ by induction on the number of taxa $n$. The induction basis for $n=3$ taxa is trivial as the $\rnni$ graph is a triangle on three caterpillar trees.
+We prove that $d(T,R) = \frac{(n-1)(n-2)}{2}$ by induction on the number of taxa $n$.
+The induction basis for $n=3$ taxa is trivial as the $\rnni$ graph is a triangle on three caterpillar trees in that case.
 
 For the induction step we assume without loss of generality that $T$ is the caterpillar tree $[1,2,3,\ldots,n+1]$ and $R$ is a caterpillar tree at distance $\frac{n(n-1)}{2}$ to $T$.
+\todo{We cannot assume that and the rest of the proof doesn't go through.}
 It follows that when applying $\csort$ onto $T,R$ the number of taxon swaps is maximum in each step, which implies that taxon $n+1$ is part of the cherry of $R$.
 Let us now consider the trees $T{\big|}_n$ to $R{\big|}_n$ that result from $T$ and $R$ by deleting taxon $n+1$.
 $\csort$ computes a path from $T{\big|}_n$ to $R{\big|}_n$ that contains the same $\nni$ moves as $p$, except for the $n-1$ ones on $p$ that involve taxon $n+1$.
@@ -449,7 +451,7 @@ Since this is a contradiction to $d(T{\big|}_n, R{\big|}_n) = \frac{(n-1)(n-2)}{
 \end{proof}
 
 \begin{theorem}
-The set of caterpillar trees is convex.
+The set of caterpillar trees is convex in $\rnni$.
 \label{thm:caterpillar_convex}
 \end{theorem}
 
