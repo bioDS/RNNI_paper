@@ -59,6 +59,8 @@
 \address{\textsuperscript{3}Department of Mathematics and Statistics, University of Otago, New Zealand}
 \author{Alex Gavryushkin\textsuperscript{1, \Letter}}
 \email{\textsuperscript{\Letter}alex@biods.org}
+\author{Kieran Elmes\textsuperscript{1}}
+\email{kelmes@cs.otago.ac.nz}
 
 
 \begin{document}
@@ -167,13 +169,13 @@ We will prove this fact in Section~\ref{section:diameter}.
 The algorithm $\findpath$ can be used to approximate the $\rnni$ distance.
 We will study the accuracy of this approximation by computing the exact $\rnni$ distance for small trees.
 Specifically, we will use the algorithm for computing the complete $\rnni$ graph that is given in \autocite[their Section 3.3]{Gavryushkin2018-ol}.
-After pre-computing the graph, we use the standard algorithms~\autocite{Floyd1962-ew,Dijkstra1959-ph} for computing shortest paths.
+After pre-computing the graph, we use Seidel's algorithm~\autocite{seidel_all-pairs-shortest-path_1995} for computing distances.
 However, the large number of vertices in $\rnni$ is an obstacle when it comes to computing distances for larger trees.
-Since there are $\frac{n!(n-1)!}{2^{n-1}}$ vertices in the $\rnni$ graph \autocite{Gavryushkin2018-ol}, we compute the $\rnni$ graph on up to six taxa for our analyses.
+Since there are $\frac{n!(n-1)!}{2^{n-1}}$ vertices in the $\rnni$ graph \autocite{Gavryushkin2018-ol}, we compute the $\rnni$ graph on up to seven taxa for our analyses.
 This computational result will also be used later in the paper to support Conjecture~\ref{conjecture:cluster_theorem}, a modification of Conjecture~9 in \autocite{Gavryushkin2018-ol}, which we prove to be false in this paper.
 
 %TODO: Make a zenodo dio for the repository before final publication
-We have implemented all these algorithms in Python and the source code is available at \autocite{Collienne2019}.
+We have implemented these algorithms in a combination of Python and C, and the source code is available at \autocite{Collienne2019}.
 
 
 \subsection{$\findpath$}
@@ -622,7 +624,7 @@ if two trees $T$ and $R$ contain the same cluster $C$, then $C$ is present as cl
 \label{conjecture:cluster_theorem}
 \end{conjecture}
 
-For providing further evidence that the Cluster Theorem holds in $\rnni$, we could show computationally that it holds for the $\rnni$ graph on small trees with up to six taxa.
+For providing further evidence that the Cluster Theorem holds in $\rnni$, we could show computationally that it holds for the $\rnni$ graph on small trees with up to seven taxa.
 We did this by computing subgraph of $\rnni$ only containing trees that share a cluster and compare distances within this subgraph with distances in the whole $\rnni$ graph \autocite{Collienne2019}.
 We computed these graphs according to the algorithm of \autocite{Gavryushkin2018-ol} as discussed in Section~\ref{section:algorithms}.
 
@@ -713,7 +715,7 @@ With this result and the algorithm $\csort$ for computing shortest caterpillar p
 This already suggests that there is a difference in complexity of computing distances in $\rnni$ and $\nni$, since in $\nni$ there is no subspace known for which computing distances only takes polynomial time.
 In Section~\ref{section:cluster_theorem} we supported the claim that computing $\rnni$ distances is not as hard as computing $\nni$ distances further by discussing the proof of $\np$-completeness of computing distances in $\nni$ and showing that this proof does not work for $\rnni$.
 Specifically, we conjectured the Cluster Theorem (Conjetcure~\ref{conjecture:cluster_theorem}), which does not hold in $\nni$.
-However, we strongly suspect that it holds in $\rnni$ and could prove that it does hold for trees on up to six taxa \autocite{Collienne2019}.
+However, we strongly suspect that it holds in $\rnni$ and could prove that it does hold for trees on up to seven taxa \autocite{Collienne2019}.
 
 
 \subsection{Open Problems}
