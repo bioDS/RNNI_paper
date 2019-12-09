@@ -460,9 +460,8 @@ The set of caterpillar trees is convex in $\rnni$.
 \end{theorem}
 
 \begin{proof}
-We prove this theorem by backwards induction on the length of a shortest caterpillar path $d_c(T,R) = l$ ($l$ is the induction parameter) between trees $T$ and $R$.
-We saw in the proof of Lemma~\ref{lemma:caterpillar_dist=diameter} that the maximum possible value for $l$ is $\frac{(n-1)(n-2)}{2}$, which forms the induction basis.
-Lemma~\ref{lemma:caterpillar_dist=diameter} also implies in this case that $d(T, R) = d_c(T, R)$, hence there is a caterpillar path between $T$ and $R$ of length $d(T, R)$.
+We prove this theorem by backward induction on the length of a shortest caterpillar path $d_c(T,R) = l$ ($l$ is the induction parameter) between trees $T$ and $R$.
+The backward induction basis follows by Lemma~\ref{lemma:caterpillar_dist=diameter}, as the maximum possible value for $l$ is $\frac{(n-1)(n-2)}{2}$.
 
 Let $T$ and $R$ now be caterpillar trees such that $d_c(T, R) = l < \frac{(n-1)(n-2)}{2}$.
 For proving $d(T,R) = l$ we consider the shortest caterpillar path between these trees computed by $\csort$.
