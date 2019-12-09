@@ -441,22 +441,17 @@ For proving the other direction of the statement, assume that $d_c(T,R) = \frac{
 We prove that $d(T,R) = \frac{(n-1)(n-2)}{2}$ by induction on the number of taxa $n$.
 The induction basis for $n=3$ taxa is trivial as the $\rnni$ graph is a triangle on three caterpillar trees in that case.
 
-For the induction step we assume without loss of generality that $T$ is the caterpillar tree $[1,2,3,\ldots,n+1]$ and $R$ is a caterpillar tree
-%TODO: this is an incorrect assumption -- we need to prove this!
-at distance $\frac{n(n-1)}{2}$ from $T$.
-Consider the path $p = \csort(T, R)$ of length
-Note that in this case taxon $n+1$ has to be in the cherry of $R$.
-Otherwise, $\csort$ would find a path between $T$ and $R$ shorter than $\frac{n(n-1)}{2}$, which can be shown as in (\ref{csort_max}) above.
+For the induction step we assume without loss of generality that $T$ is the caterpillar tree $[1, \ldots, n+1]$ and $R$ is a caterpillar tree such that $d_c(T, R) = \frac{n(n-1)}{2}$.
+Consider the path $p = \csort(T, R)$ of this length.
+Note that in this case taxon $n+1$ has to be in the cherry of $R$, as otherwise $\csort$ would find a path between $T$ and $R$ of length strictly less than $\frac{n(n-1)}{2}$, which can be shown by counting the number of moves as in (\ref{csort_max}) above.
 
-Let us now consider the trees $T{\big|}_n$ to $R{\big|}_n$ that result from $T$ and $R$ by deleting taxon $n+1$.
-$\csort$ computes a path from $T{\big|}_n$ to $R{\big|}_n$ that contains the same $\nni$ moves as $p$, except for the $n-1$ ones on $p$ that involve taxon $n+1$.
-Hence, $d_c(T{\big|}_n, R{\big|}_n) = \frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2}$.
-So we can apply the induction hypothesis on $T{\big|}_n$ and $R{\big|}_n$ and know that $d(T{\big|}_n,R{\big|}_n) = \frac{(n-1)(n-2)}{2}$.
-With Lemma~\ref{lemma:distance_delete_taxon} we also know that it is $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - |\rank_T(\parent_T(n+1)) - \rank_R(\parent_R(n+1))| = d(T,R) - (n-1)$, where the last equality follows from our observation above.
-
-For proving $d(T,R) = \frac{n(n-1)}{2}$ we suppose contrary to our claim that there is a path from $T$ to $R$ of length less than $\frac{n(n-1)}{2}$.
-By the above, it follows that $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - (n-1) < \frac{n(n-1)}{2} - (n-1) < \frac{(n-1)(n-2)}{2}$.
-Since this is a contradiction to $d(T{\big|}_n, R{\big|}_n) = \frac{(n-1)(n-2)}{2}$, it is proven that $d(T,R) = \frac{n(n-1)}{2} $.
+Let us now consider the path $p\big|_n$ from $T\big|_n$ to $R\big|_n$, which is obtained by restricting every tree on $p$ to taxa $1, \ldots, n$ and removing identical trees.
+Observe that this path is shorter than $p$ by the number of moves that involve taxon $n+1$.
+Since this taxon is adjacent to the root in $T$ and part of the cherry in $R$, $\csort$ requires $n-1$ such moves.
+Hence, $d_c(T{\big|}_n, R{\big|}_n) = \frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2} = d(T{\big|}_n,R{\big|}_n)$, by induction.
+Lemma~\ref{lemma:distance_delete_taxon} implies that $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - |\rank_T(\parent_T(n+1)) - \rank_R(\parent_R(n+1))| = d(T,R) - (n-1)$.
+So $\frac{(n-1)(n-2)}{2} \leq d(T,R) - (n-1)$, which implies that $d(T, R) \geq \frac{n(n-1)}{2}$.
+Thus $d(T, R) = \frac{n(n-1)}{2}$.
 \end{proof}
 
 \begin{theorem}
