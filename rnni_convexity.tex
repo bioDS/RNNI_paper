@@ -281,6 +281,7 @@ A path $p$ from $T$ to $R= [x_1, x_2, \ldots, x_n]$ is computed iteratively so t
 Specifically, in step $k$ ($k = n, \ldots, 3$) the parent of taxon $x_{k}$ is moved up by $\nni$ moves to the position it has in $R$.
 Notice that there might be more than just one such move per step, which means that $p$ can be extended by more than one tree in each step.
 
+\todo{This is not enough, as sometimes one $\rnni$ move removes two inversions.}
 The path $p$ returned by the algorithm $\csort$ is a shortest caterpillar path because every tree modification on $p$ reduces the number of inversions of taxa in $T$ and $R$.
 
 Our Python implementation of this algorithm can be accessed at \autocite{Collienne2019}.
