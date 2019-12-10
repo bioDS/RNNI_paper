@@ -465,16 +465,17 @@ We prove this theorem by backward induction on the length of a shortest caterpil
 The backward induction basis follows by Lemma~\ref{lemma:caterpillar_dist=diameter}, as the maximum possible value for $l$ is $\frac{(n-1)(n-2)}{2}$.
 
 Let $T$ and $R$ be caterpillar trees such that $d_c(T, R) = l < \frac{(n-1)(n-2)}{2}$.
-For proving $d(T,R) = l$ we consider the shortest caterpillar path between these trees computed by $\csort$.
-
-Since $l < \frac{(n-1)(n-2)}{2}$, there must be a step in $\csort$ where the taxon that is moved does not require the maximum number of moves, meaning that it is not part of the cherry at the beginning of this step.
-Let $x$ be the first taxon that has this property and is considered in step number $k$.
+Since $d_c(T, R) < \frac{(n-1)(n-2)}{2}$, there must be a step in $\csort(T, R)$ where the taxon that is moved up is not part of the cherry (of $T'$) at the beginning of this step.
+Let $x$ be the first taxon that has this property and is considered at step $k$.
 Then there must be a taxon $y$ that is lower neighbour of $x$ in the tree at the beginning of step $k$.
 Since we assume that step $k$ is the first one that does not require the maximum number of $\nni$ moves, $y$ is lower neighbour of $x$ in $T$ as well.
 
 Let $\hat T$ be a tree that equals $T$ but with $x$ and $y$ being exchanged.
 Applying $\csort$ on $\hat T$ and $R$ results in almost the same path as the one computed by $\csort$ from $T$ to $R$, there is just one additional move in the beginning of step $k$ for swapping $x$ and $y$.
-It follows directly that $d(T, \hat T) = 1$ and $d_c(\hat T,R) = d_c(T,R) + 1 = l + 1$.
+It follows directly that
+\todo{No.
+As $x$ and $y$ don't have to be neighbours in $T$.}
+$d(T, \hat T) = 1$ and $d_c(\hat T,R) = d_c(T,R) + 1 = l + 1$.
 
 Therefore, we can apply the induction hypothesis for $\hat T$ and $R$ and get $d(\hat T,R) = l+1$.
 If it now were $d(T,R) < l$, it would be $d(\hat T,R) \leq d(T,R) + d(T,\hat T) < l + 1$ which contradicts the induction hypothesis.
