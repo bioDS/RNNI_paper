@@ -298,25 +298,16 @@ Notice that there might be more than just one such move per step, which means th
 \end{algorithmic}
 \end{algorithm}
 
-\begin{lemma}
-$\csort(T, R)$ returns a shortest caterpillar path between $T$ and $R$.
-\end{lemma}
-
-\proof
-Let $p$ be an arbitrary caterpillar path.
-Every $\rnni$ move along $p$ can decrease the number of inversions of taxa in $T'$ and $R$ by either $1$ or $2$.
-A decrease by $2$ is only possible when $T' = [x, y, z, \ldots]$, $z<\min(x,y)$, and the tree after the move is $[z, \min(x, y), \max(x, y), \ldots]$.
-\todo{Explain why more moves that fix two inversion each are not possible.}
-Hence $p$ is a shortest caterpillar path if every move along $p$ either is of this type or decreases the number of inversions by one.
-Note that $\csort(T, R)$ satisfies this property.
-\endproof
-
-Our Python implementation of this algorithm can be accessed at \autocite{Collienne2019}.
-
 The running time of $\csort$ is quadratic in $n$.
+
+The path $p$ returned by $\csort$ is a shortest caterpillar path because every tree modification on $p$ reduces the number of inversions of taxa in $T$ and $R$.
+Indeed, no $\rnni$ move on caterpillar trees can reduce the number of taxa inversions by more than one, assuming that inversions with both taxa of a cherry are counted only once, that is, if both pairs of taxa $(x, z)$ and $(y, z)$ appear in opposite orders in $T$ and $R$ and $(x,y)$ is a cherry then they are counted as one inversion.
+Hence any caterpillar path every move along which reduced the number of inversions is a shortest caterpillar path.
 
 It is not obvious that the path between $T$ and $R$ returned by $\csort$ has the least possible length among all $\rnni$ paths (not only caterpillar paths), that is, the length of $d(T, R)$.
 This fact will be established in Theorem~\ref{thm:caterpillar_convex}.
+
+Our Python implementation of this algorithm can be accessed at \autocite{Collienne2019}.
 
 
 \subsection{$\mdtree$}
