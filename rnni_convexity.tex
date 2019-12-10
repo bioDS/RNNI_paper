@@ -208,18 +208,19 @@ By following this procedure, the last of $p$ after step $n-2$ will be $R$, as it
 It is important but easy to see that the output path of $\findpath$ is unique for a given pair of trees, which means that it is a deterministic algorithm.
 This is due to the fact that there exists exactly one $\rnni$ move that decreases the rank of the most recent common ancestor of a subset $C_k$ of the taxon set of a tree as long as $C_k$ is not induced by an internal node of that tree.
 
+\todo{This format takes up too much space.
+Why do we need END statements?}
 \begin{algorithm}[H]
 \caption{$\findpath$($T,R$)}
 \label{alg:find_path}
 \begin{algorithmic}[1]
-\STATE $T' := T$
-\STATE $p := [T']$
+\STATE $T' := T$, $p := [T']$
 \FOR {$k = 1, \dots, n-2$}
-\STATE Let $C_k$ be the cluster induced by the node with rank $k$ in $R$ \label{alg:find_path:line:cluster}
-\WHILE {$\rank_{T'}(\mrca_{T'}(C_k))>k$}
-\STATE Update $T'$: Decrease $\rank_{T'}(\mrca_{T'}(C_k))$ by an $\rnni$ move \label{alg:findpath:line:move_set_down}
-\STATE $p = p+T'$
-\ENDWHILE
+  \STATE Let $C_k$ be the cluster induced by the node with rank $k$ in $R$ \label{alg:find_path:line:cluster}
+  \WHILE {$\rank_{T'}(\mrca_{T'}(C_k))>k$}
+    \STATE Update $T'$: Decrease $\rank_{T'}(\mrca_{T'}(C_k))$ by an $\rnni$ move \label{alg:findpath:line:move_set_down}
+    \STATE $p = p+T'$
+  \ENDWHILE
 \ENDFOR
 \RETURN $p$
 \end{algorithmic}
