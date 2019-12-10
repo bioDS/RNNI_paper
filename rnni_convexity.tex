@@ -306,13 +306,14 @@ $\csort(T, R)$ returns a shortest caterpillar path between $T$ and $R$.
 Let $p$ be an arbitrary caterpillar path.
 Every $\rnni$ move along $p$ can decrease the number of inversions of taxa in $T'$ and $R$ by either $1$ or $2$.
 A decrease by $2$ is only possible when $T' = [x, y, z, \ldots]$, $z<\min(x,y)$, and the tree after the move is $[z, \min(x, y), \max(x, y), \ldots]$.
+\todo{Explain why more moves that fix two inversion each are not possible.}
 Hence $p$ is a shortest caterpillar path if every move along $p$ either is of this type or decreases the number of inversions by one.
 Note that $\csort(T, R)$ satisfies this property.
 \endproof
 
 Our Python implementation of this algorithm can be accessed at \autocite{Collienne2019}.
 
-The running time of $\csort$ is the same as for Bubble Sort, that is quadratic in $n$.
+The running time of $\csort$ is quadratic in $n$.
 
 It is not obvious that the path between $T$ and $R$ returned by $\csort$ has the least possible length among all $\rnni$ paths (not only caterpillar paths), that is, the length of $d(T, R)$.
 This fact will be established in Theorem~\ref{thm:caterpillar_convex}.
