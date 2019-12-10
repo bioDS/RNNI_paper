@@ -463,27 +463,29 @@ The set of caterpillar trees is convex in $\rnni$.
 \label{thm:caterpillar_convex}
 \end{theorem}
 
-\begin{proof}
-We prove this theorem by backward induction on the length of a shortest caterpillar path $d_c(T,R) = l$ ($l$ is the induction parameter) between trees $T$ and $R$.
-The backward induction basis follows by Lemma~\ref{lemma:caterpillar_dist=diameter}, as the maximum possible value for $l$ is $\frac{(n-1)(n-2)}{2}$.
+\proof
+Note that it is suffice to prove that $d_c(T, R) = d(T, R)$ for an arbitrary pair of caterpillar trees $T$ and $R$.
+Lemma~\ref{lemma:caterpillar_dist=diameter} implies that if $T$ and $R$ are at the maximum possible distance, that is, $d_c(T, R) = \frac{(n-1)(n-2)}{2}$.
+Denote the latter number by $D$.
 
-Let $T$ and $R$ be caterpillar trees such that $d_c(T, R) = l < \frac{(n-1)(n-2)}{2}$.
-Since $d_c(T, R) < \frac{(n-1)(n-2)}{2}$, there must be a step in $\csort(T, R)$ where the taxon that is moved up is not part of the cherry (of $T'$) at the beginning of this step.
+Assume now that $d_c(T, R) = D - 1$.
+If we apply $\csort(T, R)$ in this case, there must be a step in the algorithm where the taxon that is moved up is not part of the cherry (of $T'$) at the beginning of this step.
 Let $x$ be the first taxon that has this property and is considered at step $k$.
-Then there must be a taxon $y$ that is lower neighbour of $x$ in the tree at the beginning of step $k$.
-Since we assume that step $k$ is the first one that does not require the maximum number of $\nni$ moves, $y$ is lower neighbour of $x$ in $T$ as well.
+Then there must be a taxon $y$ that is immediately preceding $x$ in the tree at the beginning of step $k$.
+Since $k$ is the first such step, $y$ must be preceding $x$ in tree $T$ as well.
+Consider a tree $\hat T$ that is obtained from $T$ by exchanging $x$ and $y$.
+Note that the caterpillar path from $\hat T$ to $R$ computed by $\csort$ passes $T$ and coincides with the path $\csort(T, R)$ from there on.
+Clearly, $d_c(\hat T, R) = D$.
 
-Let $\hat T$ be a tree that equals $T$ but with $x$ and $y$ being exchanged.
-Applying $\csort$ on $\hat T$ and $R$ results in almost the same path as the one computed by $\csort$ from $T$ to $R$, there is just one additional move in the beginning of step $k$ for swapping $x$ and $y$.
-It follows directly that
-\todo{No.
-As $x$ and $y$ don't have to be neighbours in $T$.}
-$d(T, \hat T) = 1$ and $d_c(\hat T,R) = d_c(T,R) + 1 = l + 1$.
+Assuming $d_c(T, R) < D$, we can iterate the construction above to find a tree $\hat T$ such that $d_c(\hat T, R) = D$ and the caterpillar path from $\hat T$ to $R$ computed by $\csort$ passes $T$ and coincides with the path $\csort(T, R)$ from there on.
+Lemma~\ref{lemma:caterpillar_dist=diameter} implies that $d(\hat T, R) = D$.
 
-Therefore, we can apply the induction hypothesis for $\hat T$ and $R$ and get $d(\hat T,R) = l+1$.
-If it now were $d(T,R) < l$, it would be $d(\hat T,R) \leq d(T,R) + d(T,\hat T) < l + 1$ which contradicts the induction hypothesis.
-We can conclude that $d(T,R) = l$, which completes the proof.
-\end{proof}
+Assume that $d(T, R) < d_c(T, R)$ and let $p$ be a path from $T$ to $R$ of length $d(T, R)$.
+Consider a path $q$ obtained by concatenating paths $\csort(\hat T, T)$ and $p$.
+Note that $q$ is a path from $\hat T$ to $R$ which is shorter than $\csort(\hat T, R)$.
+Indeed, the two paths coincide between $\hat T$ and $T$ and $q$ is shorter between $T$ and $R$.
+Since $d_c(\hat T, R) = D$, the existence of $q$ is a contradiction to Lemma~\ref{lemma:caterpillar_dist=diameter}.
+\endproof
 
 
 \subsection{Diameter and radius}
