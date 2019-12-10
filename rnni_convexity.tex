@@ -281,11 +281,6 @@ A path $p$ from $T$ to $R= [x_1, x_2, \ldots, x_n]$ is computed iteratively so t
 Specifically, in step $k$ ($k = n, \ldots, 3$) the parent of taxon $x_{k}$ is moved up by $\nni$ moves to the position it has in $R$.
 Notice that there might be more than just one such move per step, which means that $p$ can be extended by more than one tree in each step.
 
-\todo{This is not enough, as sometimes one $\rnni$ move removes two inversions.}
-The path $p$ returned by the algorithm $\csort$ is a shortest caterpillar path because every tree modification on $p$ reduces the number of inversions of taxa in $T$ and $R$.
-
-Our Python implementation of this algorithm can be accessed at \autocite{Collienne2019}.
-
 \begin{algorithm}[H]
 \caption{$\csort$($T,R$)}
 \label{alg:csort}
@@ -302,6 +297,20 @@ Our Python implementation of this algorithm can be accessed at \autocite{Collien
 \RETURN $p$
 \end{algorithmic}
 \end{algorithm}
+
+\begin{lemma}
+$\csort(T, R)$ returns a shortest caterpillar path between $T$ and $R$.
+\end{lemma}
+
+\proof
+Let $p$ be an arbitrary caterpillar path.
+Every $\rnni$ move along $p$ can decrease the number of inversions of taxa in $T'$ and $R$ by either $1$ or $2$.
+A decrease by $2$ is only possible when $T' = [x, y, z, \ldots]$, $z<\min(x,y)$, and the tree after the move is $[z, \min(x, y), \max(x, y), \ldots]$.
+Hence $p$ is a shortest caterpillar path if every move along $p$ either is of this type or decreases the number of inversions by one.
+Note that $\csort(T, R)$ satisfies this property.
+\endproof
+
+Our Python implementation of this algorithm can be accessed at \autocite{Collienne2019}.
 
 The running time of $\csort$ is the same as for Bubble Sort, that is quadratic in $n$.
 
