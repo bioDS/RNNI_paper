@@ -276,11 +276,10 @@ As a result caterpillar trees have only one \emph{cherry}, which is a pair of ta
 A path between two caterpillar trees that only consists of caterpillar trees is called a \emph{caterpillar path}.
 We can identify a caterpillar tree $T = [\{x_1, x_2\}, \{x_1, x_2, x_3\}, \ldots, \{x_1, \ldots, x_n\}]$ with the list of its taxa $[x_1, x_2, \ldots, x_n]$, assuming that $x_1 < x_2$ as natural numbers (recall that the set of taxa is $\{1, \ldots, n\}$).
 
-The algorithm $\csort$ (Algorithm~\ref{alg:csort}) is a natural modification of the classical \emph{Bubble Sort} algorithm \autocite{Knuth1997-pi}.
+The algorithm $\csort$ (Algorithm~\ref{alg:csort}) is a natural modification of the classical Bubble Sort algorithm \autocite{Knuth1997-pi}.
 A path $p$ from $T$ to $R= [x_1, x_2, \ldots, x_n]$ is computed iteratively so that after $k$ steps the last $k$ taxa of $T$ and $R$ coincide.
-Specifically, in step $k$ ($k = 0, \ldots, n-3$) the parent of taxon $x_{n-k}$ is moved up by $\nni$ moves to the position it has in $R$.
+Specifically, in step $k$ ($k = n, \ldots, 3$) the parent of taxon $x_{k}$ is moved up by $\nni$ moves to the position it has in $R$.
 Notice that there might be more than just one such move per step, which means that $p$ can be extended by more than one tree in each step.
-After $n-2$ steps we reach $R$.
 
 The path $p$ returned by the algorithm $\csort$ is a shortest caterpillar path because every tree modification on $p$ reduces the number of inversions of taxa in $T$ and $R$.
 
@@ -291,10 +290,10 @@ Our Python implementation of this algorithm can be accessed at \autocite{Collien
 \label{alg:csort}
 \begin{algorithmic}[1]
 \STATE $[x_1, x_2, \ldots, x_n] := R$, $T' := T$, $p = [T']$
-\FOR {$i=n, \ldots, 3$}
-    \FOR {$j=1, \ldots, i$}
-        \IF {$T'[j] = x_i$}
-            \STATE Update $T'$: swap $T'[j]$ and $T'[j+1]$
+\FOR {$k=n, \ldots, 3$}
+    \FOR {$i=1, \ldots, k$}
+        \IF {$T'[i] = x_k$}
+            \STATE Update $T'$: swap $T'[i]$ and $T'[i+1]$
             \STATE $p = p + T'$
         \ENDIF
     \ENDFOR
@@ -465,7 +464,7 @@ The set of caterpillar trees is convex in $\rnni$.
 We prove this theorem by backward induction on the length of a shortest caterpillar path $d_c(T,R) = l$ ($l$ is the induction parameter) between trees $T$ and $R$.
 The backward induction basis follows by Lemma~\ref{lemma:caterpillar_dist=diameter}, as the maximum possible value for $l$ is $\frac{(n-1)(n-2)}{2}$.
 
-Let $T$ and $R$ now be caterpillar trees such that $d_c(T, R) = l < \frac{(n-1)(n-2)}{2}$.
+Let $T$ and $R$ be caterpillar trees such that $d_c(T, R) = l < \frac{(n-1)(n-2)}{2}$.
 For proving $d(T,R) = l$ we consider the shortest caterpillar path between these trees computed by $\csort$.
 
 Since $l < \frac{(n-1)(n-2)}{2}$, there must be a step in $\csort$ where the taxon that is moved does not require the maximum number of moves, meaning that it is not part of the cherry at the beginning of this step.
