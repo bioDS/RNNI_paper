@@ -9,7 +9,7 @@
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{algorithm}
-\usepackage{algorithmic}
+\usepackage[noend]{algorithmic}
 \usepackage{todonotes}
 \usepackage{enumitem}
 \usepackage[misc]{ifsym}
@@ -491,27 +491,20 @@ Since $d_c(\hat T, R) = D$, the existence of $q$ is a contradiction to Lemma~\re
 \subsection{Diameter and radius}
 \label{section:diameter}
 
-In this section we establish diameter and radius of the $\rnni$ graph.
-In Theorem 7 of \autocite{Gavryushkin2018-ol} an upper bound for the diameter is given, but we are able to give the exact diameter using the results of Section~\ref{section:caterpillar_convex}.
-In the following we prove the exact diameter of $\rnni$ before we investigate the radius of $\rnni$.
+\textcite[Theorem~7]{Gavryushkin2018-ol} gave an upper bound for the diameter of $\rnni$ space.
+In this section we improve that result and calculate the exact diameter and radius of the $\rnni$ space.
+To achieve this we will employ our results on caterpillar trees from the previous sections.
 
-\begin{lemma}
-There are two caterpillar trees in $\rnni$ with distance $\frac{(n-1)(n-2)}{2}$.
-\label{lemma:caterpillar_diameter}
-\end{lemma}
-
-\begin{proof}
-Let $T = [1,2,3,\ldots,n]$ and $R = [n-1,n,n-2,n-3, \ldots, 1]$ be two caterpillar trees.
-According to Theorem~\ref{thm:caterpillar_convex}, there is a caterpillar path of length $d(T,R)$ between $T$ and $R$.
-We can compute a shortest caterpillar path by using $\csort$ as explained in Section~\ref{section:caterpillar_convex}.
-When running this algorithm to compute a path from $T$ to $R$, each taxon $i$ ($i = n, \ldots, 3$) swaps $i-2$ times with its upper neighbour.
-Therefore, the length of a shortest caterpillar path, and therefore the distance between $T$ and $R$, is $\sum\limits_{i=3}^{n}(i-2)  = \frac{(n-1)(n-2)}{2}$.
-\end{proof}
+The results of previous section imply that $d([1,2,3,\ldots,n], [n-1,n,n-2,n-3, \ldots, 1]) = \frac{(n-1)(n-2)}{2}$, which is the maximum possible distance between caterpillar trees.
 
 \begin{corollary}
 It is $\Delta(\rnniu) = \frac{(n-1)(n-2)}{2}$.
 \label{corollary:diameter}
 \end{corollary}
+
+\proof
+\todo{Why exactly is this true for arbitrary, not necessarily caterpillar, trees?}
+\endproof
 
 We now proceed to show that the radius of the $\rnni$ graph equals its diameter.
 Therefore we use the algorithm $\mdtree$ that has been introduced in Section~\ref{section:alg_mdtree}.
