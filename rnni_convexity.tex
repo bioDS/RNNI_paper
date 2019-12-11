@@ -16,6 +16,7 @@
 \usepackage[foot]{amsaddr}
 \usepackage[hidelinks]{hyperref}
 \usepackage{csquotes}
+\usepackage[notref,notcite]{showkeys}
 \usepackage[style=authoryear,ibidtracker=false,uniquename=false,giveninits=true,terseinits=true,maxbibnames=5,backend=biber]{biblatex}
 \renewbibmacro{in:}{}
 \addbibresource{rnni_convexity.bib}
@@ -38,7 +39,6 @@
 \newtheorem{theorem}[definition]{Theorem}
 \newtheorem{conjecture}[definition]{Conjecture}
 \newtheorem{lemma}[definition]{Lemma}
-\newtheorem{corollary}[definition]{Corollary}
 \newtheorem{proposition}[definition]{Proposition}
 
 \graphicspath{{figures/}}
@@ -70,7 +70,7 @@
 In this paper we study the graph of ranked phylogenetic trees where the adjacency relation is given by a local rearrangement of the tree structure.
 Our work is motivated by tree inference algorithms, such as maximum likelihood and Markov Chain Monte Carlo methods, where the geometry of the search space plays a central role for efficiency and practicality of the optimisation.
 We hence focus on understanding the geometry of the space (graph) of ranked trees, the so-called ranked nearest neighbour interchange ($\rnni$) graph.
-For example, we find exact estimates of the radius and diameter of the space.
+For example, we find exact estimates of the radius and diameter of the space, improving the best previously known estimates.
 Since the $\rnni$ graph is a generalisation of the classical nearest neighbour interchange ($\nni$) graph to ranked phylogenetic trees, we compare geometric and algorithmic properties of the two graphs.
 Surprisingly, we discover that both geometric and algorithmic properties of $\rnni$ and $\nni$ are quite different.
 For example, we establish convexity of certain natural subspaces in $\rnni$, which are not convex is $\nni$.
@@ -208,8 +208,6 @@ By following this procedure, the last of $p$ after step $n-2$ will be $R$, as it
 It is important but easy to see that the output path of $\findpath$ is unique for a given pair of trees, which means that it is a deterministic algorithm.
 This is due to the fact that there exists exactly one $\rnni$ move that decreases the rank of the most recent common ancestor of a subset $C_k$ of the taxon set of a tree as long as $C_k$ is not induced by an internal node of that tree.
 
-\todo{This format takes up too much space.
-Why do we need END statements?}
 \begin{algorithm}[H]
 \caption{$\findpath$($T,R$)}
 \label{alg:find_path}
@@ -491,33 +489,31 @@ Since $d_c(\hat T, R) = D$, the existence of $q$ is a contradiction to Lemma~\re
 \subsection{Diameter and radius}
 \label{section:diameter}
 
-\textcite[Theorem~7]{Gavryushkin2018-ol} gave an upper bound for the diameter of $\rnni$ space.
+\textcite[Theorem~7]{Gavryushkin2018-ol} gave an upper bound for the diameter of $\rnni$ space, which we recall is denoted by $\Delta(\rnni)$.
+They showed that $\Delta(\rnni) = n^2 - 3n - 5/8$.
 In this section we improve that result and calculate the exact diameter and radius of the $\rnni$ space.
-To achieve this we will employ our results on caterpillar trees from the previous sections.
 
-The results of previous section imply that $d([1,2,3,\ldots,n], [n-1,n,n-2,n-3, \ldots, 1]) = \frac{(n-1)(n-2)}{2}$, which is the maximum possible distance between caterpillar trees.
-
-\begin{corollary}
-It is $\Delta(\rnniu) = \frac{(n-1)(n-2)}{2}$.
-\label{corollary:diameter}
-\end{corollary}
+\begin{theorem}
+$\Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
+\label{thm:diameter}
+\end{theorem}
 
 \proof
-\todo{Why exactly is this true for arbitrary, not necessarily caterpillar, trees?}
+Since $d_c([1,2,3,\ldots,n], [n-1,n,n-2,n-3, \ldots, 1]) = \frac{(n-1)(n-2)}{2}$, the claim follows directly from from Theorem~\ref{thm:caterpillar_convex} and Lemma~\ref{lemma:diameter_bound}.
 \endproof
 
-We now proceed to show that the radius of the $\rnni$ graph equals its diameter.
-Therefore we use the algorithm $\mdtree$ that has been introduced in Section~\ref{section:alg_mdtree}.
-Note that the results provided in this section are only true if the input tree of $\mdtree$ is a caterpillar tree.
+We show in the rest of this section that the radius of $\rnni$ space coincides with its diameter.
+The main tool to establish this result is the algorithm $\mdtree$ from Section~\ref{section:alg_mdtree}.
+Recall that $\mdtree$ is a non-deterministic algorithm, which implies that the output tree is not uniquely defined by the input to the algorithm.
 
 \begin{lemma}
 Let $T$ be a caterpillar tree.
-Any tree $R = \mdtree(T)$ has distance $d(T,R) = \Delta(\rnni)$ to $T$.
+Then $d(T, R) = \Delta(\rnni)$ for every tree $R$ such that $R = \mdtree(T)$.
 \label{lemma:max_dist_caterpillar}
 \end{lemma}
 
 \begin{proof}
-Recall that with Corollary~\ref{corollary:diameter} we know that $\Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
+Recall that with Theorem~\ref{thm:diameter} we know that $\Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
 Within this proof we assume, without loss of generality, that it is $T = [1,2,3,\ldots,n]$.
 We prove the lemma by induction on the number of taxa $n$.
 
@@ -536,12 +532,12 @@ In Section~\ref{alg:max_dist_tree} we already discussed that $\mdtree$ is a non-
 In fact, the output tree of $\mdtree$ can have any tree topology, since in each step of the algorithm the next taxon can be added on any edge incident to a leaf in the tree.
 Therefore, if the input tree is a caterpillar tree, $\mdtree$ can compute a tree with any tree topology that has maximum distance from the input tree.
 And as permuting labels of trees does not change the distance between them, there exists for every tree $R$ on $n$ taxa a caterpillar tree $T$ with distance $d(T,R) = \Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
-By this we obtain Corollary~\ref{corollary:radius}.
+By this we obtain Theorem~\ref{thm:radius}.
 
-\begin{corollary}
+\begin{theorem}
 The radius of the $\rnni$ graph is $\rad(\rnni) = \Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
-\label{corollary:radius}
-\end{corollary}
+\label{thm:radius}
+\end{theorem}
 
 
 \subsection{Cluster Theorem}
