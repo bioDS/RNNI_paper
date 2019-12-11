@@ -79,7 +79,7 @@ Furthermore, our results suggest that the complexity of computing distances in t
 
 \maketitle
 
-The nearest neighbour interchange ($\nni$) graph, defined on the set of phylogenetic trees with adjacency relation given by the interchange operation of two sister clades, has been known in mathematical biology literature for nearly 50 years \autocite{Robinson1971-ql,Moore1973-kk}.
+The nearest neighbour interchange ($\nni$) graph, defined on the set of phylogenetic trees with adjacency relation given by the interchange operation of two sister clades (subtrees), has been known in mathematical biology literature for nearly 50 years \autocite{Robinson1971-ql,Moore1973-kk}.
 Considered with the metric given by the length of a shortest path (graph-distance), this graph becomes a metric space.
 Its geometry has been extensively studied \autocite{Dasgupta2000-xa, Li1996-zw, Gordon2013-fw, De_Jong2016-al}.
 An important property of the $\nni$ graph is that computing distances is NP-hard \autocite{Dasgupta2000-xa}.
@@ -150,7 +150,7 @@ In Section~\ref{section:algorithms} we introduce three algorithms for exploring 
 We use these algorithms in Section~\ref{section:geometry} to establish several geometrical properties of this graph, such as its diameter and radius.
 Furthermore, we will establish in Section~\ref{section:caterpillar_convex} that a certain subspace of $\rnni$ is convex and design a polynomial-time algorithm for computing $\rnni$-distances in that subspace.
 This result suggests that the complexity of computing distances in $\rnni$ is different from that in the classical $\nni$ space.
-We will discuss this further in Section~\ref{section:cluster_theorem}, where we disprove a conjecture of \textcite{Gavryushkin2018-ol} and suggest its weaker version a plausible alternative.
+We will discuss this further in Section~\ref{section:cluster_theorem}, where we disprove a conjecture of \textcite{Gavryushkin2018-ol} and suggest its weaker versions a plausible alternatives.
 We will finish the paper with a discussion and open problems.
 
 
@@ -167,14 +167,16 @@ We will prove this fact in Section~\ref{section:diameter}.
 
 The algorithm $\findpath$ can be used to approximate the $\rnni$ distance.
 We will study the accuracy of this approximation by computing the exact $\rnni$ distance for small trees.
-Specifically, we will use the algorithm for computing the complete $\rnni$ graph that is given in \autocite[their Section 3.3]{Gavryushkin2018-ol}.
-After pre-computing the graph, we use Seidel's algorithm~\autocite{seidel_all-pairs-shortest-path_1995} for computing distances.
+Specifically, we will use the algorithm for computing the complete $\rnni$ graph that is given in \autocite[Section 3.3]{Gavryushkin2018-ol}.
+After pre-computing the graph, we use Seidel's algorithm \autocite{seidel_all-pairs-shortest-path_1995} for computing distances.
 However, the large number of vertices in $\rnni$ is an obstacle when it comes to computing distances for larger trees.
 Since there are $\frac{n!(n-1)!}{2^{n-1}}$ vertices in the $\rnni$ graph \autocite{Gavryushkin2018-ol}, we compute the $\rnni$ graph on up to seven taxa for our analyses.
 This computational result will also be used later in the paper to support Conjecture~\ref{conjecture:cluster_theorem}, a modification of Conjecture~9 in \autocite{Gavryushkin2018-ol}, which we prove to be false in this paper.
 
+Note that $\rnni$ space on trees with seven taxa is a challenging goal to achieve computationally.
+For example, \textcite{Whidden2016-kl} were able to achieve up to seven taxa in the much smaller $\rnni$ space, when it required considering pairs of trees.
 %TODO: Make a zenodo dio for the repository before final publication
-We have implemented these algorithms in a combination of Python and C, and the source code is available at \autocite{Collienne2019}.
+We have implemented all our algorithms in a combination of Python and C, and the source code is available at \autocite{Collienne2019}.
 
 
 \subsection{$\findpath$}
@@ -352,8 +354,9 @@ In other words, the set of caterpillar trees is \emph{convex} in $\rnni$.
 In Section~\ref{section:diameter} we will investigate the diameter and radius of the $\rnni$ space.
 Interestingly, the \emph{diameter} of $\rnni$, that is the maximum distance $\Delta(\rnni) = \max \{d(T, R) \mid T, R \in \rnni\}$ between any two trees in the graph, equals its \emph{radius} defined as $\min\limits_T \max\limits_R d(T,R)$.
 Next, we will consider the so-called Split Theorem \autocite{Gavryushkin2018-ol}, which states that every shared split of taxa is maintained along every shortest path.
+Recall that a \emph{split} is a bipartition of the set of taxa obtained by deleting an edge of the tree $T$, splits are denoted by $A|B$.
 We will give a counterexample to the Split Theorem in $\rnni$ and consider a variant of the Weak Split Theorem, which states that every shared split of taxa is maintained along a shortest path.
-We will call this statement the Clade Theorem, as it is slightly more natural to work with ranked trees in terms clades rather than splits (see Conjecture~\ref{conjecture:cluster_theorem}).
+We will also consider the so-called Clade Theorem as another weak version of the Split Theorem (see Conjecture~\ref{conjecture:cluster_theorem}).
 
 We start with the following auxiliary results.
 
@@ -563,19 +566,9 @@ Instead, the depicted path where $\frac{n}{2}$ cherries are built and then sorte
 \label{fig:NNI_NP_proof}
 \end{figure}
 
-Since the example of a shortest $\nni$ described above, which was used to prove Theorem~\ref{thm:split_nni} in \autocite{Li1996-zw}, does not work in $\rnni$, a contrary statement was conjectured in \autocite{Gavryushkin2018-ol}.
-For understanding this conjecture it is important to know the connection between edges in a tree and so-called \emph{splits}, which are bipartitions of the taxon set of a tree:
-By deleting an edge $e$ of a tree $T$ one receives two graphs with labels in $A$ and $B$, respectively, such that $\{A,B\}$ is a partition of the taxon set of $T$.
-Note that each edge induces such a bipartition, often written as $A|B$, and that both edges incident to the root of a tree induce the same partition.
-Since these partitions are commonly referred to as splits, the following conjecture was named \emph{Split Theorem} in \autocite{Gavryushkin2018-ol}.
+This argument motivated \textcite[Conjecture~9]{Gavryushkin2018-ol} to conjecture that every split shared between trees in $\rnni$ is maintained along every shortest path.
 
-\begin{conjecture}[Split Theorem]
-For the $\rnni$ graph the following statement holds:
-If a partition of leaves given by an edge is present in two trees $T$ and $R$ then the partition is presented in every tree on every shortest path between $T$ and $R$.
-\label{conjecture:split_theorem}
-\end{conjecture}
-
-We found a simple counterexample to this conjecture, provided in Figure~\ref{fig:splitthm_counterexample}.
+The following example in Figure~\ref{fig:splitthm_counterexample} shows that this form of the Split Theorem does now hold.
 
 \begin{figure}[H]
 \centering
@@ -586,20 +579,36 @@ On the path at the bottom, which is a shortest path as well, this split is maint
 \label{fig:splitthm_counterexample}
 \end{figure}
 
-Since the counterexample in Figure~\ref{fig:splitthm_counterexample} shows that the version of the Split Theorem stated in \autocite{Gavryushkin2018-ol} does not hold, we will now claim an alternative to this conjecture, the \emph{Cluster Theorem} (Conjecture~\ref{conjecture:cluster_theorem}).
-The Cluster Theorem concerns clusters instead of splits.
-This is motivated by the fact that rooted phylogenetic trees can uniquely be represented by sets of clusters \autocite{Steel2016-ye}, but not by sets of splits as they cannot define the position of the root.
-Note that trees $T$ and $R$ in Figure~\ref{fig:splitthm_counterexample} induce the same set of splits, but share no cluster.
+Hence not every shortest path between trees in $\rnni$ has to maintain every shared split of taxa.
+However, \textbf{there exists} still another shortest path connecting the two trees, along which every shared split is maintained.
+This motivates the study of the following Weak Split Theorem in $\rnni$.
+
+\begin{conjecture}[Weak Split Theorem]
+For the $\rnni$ graph the following statement holds:
+If a partition of leaves given by an edge is present in two trees $T$ and $R$ then the partition is presented in every tree on every shortest path between $T$ and $R$.
+\label{conjecture:split_theorem}
+\end{conjecture}
+
+Another interesting property of our counterexample in Figure~\ref{fig:splitthm_counterexample} is that the set of taxa $\{1, 2, 3\}$, which is a part of the split in both $T$ and $R$, does not form a \textbf{cluster} in $R$, that is, there is no single node in the tree all descended taxa of which are exactly $1$, $2$, and $3$.
+Importantly, rooted phylogenetic trees can be uniquely represented by sets of clusters \autocite{Steel2016-ye}, but not by sets of splits as splits cannot define the position of the root.
+For example, trees $T$ and $R$ in Figure~\ref{fig:splitthm_counterexample} induce the same set of splits, but share no cluster.
+
+Furthermore, all our methods in this paper for computing shortest paths in special subspaces of $\rnni$ demonstrate that that shared clusters are maintained along shortest paths.
+
+These considerations motivate us to conjecture the following strong version of the Cluster Theorem.
 
 \begin{conjecture}[Cluster Theorem]
-For the $\rnni$ graph the following statement holds:
-if two trees $T$ and $R$ contain the same cluster $C$, then $C$ is present as cluster in every tree on every shortest path between $T$ and $R$.
+Let $T$ and $R$ be trees in $\rnni$ that share a cluster $C$.
+Then $C$ is present as a cluster in every tree on every shortest path between $T$ and $R$.
 \label{conjecture:cluster_theorem}
 \end{conjecture}
 
-For providing further evidence that the Cluster Theorem holds in $\rnni$, we could show computationally that it holds for the $\rnni$ graph on small trees with up to seven taxa.
-We did this by computing subgraph of $\rnni$ only containing trees that share a cluster and compare distances within this subgraph with distances in the whole $\rnni$ graph \autocite{Collienne2019}.
-We computed these graphs according to the algorithm of \autocite{Gavryushkin2018-ol} as discussed in Section~\ref{section:algorithms}.
+We have computationally checked that this conjecture is true in $\rnni$ spaces with up to seven taxa ($n = 2, \ldots, 7$).
+%TODO
+Specifically, we computed subgraphs of $\rnni$ containing only trees with shared clusters and compared distances in this subgraph with distances in the whole $\rnni$ graph.
+We computed these graphs according to the algorithm from \autocite{Gavryushkin2018-ol} as discussed in Section~\ref{section:algorithms}.
+The source code of all these implementations can be openly accessed at \autocite{Collienne2019}.
+
 
 \section{Discussion}
 
