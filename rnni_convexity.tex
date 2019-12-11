@@ -543,26 +543,15 @@ The radius and diameter of the $\rnni$ space coincide and are equal to $\frac{(n
 \subsection{Cluster Theorem}
 \label{section:cluster_theorem}
 
-In this section we will make a further step towards understanding the complexity of computing shortest paths in $\rnni$.
+In this section we discussed the so-called Split Theorem, which states that every split shared between two trees is maintained along shortest paths between the trees.
+For example, Split Theorem is true in the $\spr$ space and false in $\nni$ \autocite{Li1996-zw}.
+Specifically, in $\nni$ there exist two trees $T$ and $R$, which share a split $A | B$, such that every tree on every shortest path between $T$ and $R$ does not have $A | B$.
 
-\begin{theorem}
-There are trees $T,R$ in $\nni$ sharing a cluster which is not shared by any intermediate tree on any shortest path from $T$ to $R$.
-\label{thm:split_nni}
-\end{theorem}
+To construct this example, \textcite{Li1996-zw} used the idea illustrated in Figure~\ref{fig:NNI_NP_proof} and showed that for an appropriate permutation of the taxa in the two caterpillar subtrees of both $T$ and $R$, it is strictly shorter to merge the two caterpillar subtrees first, then sort them simultaneously, and then split back to two caterpillar subtrees, rather the two caterpillar subtrees independently.
 
-\begin{proof}
-See \autocite{Li1996-zw}.
-\end{proof}
-
-In the proof of Theorem~\ref{thm:split_nni} presented in \autocite{Li1996-zw} an example of two trees $T$ and $R$ that share clusters $C$ and $X \setminus C$ but have no shortest path that preserves these cluster is given.
-A simplified illustration of this example is provided in Figure~\ref{fig:NNI_NP_proof}.
-\autocite{Li1996-zw} prove that on a shortest path between $T$ and $R$ in $\nni$ at first $T$ is transformed to a tree $T'$ with $\frac{n}{2}$ cherries, each of which contains one taxon of each of the clusters $C$ and $X \setminus C$.
-Then $T'$ is sorted to a tree $R'$ containing the same cherries as $T'$ such that that resolving all these cherries of $R'$ results in $R$.
-Specifically, \autocite{Li1996-zw} prove that there is no shortest path between $T$ and $R$ in $\nni$ where $C$ and $X \setminus C$ are present in all trees on that path.
-
-The reason that this example cannot be transferred to $\rnni$ is that there are lots of additional rank moves needed on a path between $T$ ans $R$ similar to the one described above.
-As in the example depicted in Figure~\ref{fig:NNI_vs_RNNI}, adding rank moves to the shortest $\nni$ path from $T$ to $R$ results in a path that is longer than a shortest $\rnni$ path.
-Sorting the two caterpillar subtrees of $T$ and $R$ separately results in a shorter path in $\rnni$.
+The reason that this example cannot be transferred to $\rnni$ is that additional rank moves are necessary to merge and then split the two caterpillar subtrees.
+Similarly to the example in Figure~\ref{fig:NNI_vs_RNNI}, adding rank moves to the shortest $\nni$ path from $T$ to $R$ results in a path that is no longer a shortest $\rnni$ path.
+Sorting the two caterpillar subtrees of $T$ and $R$ independently results in a shorter path in $\rnni$.
 
 \begin{figure}[H]
 \centering
