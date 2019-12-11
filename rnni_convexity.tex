@@ -16,7 +16,7 @@
 \usepackage[foot]{amsaddr}
 \usepackage[hidelinks]{hyperref}
 \usepackage{csquotes}
-\usepackage[notref,notcite]{showkeys}
+%\usepackage[notref,notcite]{showkeys}
 \usepackage[style=authoryear,ibidtracker=false,uniquename=false,giveninits=true,terseinits=true,maxbibnames=5,backend=biber]{biblatex}
 \renewbibmacro{in:}{}
 \addbibresource{rnni_convexity.bib}
@@ -612,45 +612,42 @@ The source code of all these implementations can be openly accessed at \autocite
 
 \section{Discussion}
 
-Since the problem of computing distances in the most common tree spaces as $\nni$ \autocite{Dasgupta2000-xa}, rooted $\spr$ \autocite{Bordewich2005-nx}, or $\tbr$ \autocite{Allen2001-ky} is known to be $\np$-hard, it is desirable to find a tree space that is less complex.
-So far it is not known whether computing distances in $\rnni$ is $\np$-hard or not.
-The natural approach to solve this question is to compare $\rnni$ and $\nni$ graph to see whether the proof of $\np$-hardness of $\nni$ applies to $\rnni$ as well.
-We will explain why this is not the case by considering an example of shortest paths in $\nni$ that builds the key of the proof of its $\np$-hardness.
-After explaining why this example cannot be transferred to $\rnni$ we will introduce the so-called Split Theorem (Conjecture~\ref{conjecture:split_theorem}), which has been conjectured in \autocite{Gavryushkin2018-ol}.
-However, we present a counterexample disproving the Split Theorem in its original version and claiming the Cluster Theorem (Conjecture~\ref{conjecture:cluster_theorem}) as alternative version.
+The problem of computing distances in all common phylogenetic graphs, including $\nni$ \autocite{Dasgupta2000-xa}, $\spr$ \autocite{Bordewich2005-nx}, and $\tbr$ \autocite{Allen2001-ky}, is $\np$-hard.
+Although $\np$-hardness does not necessarily imply practical impossibility, this so far has been the case for these phylogenetic algorithms with extremely few major advances \autocite{Whidden2010-bw}.
+$\nni$ is especially known for its algorithmic hardness \autocite{Whidden2018-fw}.
 
-The proof of $\np$-completeness of $\nni$ in \autocite{Dasgupta2000-xa} is based on the fact that Theorem~\ref{thm:split_nni} holds for $\nni$.
-The aim of this paper was to gain better understanding of the $\rnni$ space of ranked phylogenetic trees.
-Before investigating geometrical properties of $\rnni$ we introduced some algorithms in Section~\ref{section:algorithms}).
-One of the most important algorithms we introduced here is $\findpath$, which can be used for approximating $\rnni$ distances.
-We could in particular show that this algorithm computes exact distances for all pairs of trees on up to six taxa.
-This algorithm might be a useful tool for future investigations of the $\rnni$ space.
+Our results suggest a surprising advance in this field of $\np$-problems -- adding ranking information to trees simplifies some of the algorithms and makes some unintuitive counterexamples impossible.
+We hence continued the investigation of the $\rnni$ graph on ranked phylogenetic trees in this paper.
+We have taken the route of comparing the classic $\nni$ with the $\rnni$ graph, so have mostly been concentrating on questions that are settled in $\nni$.
+Specifically, we have considered a number of geometric properties, including the diameter, radius, convexity of caterpillar trees, and the Split Theorem.
+We have also justified that the technique of \textcite{Dasgupta2000-xa} to prove that distances in $\nni$ are $\np$-hard to compute cannot be directly applied in $\rnni$.
+This led us to the Cluster Theorem, a statement that does not hold in $\nni$.
+All our algorithms and methods developed in this paper witness in favour of the Cluster Theorem being true in $\rnni$.
+For example, we have checked the statement computationally for up to seven taxa \autocite{Collienne2019}.
+Although the Split Theorem is true in $\spr$, it is still $\np$-hard to compute distances in that graph.
+Hence Cluster Theorem alone cannot be used as an argument in favour of the distance problem having an efficient solution in $\rnni$.
+But the greedy nature of all our algorithms for computing shortest paths in $\rnni$ developed in this paper does provide such an argument.
 
-We used the algorithms introduced in Section~\ref{section:algorithms} to prove some geometric properties of the $\rnni$ graph such as diameter and radius.
-Moreover, we discovered that the set of caterpillar trees is convex in $\rnni$ (Theorem~\ref{thm:caterpillar_convex}).
-With this result and the algorithm $\csort$ for computing shortest caterpillar paths (Section~\ref{section:alg_csort}) we can compute $\rnni$ distances between caterpillar trees in polynomial time.
+The algorithms we developed and implemented in this paper have served as a main ingredient for our study of the geometry of $\rnni$ space.
+These algorithms are of interest on their own as well.
+For example, our $\findpath$ algorithm gives a good approximation of the $\rnni$ distance, performing exactly on small trees.
+We are not aware of the minimal number of taxa where this algorithm fails to return the correct distance.
+The $\mdtree$ algorithm produces trees as far away from a given tree as possible, a task of importance in simulation and model comparison studies.
+The $\csort$ algorithm efficiently computes the $\rnni$ distance and shortest paths between caterpillar trees exactly.
+To the best of our knowledge no such algorithm exists for $\nni$.
+This implies that the algorithmic complexity of comping distances in $\nni$ is higher than in $\rnni$.
 
-This already suggests that there is a difference in complexity of computing distances in $\rnni$ and $\nni$, since in $\nni$ there is no subspace known for which computing distances only takes polynomial time.
-In Section~\ref{section:cluster_theorem} we supported the claim that computing $\rnni$ distances is not as hard as computing $\nni$ distances further by discussing the proof of $\np$-completeness of computing distances in $\nni$ and showing that this proof does not work for $\rnni$.
-Specifically, we conjectured the Cluster Theorem (Conjetcure~\ref{conjecture:cluster_theorem}), which does not hold in $\nni$.
-However, we strongly suspect that it holds in $\rnni$ and could prove that it does hold for trees on up to seven taxa \autocite{Collienne2019}.
-
-
-\subsection{Open Problems}
-
-In Section~\ref{section:cluster_theorem} we claimed that the Cluster Theorem holds for $\rnni$.
-We could show that the previous version of it, the Split Theorem as it was conjectured in \autocite{Gavryushkin2018-ol}, is not true.
-If the Cluster Theorem actually is true still remains an open question.
-Proving it will be a big step towards finding the complexity of computing $\rnni$ distances.
-
-This question of whether computing $\rnni$ distances is $\np$-hard is another problem for future research.
-Though we did not aim to answer this question in this paper, we made some progress towards solving it by establishing some geometric properties of the $\rnni$ graph.
-Comparing these results with what is known for the plain $\nni$ graph makes us assume that the complexity of computing shortest path in $\rnni$ might differ from $\nni$.
-We also suspect that the fact that computing distances between caterpillar trees can be done in polynomial time might be the key for further investigation of the complexity of computing $\rnni$ distances.
+The question of whether computing $\rnni$ distances is $\np$-hard is still an open problem.
 
 
+\section*{Acknowledgements}
+We thank Charles Semple for useful discussions about the Cluster Theorem.
+
+We acknowledge support from the Royal Society of New Zealand through the Rutherford Discovery Fellowship awarded to AG.
+This work was partially supported by MBIE through the Endeavour Smart Ideas and Data Science Programmes grants.
+
+Part of this work was done while LC and AG were visiting Max Plank Institute for Evolutionary Biology, we appreciate their support.
 
 
 \printbibliography
-
 \end{document}
