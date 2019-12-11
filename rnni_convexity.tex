@@ -33,7 +33,6 @@
 \newcommand{\csort}{\textsc{Caterpillar Sort}}
 \newcommand{\findpath}{\textsc{FindPath}}
 \newcommand{\mdtree}{\textsc{MDTree}}
-\newcommand{\rad}{\textsc{R}}
 
 \newtheorem{definition}{Definition}
 \newtheorem{theorem}[definition]{Theorem}
@@ -331,7 +330,7 @@ Note that $R$ is not uniquely determined due to the non-deterministic choice of 
 \STATE Construct list $L=[l_1, \ldots, l_n]$ of all taxa ordered with respect to the ranks of their parents in $T$
 \label{alg:mdtree_lineL}
 \STATE Build tree $R$ with two taxa $l_1, l_2$ that are children of the root
-\FOR {$i = n, \ldots, 3$}
+\FOR {$i = 3, \ldots, n$}
 \STATE Extend $R$ by attaching $l_i$ to a newly created node of rank $1$ on an arbitrarily chosen edge
 \label{alg:mdtree_lineAddTaxon}
 \ENDFOR
@@ -351,7 +350,7 @@ We will employ the algorithms developed in the previous section to aid our analy
 Those algorithms will, for example, enable us to prove that every pair of caterpillar trees $T$ and $R$ is connected by a caterpillar path of length $d(T,R)$ (Theorem~\ref{thm:caterpillar_convex} in Section~\ref{section:caterpillar_convex}).
 In other words, the set of caterpillar trees is \emph{convex} in $\rnni$.
 In Section~\ref{section:diameter} we will investigate the diameter and radius of the $\rnni$ space.
-Interestingly, the \emph{diameter} of $\rnni$, that is the maximum distance $\Delta(\rnni) = \max \{d(T, R) \mid T, R \in \rnni\}$ between any two trees in the graph, equals its \emph{radius} $\rad(\rnni) = \min\limits_T \max\limits_R d(T,R)$.
+Interestingly, the \emph{diameter} of $\rnni$, that is the maximum distance $\Delta(\rnni) = \max \{d(T, R) \mid T, R \in \rnni\}$ between any two trees in the graph, equals its \emph{radius} defined as $\min\limits_T \max\limits_R d(T,R)$.
 Next, we will consider the so-called Split Theorem \autocite{Gavryushkin2018-ol}, which states that every shared split of taxa is maintained along every shortest path.
 We will give a counterexample to the Split Theorem in $\rnni$ and consider a variant of the Weak Split Theorem, which states that every shared split of taxa is maintained along a shortest path.
 We will call this statement the Clade Theorem, as it is slightly more natural to work with ranked trees in terms clades rather than splits (see Conjecture~\ref{conjecture:cluster_theorem}).
@@ -463,7 +462,7 @@ The set of caterpillar trees is convex in $\rnni$.
 
 \proof
 Note that it is suffice to prove that $d_c(T, R) = d(T, R)$ for an arbitrary pair of caterpillar trees $T$ and $R$.
-Lemma~\ref{lemma:caterpillar_dist=diameter} implies that if $T$ and $R$ are at the maximum possible distance, that is, $d_c(T, R) = \frac{(n-1)(n-2)}{2}$.
+Lemma~\ref{lemma:caterpillar_dist=diameter} implies that if $T$ and $R$ are at the maximal possible distance, that is, $d_c(T, R) = \frac{(n-1)(n-2)}{2}$.
 Denote the latter number by $D$.
 
 Assume now that $d_c(T, R) = D - 1$.
@@ -499,7 +498,7 @@ $\Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
 \end{theorem}
 
 \proof
-Since $d_c([1,2,3,\ldots,n], [n-1,n,n-2,n-3, \ldots, 1]) = \frac{(n-1)(n-2)}{2}$, the claim follows directly from from Theorem~\ref{thm:caterpillar_convex} and Lemma~\ref{lemma:diameter_bound}.
+Since $d_c([1\ldots,n], [n-1,n,n-2,n-3, \ldots, 1]) = \frac{(n-1)(n-2)}{2}$, the claim follows directly from from Theorem~\ref{thm:caterpillar_convex} and Lemma~\ref{lemma:diameter_bound}.
 \endproof
 
 We show in the rest of this section that the radius of $\rnni$ space coincides with its diameter.
@@ -513,29 +512,30 @@ Then $d(T, R) = \Delta(\rnni)$ for every tree $R$ such that $R = \mdtree(T)$.
 \end{lemma}
 
 \begin{proof}
-Recall that with Theorem~\ref{thm:diameter} we know that $\Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
-Within this proof we assume, without loss of generality, that it is $T = [1,2,3,\ldots,n]$.
 We prove the lemma by induction on the number of taxa $n$.
+The induction basis for $n = 3$ is trivial.
 
-The lemma is true for the induction basis on $n=3$ taxa since all three trees have distance one, which equals diameter and radius in this case.
-
-Let us now assume for the induction step that $T$ is a tree on $n+1$ taxa.
-Taxon $n+1$ is the last one in the list $L$ computed in $\mdtree$ as its parent in $T$ is the root.
-It follows that this taxon $n+1$ is the last one added to $R$ in the algorithm, so its parent has rank one in $R$.
-With Lemma~\ref{lemma:distance_delete_taxon} we can follow that for $T$ and $R$ restricted to taxa $\{1, \ldots, n\}$ it holds $d(T|_n,R|_n) \leq d(T,R) - (n-1)$.
-It is not hard to see that $R|_n$ can be received from $T|_n$ by applying $\mdtree$:
-$R|_n$ can be constructed from input tree $T|_n$ in the same way as $R$ can be constructed from $T$, since the list $L$ computed for $T|_n$ in $\mdtree$ is the same as the one for $T$, but without the last element.
-So we can follow from the induction hypothesis and Lemma~\ref{lemma:distance_delete_taxon} that it is $d(T,R) \geq d(T|_n,R|_n) + (n-1) = \frac{(n-1)(n-2)}{2} = \frac{n(n-1)}{2}$, which concludes the proof of the lemma.
+Assume now that $T = [1, \ldots, n+1]$.
+In this case, the parent of taxon $n+1$ has rank $n$ in $T$ and rank $1$ in $R$.
+Lemma~\ref{lemma:distance_delete_taxon} then implies that
+\begin{equation}
+d(T\big|_n,R\big|_n) \leq d(T,R) - (n-1).
+\label{eqn:max_dist_cat_proof}
+\end{equation}
+Note that $R\big|_n = \mdtree (T\big|_n)$ for an appropriate choice of attachment points in the execution of $\mdtree$.
+By induction hypothesis and Theorem~\ref{thm:diameter}, $d(T\big|_n,R\big|_n) = \frac{(n-1)(n-2)}{2}$.
+So inequality~(\ref{eqn:max_dist_cat_proof}) becomes $d(T,R) \geq \frac{(n-1)(n-2)}{2} + n - 1 = \frac{n(n-1)}{2}$, which with Theorem~\ref{thm:diameter} gives the desired equality.
 \end{proof}
 
-In Section~\ref{alg:max_dist_tree} we already discussed that $\mdtree$ is a non-deterministic algorithm.
-In fact, the output tree of $\mdtree$ can have any tree topology, since in each step of the algorithm the next taxon can be added on any edge incident to a leaf in the tree.
-Therefore, if the input tree is a caterpillar tree, $\mdtree$ can compute a tree with any tree topology that has maximum distance from the input tree.
-And as permuting labels of trees does not change the distance between them, there exists for every tree $R$ on $n$ taxa a caterpillar tree $T$ with distance $d(T,R) = \Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
-By this we obtain Theorem~\ref{thm:radius}.
+The non-determinism of $\mdtree$ can be exploited to investigate what trees are at the maximal possible from a given caterpillar tree.
+In fact, those trees can have an arbitrary (non-ranked) topology!
+This is because in each step of the algorithm the next taxon can be added on any edge incident to a leaf in the running tree.
+Therefore, if the input tree is a caterpillar tree, $\mdtree$ can be used to find a tree of pre-defined topology that is at the maximal possible distance from the input tree.
+Because the distance between trees is invariant under permutations of taxa labels, we conclude that for every tree $R$ on $n$ taxa there exists a caterpillar tree $T$ such that $d(T,R) = \Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
+This proves the following Theorem~\ref{thm:radius}.
 
 \begin{theorem}
-The radius of the $\rnni$ graph is $\rad(\rnni) = \Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
+The radius and diameter of the $\rnni$ space coincide and are equal to $\frac{(n-1)(n-2)}{2}$.
 \label{thm:radius}
 \end{theorem}
 
