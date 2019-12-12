@@ -187,27 +187,19 @@ In this section we present $\findpath$, an efficient algorithm for computing pat
 Before introducing the algorithm we need the following definitions.
 Each node $v$ of a tree defines a \emph{cluster} $C$, which is the set of taxa descending from $v$.
 We then say that $v$ \emph{induces} $C$.
-\emph{Trivial clusters} are clusters induced by leaves (contain just one element each) and the root of the tree (contains all taxa).
-As all trees on $n$ taxa share all trivial clusters, we will use the notion cluster to mean non-trivial clusters.
-Note that the list of all non-trivial clusters of a tree, sorted according to the rank of the corresponding node, defines the tree unambiguously.
+All trees on $n$ leaves share trivial clusters, which are those induced by leaves and the root, so we exclude them from consideration and say cluster to mean a non-trivial cluster.
+A tree in unambiguously defined by the list of its clusters sorted according to the rank of the inducing nodes.
 We will refer to this list of $n-2$ clusters for a given tree on $n$ taxa as a \emph{cluster representation} of the tree.
 
 Let $T$ and $R$ be arbitrary trees and $[C_1, \ldots, C_{n-2}]$ be the cluster representation of $R$ (the ``destination'' tree).
 Then $C_i$ is induced by the node of rank $i$ for $i = 1, \ldots, n-2$.
 $\findpath$ computes a path by iteratively extending a sequence $p$ of trees starting from $T$.
 The algorithm terminates when $p$ is an $\rnni$ path from $T$ to $R$.
-
-\todo{Alex: go through the following two paragraphs and proof of L1}
-In step $k$ of $\findpath$ we consider the cluster $C_k$ for $k = 1, \ldots, n-2$.
-$p$ is extended in step $k$ by considering the last tree $T'$ on $p$ and finding the node in $T'$ that induces the smallest cluster containing all elements of $C_k$.
+At step $k = 1, \ldots, n-2$ of $\findpath$ we consider the cluster $C_k$ and extend path $p$ as follows.
+We search for a node in the last tree $T'$ of $p$ from the previous step that induces the smallest cluster containing all elements of $C_k$.
 This node is denoted by $\mrca_{T'}(C_k)$ (short for \emph{most recent common ancestor}).
-By performing an $\rnni$ move that decreases the rank of $\mrca_{T'}(C_k)$, we receive a tree that is then appended to $p$.
-Now we extend $p$ by repeatedly performing $\rnni$ moves on the last tree of $p$ that move the most recent common ancestor of $C_k$ down.
-In the end of step $k$, $C_k$ is induced by the internal node of rank $k$ in the last tree of $p$.
-
-By following this procedure, the last of $p$ after step $n-2$ will be $R$, as it contains all clusters of $R$.
-It is important but easy to see that the output path of $\findpath$ is unique for a given pair of trees, which means that it is a deterministic algorithm.
-This is due to the fact that there exists exactly one $\rnni$ move that decreases the rank of the most recent common ancestor of a subset $C_k$ of the taxon set of a tree as long as $C_k$ is not induced by an internal node of that tree.
+We then extend $p$ by adding the tree obtained from $T'$ by performing the $\rnni$ move that decreases the rank of $\mrca_{T'}(C_k)$.
+We continue extending $p$ in this way by repeatedly performing $\rnni$ moves until the rank of $\mrca_{T'}(C_k) = k$, thus completing step $k$.
 
 \begin{algorithm}[H]
 \caption{$\findpath$($T,R$)}
@@ -225,11 +217,10 @@ This is due to the fact that there exists exactly one $\rnni$ move that decrease
 \end{algorithmic}
 \end{algorithm}
 
-The following lemma shows that $\findpath$ is correct, that is, the algorithm returns a path between the two input trees.
-To prove this we have to establish that there always exists a unique $\rnni$ move required in Line~\ref{alg:findpath:line:move_set_down} of the algorithm.
+The following lemma shows that $\findpath$ is a correct deterministic algorithm.
 
 \begin{lemma}
-Let $T = [C_1, \ldots, C_{k-1}, B_{k}, \ldots, B_{n-2}]$ and $R = [C_1, \ldots, C_{k-1}, C_k, \ldots, C_{n-2}]$ be two trees where $C_k \neq B_k, \ldots, B_{n-2}$.
+Let $T = [C_1, \ldots, C_{k-1}, B_{k}, \ldots, B_{n-2}]$ and $R = [C_1, \ldots, C_{k-1}, C_k, \ldots, C_{n-2}]$ be two trees such that $C_k \neq B_k, \ldots, B_{n-2}$.
 Then there exists exactly one $\rnni$ move on $T$ that results in a tree $T'$ such that $\mrca_{T'}(C_k) < \mrca_{T}(C_k)$.
 \label{lemma:mrca_move}
 \end{lemma}
