@@ -16,7 +16,7 @@
 \usepackage[foot]{amsaddr}
 \usepackage[hidelinks]{hyperref}
 \usepackage{csquotes}
-%\usepackage[notref,notcite]{showkeys}
+\usepackage[notref,notcite]{showkeys}
 \usepackage[style=authoryear,ibidtracker=false,uniquename=false,giveninits=true,terseinits=true,maxbibnames=5,backend=biber]{biblatex}
 \renewbibmacro{in:}{}
 \addbibresource{rnni_convexity.bib}
@@ -220,7 +220,7 @@ We continue extending $p$ in this way by repeatedly performing $\rnni$ moves unt
 The following lemma shows that $\findpath$ is a correct deterministic algorithm.
 
 \begin{lemma}
-Let $T = [C_1, \ldots, C_{k-1}, B_{k}, \ldots, B_{n-2}]$ and $R = [C_1, \ldots, C_{k-1}, C_k, \ldots, C_{n-2}]$ be two trees such that $C_k \neq B_k, \ldots, B_{n-2}$.
+Let $T = [C_1, \ldots, C_{k-1}, B_{k}, \ldots, B_{n-2}]$ and $R = [C_1, \ldots, C_{k-1}, C_k, \ldots, C_{n-2}]$ be two trees such that $C_k \neq B_k$.
 Then there exists exactly one $\rnni$ move on $T$ that results in a tree $T'$ such that $\mrca_{T'}(C_k) < \mrca_{T}(C_k)$.
 \label{lemma:mrca_move}
 \end{lemma}
