@@ -225,6 +225,7 @@ Then there exists exactly one $\rnni$ move on $T$ that results in a tree $T'$ su
 \label{lemma:mrca_move}
 \end{lemma}
 
+\todo{We never use $R$ in this proof, so $B_k$'s are irrelevant in Lemma.}
 \begin{proof}
 Let $T$ and $R$ be trees as defined in the lemma.
 Notice that the only $\rnni$ move on $T$ that could decrease the rank of $\mrca_T(C_k)$ are $\nni$ moves on the edge between $\mrca_T(C_k)$ and its child (if this edge has length one), or a rank move between $\mrca_T(C_k)$ and the node with rank one less.
@@ -250,13 +251,11 @@ Now it is easy to see that just one of the $\nni$ moves on $(v,w)$ (illustrated 
 \end{figure}
 \end{proof}
 
-Note that the uniqueness of the $\rnni$ move in Line~\ref{alg:findpath:line:move_set_down} of the algorithm $\findpath$ also implies that the algorithm is deterministic.
-The running time of the algorithm is quadratic in the number of taxa.
+Clearly, the worst-case complexity of $\findpath$ is quadratic in the number of taxa.
 
 Because the algorithm returns a path between pairs of trees in $\rnni$, the length of the path approximates the $\rnni$ distance from above.
 A natural question then is how accurate this approximation is.
-We have computationally shown that the algorithm $\findpath$ finds the correct distance for trees up to six taxa.
-Specifically, we have implemented $\findpath$ \autocite{Collienne2019} and compared the results with the true $\rnni$ distance as explained earlier in this section.
+We have computationally shown that the algorithm $\findpath$ finds the correct distance for trees up to seven taxa \autocite{Collienne2019}.
 
 
 \subsection{$\csort$}
