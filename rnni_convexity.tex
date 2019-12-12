@@ -203,13 +203,12 @@ We continue extending $p$ in this way by repeatedly performing $\rnni$ moves unt
 
 \begin{algorithm}[H]
 \caption{$\findpath$($T,R$)}
-\label{alg:find_path}
 \begin{algorithmic}[1]
-\STATE $T' := T$, $p := [T']$
+\STATE $T' := T$, $p := [T']$, $[C_1, \ldots, C_{n-2}] := R$
 \FOR {$k = 1, \dots, n-2$}
-  \STATE Let $C_k$ be the cluster induced by the node with rank $k$ in $R$ \label{alg:find_path:line:cluster}
   \WHILE {$\rank_{T'}(\mrca_{T'}(C_k))>k$}
-    \STATE Update $T'$: Decrease $\rank_{T'}(\mrca_{T'}(C_k))$ by an $\rnni$ move \label{alg:findpath:line:move_set_down}
+    \STATE Update $T'$: Decrease $\rank_{T'}(\mrca_{T'}(C_k))$ by an $\rnni$ move
+    \label{alg:findpath:line:move_set_down}
     \STATE $p = p+T'$
   \ENDWHILE
 \ENDFOR
@@ -217,39 +216,32 @@ We continue extending $p$ in this way by repeatedly performing $\rnni$ moves unt
 \end{algorithmic}
 \end{algorithm}
 
-The following lemma shows that $\findpath$ is a correct deterministic algorithm.
+\begin{proposition}
+$\findpath$ is a correct deterministic algorithm.
+\end{proposition}
 
-\begin{lemma}
-Let $T = [C_1, \ldots, C_{k-1}, B_{k}, \ldots, B_{n-2}]$ be a tree and $C_k$ a cluster such that $\mrca_T(C_k) > k$.
-Then there exists exactly one $\rnni$ move on $T$ that results in a tree $T' = [C_1, \ldots, C_{k-1}, \ldots]$ with $\mrca_{T'}(C_k) < \mrca_{T}(C_k)$.
-\label{lemma:mrca_move}
-\end{lemma}
+\proof
+It is suffice to show that the update operation (line~\ref{alg:findpath:line:move_set_down}) is well-defined, that is the $\rnni$ move that decreases the rank of $\mrca_{T'}(C_k)$ is unique.
 
-\todo{We never use $R$ in this proof, so $B_k$'s are irrelevant in Lemma.}
-\begin{proof}
-Let $T$ and $R$ be trees as defined in the lemma.
-Notice that the only $\rnni$ move on $T$ that could decrease the rank of $\mrca_T(C_k)$ are $\nni$ moves on the edge between $\mrca_T(C_k)$ and its child (if this edge has length one), or a rank move between $\mrca_T(C_k)$ and the node with rank one less.
-Therefore, we will now distinguish these two cases:
-Either there is an edge $(v,w)$ between nodes $v = \mrca_T(C_k)$ and $w$ with rank $rank_T(w) = rank_T(v) - 1$, or there is no such edge.
+Case $k = 1$.
+In this case $C_k$ is a cherry $(x, y)$.
+The node $v = \mrca_{T'}(x, y)$ has $\rank_{T'}(v) = r > 1$.
+Consider the node $w$ preceding $v$ in $T'$, that is, $\rank_{T'}(w) = r - 1$.
+If a rank move that swaps $v$ and $w$ is possible then this is the only move on $T'$ that can decrease the rank of $\mrca(x, y)$.
+If the rank move is impossible then there is an edge in $T'$ connecting $v$ and $w$.
+The only way to decrease the rank of $\mrca(x, y)$ then is to perform an $\nni$ move on that edge.
+It is not hard to see that out of two possible $\nni$ moves only one decreases the rank of $\mrca$.
 
-In the latter case the only $\rnni$ move that could decrease the rank of $v$ is a rank move swapping the ranks of $v$ and $w$.
-
-Let us now assume that there is an edge $(v,w)$ in $T$.
-Let $T_v$ be the subtree that is rooted in the child of $v$ that is not $w$ and let $T_{w_1}$ and $T_{w_2}$ be the subtrees rooted in the children of $w$.
-We are now going to explain why only one of these two $\nni$ moves changes the rank of $\mrca_T(C_k)$.
-It is important to notice that $C_k$ either is the disjoint union of two of the clusters $C_1, \ldots, C_{k-1}$ or the union of one of those clusters with a single taxon that is not included in any of those clusters.
-In general we can say that $C_k = S_1 \dot\cup S_2$ is the union of two subsets of taxon set of $T$ such each of these subsets is contained in one of the subtrees $T_v, T_{w_1}$, or $T_{w_2}$.
-In fact, $S_1$ and $S_2$ are contained in two different of these subtrees.
-Now it is easy to see that just one of the $\nni$ moves on $(v,w)$ (illustrated in Figure~\ref{fig:mrca_move}) decreases the rank of $\mrca_T(C_k)$.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.5\textwidth]{mrca_move}
-\vspace{12pt}
-\caption{Two $\nni$ moves that are possible on the edge $(v,w)$ of the tree $T'$ with subtrees $T_v, T_{w_1}, T_{w_2}$ as described in the proof of Lemma~\ref{lemma:mrca_move}.}
-\label{fig:mrca_move}
-\end{figure}
-\end{proof}
+Case $k > 1$.
+\begin{enumerate}
+\item $C_k = C_i \cup C_j$ for $i, j < k$.
+Suppress $C_i$ and $C_j$ in both $T'$ and $R$ to new taxa $c_i$ and $c_j$ respectively and proceed as in Case $k = 1$.
+\item $C_k = C_i \cup {x}$, where $x$ is a taxon not present in $C_1, \ldots, C_k$.
+Suppress $C_i$ in both $T'$ and $R$ to a new taxon $c_i$ and proceed as in Case $k = 1$.
+\item $C_k = \{x, y\}$ where both $x$ and $y$ are not in $C_1, \ldots, C_k$.
+Proceed as in Case $k = 1$.
+\end{enumerate}
+\endproof
 
 Clearly, the worst-case complexity of $\findpath$ is quadratic in the number of taxa.
 
@@ -266,8 +258,8 @@ As a result caterpillar trees have only one \emph{cherry}, which is a pair of ta
 A path between two caterpillar trees that only consists of caterpillar trees is called a \emph{caterpillar path}.
 We can identify a caterpillar tree $T = [\{x_1, x_2\}, \{x_1, x_2, x_3\}, \ldots, \{x_1, \ldots, x_n\}]$ with the list of its taxa $[x_1, x_2, \ldots, x_n]$, assuming that $x_1 < x_2$ as natural numbers (recall that the set of taxa is $\{1, \ldots, n\}$).
 
-The algorithm $\csort$ (Algorithm~\ref{alg:csort}) is a natural modification of the classical Bubble Sort algorithm \autocite{Knuth1997-pi}.
-A path $p$ from $T$ to $R= [x_1, x_2, \ldots, x_n]$ is computed iteratively so that after $k$ steps the last $k$ taxa of $T$ and $R$ coincide.
+The algorithm $\csort$ (Algorithm~\ref{alg:csort}) is a modification of the classical Bubble Sort algorithm \autocite{Knuth1997-pi}.
+A path $p$ from $T$ to $R= [x_1, \ldots, x_n]$ is computed iteratively so that after $k$ steps the last $k$ taxa of $T$ and $R$ coincide.
 Specifically, in step $k$ ($k = n, \ldots, 3$) the parent of taxon $x_{k}$ is moved up by $\nni$ moves to the position it has in $R$.
 Notice that there might be more than just one such move per step, which means that $p$ can be extended by more than one tree in each step.
 
