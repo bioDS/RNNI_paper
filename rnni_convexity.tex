@@ -69,7 +69,7 @@
 In this paper we study the graph of ranked phylogenetic trees where the adjacency relation is given by a local rearrangement of the tree structure.
 Our work is motivated by tree inference algorithms, such as maximum likelihood and Markov Chain Monte Carlo methods, where the geometry of the search space plays a central role for efficiency and practicality of the optimisation.
 We hence focus on understanding the geometry of the space (graph) of ranked trees, the so-called ranked nearest neighbour interchange ($\rnni$) graph.
-For example, we find exact estimates of the radius and diameter of the space, improving the best previously known estimates.
+For example, we find the radius and diameter of the space exactly, improving the best previously known estimates.
 Since the $\rnni$ graph is a generalisation of the classical nearest neighbour interchange ($\nni$) graph to ranked phylogenetic trees, we compare geometric and algorithmic properties of the two graphs.
 Surprisingly, we discover that both geometric and algorithmic properties of $\rnni$ and $\nni$ are quite different.
 For example, we establish convexity of certain natural subspaces in $\rnni$, which are not convex is $\nni$.
@@ -96,7 +96,7 @@ Surprisingly, most of them cannot be settled by directly translating results or 
 
 In this paper, we consider the $\rnni$ space on ranked phylogenetic trees with all taxa being of equal rank.
 An example of such a tree is depicted in Figure~\ref{fig:ranked_tree}.
-In the terminology of \autocite{Gavryushkin2018-ol}, the space considered in this paper is the space of ranked ultrametric phylogenetic trees $\rnniu$.
+In the terminology of \autocite{Gavryushkin2018-ol}, the space considered in this paper is the space of ranked ultrametric phylogenetic trees ($\rnniu$ in their notations).
 We postpone accurate definitions until later in this section.
 
 \begin{figure}[H]
@@ -125,6 +125,7 @@ For a tree $T$, we will use $\rank_T$ to refer to its ranking.
 A ranked tree $T$ without its leaf labels will be called \emph{tree topology}.
 
 Our definition of a ranked tree implies a natural notion of edge length -- we call $|\rank_T(v) - \rank_T(u)|$ the length of an edge $(u, v)$.
+We assume that edges of trees are undirected, so $(u, v) = (v, u)$.
 
 Now we are ready to introduce the tree space which is the subject of study in this paper, the $\rnni$ graph.
 
@@ -158,7 +159,7 @@ We will finish the paper with a discussion and open problems.
 \label{section:algorithms}
 
 In this section we introduce three algorithms, $\findpath$ (Section~\ref{section:alg_findpath}), $\csort$ (Section~\ref{section:alg_csort}), and $\mdtree$ (Section~\ref{section:alg_mdtree}).
-$\findpath$ computes a $\rnni$ path between trees.
+$\findpath$ computes an $\rnni$ path between trees.
 $\csort$ computes a shortest $\rnni$ path between caterpillar trees (also known as ladder trees, see later in this section for accurate definitions).
 $\mdtree$ maximises the dissimilarity to find a remote tree given an arbitrary $\rnni$ tree.
 While these algorithms are interesting on their own (e.g.\ in simulation studies), they will also form an important ingredient to study the geometry of the $\rnni$ space later in this paper.
@@ -188,7 +189,7 @@ Before introducing the algorithm we need the following definitions.
 Each node $v$ of a tree defines a \emph{cluster} $C$, which is the set of taxa descending from $v$.
 We then say that $v$ \emph{induces} $C$.
 All trees on $n$ leaves share trivial clusters, which are those induced by leaves and the root, so we exclude them from consideration and say cluster to mean a non-trivial cluster.
-A tree in unambiguously defined by the list of its clusters sorted according to the rank of the inducing nodes.
+A tree is unambiguously defined by the list of its clusters sorted according to the rank of the inducing nodes.
 We will refer to this list of $n-2$ clusters for a given tree on $n$ taxa as a \emph{cluster representation} of the tree \autocite{Gavryushkin2018-ol, Gavryushkin2016-uu, Semple2003-nj}.
 
 Let $T$ and $R$ be arbitrary trees and $[C_1, \ldots, C_{n-2}]$ be the cluster representation of $R$ (the ``destination'' tree).
@@ -221,10 +222,10 @@ $\findpath$ is a correct deterministic algorithm.
 \end{proposition}
 
 \proof
-It is suffice to show that the update operation (line~\ref{alg:findpath:line:move_set_down}) is well-defined, that is the $\rnni$ move that decreases the rank of $\mrca_{T'}(C_k)$ is unique.
+It suffices to show that the update operation (line~\ref{alg:findpath:line:move_set_down}) is well-defined, that is the $\rnni$ move that decreases the rank of $\mrca_{T'}(C_k)$ is unique.
 
 Case $k = 1$.
-In this case $C_k$ is a cherry $(x, y)$.
+In this case $C_k$ is a consists of two taxa $\{x, y\}$.
 The node $v = \mrca_{T'}(x, y)$ has $\rank_{T'}(v) = r > 1$.
 Consider the node $w$ preceding $v$ in $T'$, that is, $\rank_{T'}(w) = r - 1$.
 If a rank move that swaps $v$ and $w$ is possible then this is the only move on $T'$ that can decrease the rank of $\mrca(x, y)$.
@@ -383,21 +384,21 @@ Since $d(T{\big|}_n,R{\big|}_n) \leq |p{\big|}_n|$ and $|p| = d(T,R)$, the desir
 \label{section:caterpillar_convex}
 
 In this section we restrict our attention to the set of caterpillar trees.
-These trees are of particular interest because they are used to prove the computing the $\nni$ distance is an NP-hard problem.
+These trees are of particular interest because they are used to prove that computing the $\nni$ distance is an NP-hard problem.
 As we will see below, shortest paths between caterpillar trees in $\rnni$ differ from those in the classical $\nni$ space.
 We will show later in this section that $\rnni$ distances between caterpillar trees can be computed in polynomial time.
 Throughout this section we use the list representation of trees described in Section~\ref{section:alg_csort}.
 
-Recall \autocite{Gavryushkin2018-ol} that to compute a shortest path between two caterpillar trees in $\nni$ sometimes requires first building a clade and then move the clade around the tree (see Figure~\ref{fig:NNI_vs_RNNI}).
+Recall \autocite{Gavryushkin2018-ol} that computing a shortest path between two caterpillar trees in $\nni$ sometimes requires first building a clade and then moving the clade around the tree (see Figure~\ref{fig:NNI_vs_RNNI}).
 In $\rnni$ however, the necessity of additional rank moves invalidates this strategy.
-This is due to the fact that $\nni$ moves $\rnni$ are only allowed on edges of length one.
+This is due to the fact that $\nni$ moves in $\rnni$ are only allowed on edges of length one.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{NNI_vs_RNNI}
 \vspace{12pt}
-\caption{Paths between caterpillar trees $T$ and $R$: Solid arrows indicate paths in $\rnni$, dashed arrow is a move only possible in $\nni$.
-Bottom path is a shortest $\rnni$ path.}
+\caption{Paths between caterpillar trees $T$ and $R$: Solid arrows indicate paths in $\rnni$, the dashed arrow is a move only possible in $\nni$.
+The bottom path is a shortest $\rnni$ path.}
 \label{fig:NNI_vs_RNNI}
 \end{figure}
 
@@ -528,7 +529,7 @@ The radius and diameter of the $\rnni$ space coincide and are equal to $\frac{(n
 \subsection{Cluster Theorem}
 \label{section:cluster_theorem}
 
-In this section we discussed the so-called Split Theorem, which states that every split shared between two trees is maintained along shortest paths between the trees.
+In this section we discuss the so-called Split Theorem, which states that every split shared between two trees is maintained along shortest paths between the trees.
 For example, Split Theorem is true in the $\spr$ space and false in $\nni$ \autocite{Li1996-zw}.
 Specifically, in $\nni$ there exist two trees $T$ and $R$, which share a split $A | B$, such that every tree on every shortest path between $T$ and $R$ does not have $A | B$.
 
@@ -550,7 +551,7 @@ Instead, the depicted path where $\frac{n}{2}$ cherries are built and then sorte
 
 This argument motivated \textcite[Conjecture~9]{Gavryushkin2018-ol} to conjecture that every split shared between trees in $\rnni$ is maintained along every shortest path.
 
-The following example in Figure~\ref{fig:splitthm_counterexample} shows that this form of the Split Theorem does now hold.
+The following example in Figure~\ref{fig:splitthm_counterexample} shows that this form of the Split Theorem does not hold.
 
 \begin{figure}[H]
 \centering
@@ -574,7 +575,7 @@ Another interesting property of our counterexample in Figure~\ref{fig:splitthm_c
 Importantly, rooted phylogenetic trees can be uniquely represented by sets of clusters \autocite{Steel2016-ye}, but not by sets of splits as splits cannot define the position of the root.
 For example, trees $T$ and $R$ in Figure~\ref{fig:splitthm_counterexample} induce the same set of splits, but share no cluster.
 
-Furthermore, all our methods in this paper for computing shortest paths in special subspaces of $\rnni$ demonstrate that that shared clusters are maintained along shortest paths.
+Furthermore, all our methods in this paper for computing shortest paths in special subspaces of $\rnni$ demonstrate that shared clusters are maintained along shortest paths.
 
 These considerations motivate us to conjecture the following strong version of the Cluster Theorem.
 
@@ -585,7 +586,6 @@ Then $C$ is present as a cluster in every tree on every shortest path between $T
 \end{conjecture}
 
 We have computationally checked that this conjecture is true in $\rnni$ spaces with up to seven taxa ($n = 2, \ldots, 7$).
-%TODO
 Specifically, we computed subgraphs of $\rnni$ containing only trees with shared clusters and compared distances in this subgraph with distances in the whole $\rnni$ graph.
 We computed these graphs according to the algorithm from \autocite{Gavryushkin2018-ol} as discussed in Section~\ref{section:algorithms}.
 The source code of all these implementations can be openly accessed at \autocite{Collienne2019}.
@@ -616,7 +616,7 @@ We are not aware of the minimal number of taxa where this algorithm fails to ret
 The $\mdtree$ algorithm produces trees as far away from a given tree as possible, a task of importance in simulation and model comparison studies.
 The $\csort$ algorithm efficiently computes the $\rnni$ distance and shortest paths between caterpillar trees exactly.
 To the best of our knowledge no such algorithm exists for $\nni$.
-This implies that the algorithmic complexity of comping distances in $\nni$ is higher than in $\rnni$.
+This implies that the algorithmic complexity of computing distances in $\nni$ is higher than in $\rnni$.
 
 The question of whether computing $\rnni$ distances is $\np$-hard is still an open problem.
 
@@ -624,8 +624,10 @@ The question of whether computing $\rnni$ distances is $\np$-hard is still an op
 \section*{Acknowledgements}
 We thank Charles Semple for useful discussions about the Cluster Theorem.
 
-We acknowledge support from the Royal Society of New Zealand through the Rutherford Discovery Fellowship awarded to AG.
-This work was partially supported by the Ministry of Business, Innovation, and Employment of New Zealand through the Endeavour Smart Ideas and Data Science Programmes grants.
+We acknowledge support from the Royal Society of New Zealand through the Rutherford Discovery Fellowship (RDF-UOO1702) awarded to AG.
+This work was partially supported by the Ministry of Business, Innovation, and Employment of New Zealand through the Endeavour Smart Ideas (CONT-61378-ENDSI-UOO) and Data Science Programmes grants.
+
+MF thanks the joint research project \textit{DIG-IT!} supported by the European Social Fund (ESF), reference: ESF/14-BM-A55-0017/19, and the Ministry of Education, Science, and Culture of Mecklenburg-Vorpommern, Germany, for funding parts of this work.
 
 Part of this work was done while LC and AG were visiting Max Plank Institute for Evolutionary Biology, we appreciate their support.
 
