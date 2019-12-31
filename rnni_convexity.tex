@@ -284,7 +284,7 @@ Notice that there might be more than just one such move per step, which means th
 The running time of $\csort$ is quadratic in $n$.
 
 The path $p$ returned by $\csort$ is a shortest caterpillar path because every tree modification on $p$ reduces the number of inversions of taxa in $T$ and $R$.
-Indeed, no $\rnni$ move on caterpillar trees can reduce the number of taxa inversions by more than one, assuming that inversions with both taxa of a cherry are counted only once, that is, if both pairs of taxa $(x, z)$ and $(y, z)$ appear in opposite orders in $T$ and $R$ and $(x,y)$ is a cherry then they are counted as one inversion.
+Indeed, no $\rnni$ move on caterpillar trees can reduce the number of taxa inversions by more than one, assuming that inversions with both taxa of a cherry are counted only once, that is, if both pairs of taxa $(x, z)$ and $(y, z)$ appear in opposite orders in $T$ and $R$ and $x$ an $y$ build a cherry then they are counted as one inversion.
 Hence any caterpillar path every move along which reduced the number of inversions is a shortest caterpillar path.
 
 It is not obvious that the path between $T$ and $R$ returned by $\csort$ has the least possible length among all $\rnni$ paths (not only caterpillar paths), that is, the length of $d(T, R)$.
