@@ -151,7 +151,7 @@ In Section~\ref{section:algorithms} we introduce three algorithms for exploring 
 We use these algorithms in Section~\ref{section:geometry} to establish several geometrical properties of this graph, such as its diameter and radius.
 Furthermore, we will establish in Section~\ref{section:caterpillar_convex} that a certain subspace of $\rnni$ is convex and design a polynomial-time algorithm for computing $\rnni$-distances in that subspace.
 This result suggests that the complexity of computing distances in $\rnni$ is different from that in the classical $\nni$ space.
-We will discuss this further in Section~\ref{section:cluster_theorem}, where we disprove a conjecture of \textcite{Gavryushkin2018-ol} and suggest its weaker versions a plausible alternatives.
+We will discuss this further in Section~\ref{section:cluster_theorem}, where we disprove a conjecture of \textcite{Gavryushkin2018-ol} and suggest weaker versions as plausible alternatives.
 We will finish the paper with a discussion and open problems.
 
 
@@ -163,7 +163,7 @@ $\findpath$ computes an $\rnni$ path between trees.
 $\csort$ computes a shortest $\rnni$ path between caterpillar trees (also known as ladder trees, see later in this section for accurate definitions).
 $\mdtree$ maximises the dissimilarity to find a remote tree given an arbitrary $\rnni$ tree.
 While these algorithms are interesting on their own (e.g.\ in simulation studies), they will also form an important ingredient to study the geometry of the $\rnni$ space later in this paper.
-For example, $\mdtree$ will be an important tool for finding the radius of the $\rnni$ graph, as the algorithms computes a tree with maximum distance if the input tree is a caterpillar tree.
+For example, $\mdtree$ will be an important tool for finding the radius of the $\rnni$ graph, as the algorithm computes a tree with maximum distance if the input tree is a caterpillar tree.
 We will prove this fact in Section~\ref{section:diameter}.
 
 The algorithm $\findpath$ can be used to approximate the $\rnni$ distance.
@@ -174,8 +174,8 @@ However, the large number of vertices in $\rnni$ is an obstacle when it comes to
 Since there are $\frac{n!(n-1)!}{2^{n-1}}$ vertices in the $\rnni$ graph \autocite{Gavryushkin2018-ol}, we compute the $\rnni$ graph on up to seven taxa for our analyses.
 This computational result will also be used later in the paper to support Conjecture~\ref{conjecture:cluster_theorem}, a modification of Conjecture~9 in \autocite{Gavryushkin2018-ol}, which we prove to be false in this paper.
 
-Note that $\rnni$ space on trees with seven taxa is a challenging goal to achieve computationally.
-For example, \textcite{Whidden2016-kl} were able to achieve up to seven taxa in the much smaller $\rnni$ space, when it required considering pairs of trees.
+Note that computing the $\rnni$ space on trees with seven taxa is a challenging goal to achieve.
+For example, \textcite{Whidden2016-kl} were able to achieve up to seven taxa in the much smaller $\spr$ space, when it required considering pairs of trees.
 %TODO: Make a zenodo dio for the repository before final publication
 We have implemented all our algorithms in a combination of Python and C, and the source code is available at \autocite{Collienne2019}.
 
@@ -199,7 +199,7 @@ The algorithm terminates when $p$ is an $\rnni$ path from $T$ to $R$.
 At step $k = 1, \ldots, n-2$ of $\findpath$ we consider the cluster $C_k$ and extend path $p$ as follows.
 We search for a node in the last tree $T'$ of $p$ from the previous step that induces the smallest cluster containing all elements of $C_k$.
 This node is denoted by $\mrca_{T'}(C_k)$ (short for \emph{most recent common ancestor}).
-We then extend $p$ by adding the tree obtained from $T'$ by performing the $\rnni$ move that decreases the rank of $\mrca_{T'}(C_k)$.
+We then extend $p$ by adding the tree obtained from $T'$ by performing an $\rnni$ move that decreases the rank of $\mrca_{T'}(C_k)$.
 We continue extending $p$ in this way by repeatedly performing $\rnni$ moves until the rank of $\mrca_{T'}(C_k) = k$, thus completing step $k$.
 
 \begin{algorithm}[H]
@@ -225,13 +225,13 @@ $\findpath$ is a correct deterministic algorithm.
 It suffices to show that the update operation (line~\ref{alg:findpath:line:move_set_down}) is well-defined, that is the $\rnni$ move that decreases the rank of $\mrca_{T'}(C_k)$ is unique.
 
 Case $k = 1$.
-In this case $C_k$ is a consists of two taxa $\{x, y\}$.
+In this case $C_k$ consists of two taxa $\{x, y\}$.
 The node $v = \mrca_{T'}(x, y)$ has $\rank_{T'}(v) = r > 1$.
 Consider the node $w$ preceding $v$ in $T'$, that is, $\rank_{T'}(w) = r - 1$.
 If a rank move that swaps $v$ and $w$ is possible then this is the only move on $T'$ that can decrease the rank of $\mrca(x, y)$.
 If the rank move is impossible then there is an edge in $T'$ connecting $v$ and $w$.
 The only way to decrease the rank of $\mrca(x, y)$ then is to perform an $\nni$ move on that edge.
-It is not hard to see that out of two possible $\nni$ moves only one decreases the rank of $\mrca$.
+It is not hard to see that out of two possible $\nni$ moves only one decreases the rank of this $\mrca$.
 
 Case $k > 1$.
 \begin{enumerate}
@@ -248,7 +248,7 @@ Clearly, the worst-case complexity of $\findpath$ is quadratic in the number of 
 
 Because the algorithm returns a path between pairs of trees in $\rnni$, the length of the path approximates the $\rnni$ distance from above.
 A natural question then is how accurate this approximation is.
-We have computationally shown that the algorithm $\findpath$ finds the correct distance for trees up to seven taxa \autocite{Collienne2019}.
+We have computationally shown that the algorithm $\findpath$ finds the correct distance for trees up to six taxa \autocite{Collienne2019}.
 
 
 \subsection{$\csort$}
@@ -257,7 +257,7 @@ We have computationally shown that the algorithm $\findpath$ finds the correct d
 In this section we introduce an algorithm to compute paths between \emph{caterpillar trees}, which are trees where each internal node is adjacent to at least one leaf.
 As a result caterpillar trees have only one \emph{cherry}, which is a pair of taxa that share their parent.
 A path between two caterpillar trees that only consists of caterpillar trees is called a \emph{caterpillar path}.
-We can identify a caterpillar tree $T = [\{x_1, x_2\}, \{x_1, x_2, x_3\}, \ldots, \{x_1, \ldots, x_{n-1}\}]$ with the list of its taxa $[x_1, x_2, \ldots, x_n]$, assuming that $x_1 < x_2$ as natural numbers (recall that the set of taxa is $\{1, \ldots, n\}$).
+We can identify a caterpillar tree $T = [\{x_1, x_2\}, \{x_1, x_2, x_3\}, \ldots, \{x_1, \ldots, x_{n-1}\}]$ with the list of its taxa $[x_1, x_2, \ldots, x_n]$, assuming that $x_1 < x_2$ (recall that the set of taxa is $\{1, \ldots, n\}$).
 
 The algorithm $\csort$ (Algorithm~\ref{alg:csort}) is a modification of the classical Bubble Sort algorithm \autocite{Knuth1997-pi}.
 A path $p$ from $T$ to $R= [x_1, \ldots, x_n]$ is computed iteratively so that after $k$ steps the last $k$ taxa of $T$ and $R$ coincide.
@@ -284,8 +284,9 @@ Notice that there might be more than just one such move per step, which means th
 The running time of $\csort$ is quadratic in $n$.
 
 The path $p$ returned by $\csort$ is a shortest caterpillar path because every tree modification on $p$ reduces the number of inversions of taxa in $T$ and $R$.
-Indeed, no $\rnni$ move on caterpillar trees can reduce the number of taxa inversions by more than one, assuming that inversions with both taxa of a cherry are counted only once, that is, if both pairs of taxa $(x, z)$ and $(y, z)$ appear in opposite orders in $T$ and $R$ and $x$ an $y$ build a cherry then they are counted as one inversion.
-Hence any caterpillar path every move along which reduced the number of inversions is a shortest caterpillar path.
+Indeed, no $\rnni$ move on caterpillar trees can reduce the number of taxa inversions by more than one, assuming that inversions with both taxa of a cherry are counted only once.
+That is, if both pairs of taxa $(x, z)$ and $(y, z)$ appear in opposite orders in $T$ and $R$ and $x$ an $y$ build a cherry then they are counted as one inversion.
+Hence any caterpillar path, every move along which reduced the number of inversions, is a shortest caterpillar path.
 
 It is not obvious that the path between $T$ and $R$ returned by $\csort$ has the least possible length among all $\rnni$ paths (not only caterpillar paths), that is, the length of $d(T, R)$.
 This fact will be established in Theorem~\ref{thm:caterpillar_convex}.
@@ -297,14 +298,14 @@ Our Python implementation of this algorithm can be accessed at \autocite{Collien
 \label{section:alg_mdtree}
 
 The idea behind this algorithm is to efficiently return a tree as far away from a given tree as possible.
-As we will see in Section~\ref{section:diameter}, $\mdtree$ achieves this goal exactly for caterpillar trees.
+As we will see in Section~\ref{section:diameter}, $\mdtree$ achieves this goal for caterpillar trees.
 
 $\mdtree$ (Algorithm~\ref{alg:max_dist_tree}) works as follows.
 Given an arbitrary tree $T$, order its taxa in a list $L = [l_1, \ldots, l_n]$ so that the ranks of their parents are non-decreasing with respect to this order.
 Note that this list is not uniquely determined by the tree.
 $\mdtree$ constructs an output tree $R$ as follows:
 Initially, $R$ only consists of two taxa $l_1$ and $l_2$, the most recent common ancestor of which will eventually be of rank $n - 1$.
-The remaining taxa are iteratively added to $R$ in the reversed order of $L$ starting from $l_n$.
+The remaining taxa are iteratively added to $R$ reversing the order of $L$.
 At every iteration, the taxon is attached to a new internal node created on one of the existing branches in $R$ so that this new attachment node has rank one.
 Note that $R$ is not uniquely determined due to the non-deterministic choice of the attachment edge.
 
@@ -337,9 +338,10 @@ In other words, the set of caterpillar trees is \emph{convex} in $\rnni$.
 In Section~\ref{section:diameter} we will investigate the diameter and radius of the $\rnni$ space.
 Interestingly, the \emph{diameter} of $\rnni$, that is the maximum distance $\Delta(\rnni) = \max \{d(T, R) \mid T, R \in \rnni\}$ between any two trees in the graph, equals its \emph{radius} defined as $\min\limits_T \max\limits_R d(T,R)$.
 Next, we will consider the so-called Split Theorem \autocite{Gavryushkin2018-ol}, which states that every shared split of taxa is maintained along every shortest path.
-Recall that a \emph{split} is a bipartition of the set of taxa obtained by deleting an edge of the tree $T$, splits are denoted by $A|B$.
-We will give a counterexample to the Split Theorem in $\rnni$ and consider a variant of the Weak Split Theorem, which states that every shared split of taxa is maintained along a shortest path.
-We will also consider the so-called Clade Theorem as another weak version of the Split Theorem (see Conjecture~\ref{conjecture:cluster_theorem}).
+Recall that a \emph{split} is a bipartition of the set of taxa obtained by deleting an edge of the tree $T$.
+Splits are denoted by $A|B$.
+We will give a counterexample to the Split Theorem in $\rnni$ and consider a variant, the Weak Split Theorem, which states that every shared split of taxa is maintained along a shortest path.
+We will also consider the so-called Cluster Theorem as another weak version of the Split Theorem (see Conjecture~\ref{conjecture:cluster_theorem}).
 
 We start with the following auxiliary results.
 
@@ -372,7 +374,7 @@ First observe that the rank of the internal node $\parent_T(n+1)$ can only be ch
 Second observe that any $\rnni$ move can change the rank of $\parent_T(n+1)$ by at most one.
 Hence an $\rnni$ move on $T$ can decrease the rank of $\parent_T(n+1)$ by at most one.
 
-Let $p$ be a shortest path from $T$ to $R$ and $p{\big|}_n$ the path resulting from deleting taxon $n+1$ from all trees on $p$.
+Let $p$ be a shortest path from $T$ to $R$ and $p{\big|}_n$ the path resulting from deleting taxon $n+1$ from all trees on $p$ and removing all identical trees.
 Then $p{\big|}_n$ is a path from $T{\big|}_n$ to $R{\big|}_n$.
 Recall that $\delta$ is the difference in ranks between the parents of taxon $n+1$ in $T$ and $R$.
 Combining this with the observations above, we conclude that $|p{\big|}_n| \leq |p| - \delta$.
@@ -384,10 +386,10 @@ Since $d(T{\big|}_n,R{\big|}_n) \leq |p{\big|}_n|$ and $|p| = d(T,R)$, the desir
 \label{section:caterpillar_convex}
 
 In this section we restrict our attention to the set of caterpillar trees.
-These trees are of particular interest because they are used to prove that computing the $\nni$ distance is an NP-hard problem.
+These trees are of particular interest because they are used to prove that computing $\nni$ distances is an NP-hard problem.
 As we will see below, shortest paths between caterpillar trees in $\rnni$ differ from those in the classical $\nni$ space.
 We will show later in this section that $\rnni$ distances between caterpillar trees can be computed in polynomial time.
-Throughout this section we use the list representation of trees described in Section~\ref{section:alg_csort}.
+Throughout this section we use the list representation of caterpillar trees described in Section~\ref{section:alg_csort}.
 
 Recall \autocite{Gavryushkin2018-ol} that computing a shortest path between two caterpillar trees in $\nni$ sometimes requires first building a clade and then moving the clade around the tree (see Figure~\ref{fig:NNI_vs_RNNI}).
 In $\rnni$ however, the necessity of additional rank moves invalidates this strategy.
@@ -403,11 +405,11 @@ The bottom path is a shortest $\rnni$ path.}
 \end{figure}
 
 These observations motivate the following general result.
-Every pair of trees $T, R$ in $\rnni$ are connected by a caterpillar path of length $d(T,R)$, that is, the set of caterpillar trees is convex in $\rnni$ (Theorem~\ref{thm:caterpillar_convex}).
+Every pair of caterpillar trees $T, R$ in $\rnni$ are connected by a caterpillar path of length $d(T,R)$, that is, the set of caterpillar trees is convex in $\rnni$ (Theorem~\ref{thm:caterpillar_convex}).
 Note that this is not true in the $\nni$ space (Figure~\ref{fig:NNI_vs_RNNI}).
 
-We need the following lemma.
-Recall that $\frac{(n-1)(n-2)}{2}$ is the upper bound of the diameter of $\rnni$ by Lemma~\ref{lemma:diameter_bound}.
+For proving the convexity of the set of caterpillar trees we need the following lemma.
+Recall that $\frac{(n-1)(n-2)}{2}$ is an upper bound of the diameter of $\rnni$ by Lemma~\ref{lemma:diameter_bound}.
 
 \begin{lemma}
 Let $T$ and $R$ be two caterpillar trees.
@@ -424,9 +426,9 @@ It follows that the maximum length of a path computed by $\csort$ is
 \label{csort_max}
 \end{equation}
 
-For proving the other direction of the statement, assume that $d_c(T,R) = \frac{(n-1)(n-2)}{2}$.
+To prove the reverse, assume that $d_c(T,R) = \frac{(n-1)(n-2)}{2}$.
 We prove that $d(T,R) = \frac{(n-1)(n-2)}{2}$ by induction on the number of taxa $n$.
-The induction basis for $n=3$ taxa is trivial as the $\rnni$ graph is a triangle on three caterpillar trees in that case.
+The induction basis for $n=3$ taxa is trivial as the $\rnni$ graph is a triangle on three caterpillar trees in this case.
 
 For the induction step we assume without loss of generality that $T$ is the caterpillar tree $[1, \ldots, n+1]$ and $R$ is a caterpillar tree such that $d_c(T, R) = \frac{n(n-1)}{2}$.
 Consider the path $p = \csort(T, R)$ of this length.
@@ -435,7 +437,7 @@ Note that in this case taxon $n+1$ has to be in the cherry of $R$, as otherwise 
 Let us now consider the path $p\big|_n$ from $T\big|_n$ to $R\big|_n$, which is obtained by restricting every tree on $p$ to taxa $1, \ldots, n$ and removing identical trees.
 Observe that this path is shorter than $p$ by the number of moves that involve taxon $n+1$.
 Since this taxon is adjacent to the root in $T$ and part of the cherry in $R$, $\csort$ requires $n-1$ such moves.
-Hence, $d_c(T{\big|}_n, R{\big|}_n) = \frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2} = d(T{\big|}_n,R{\big|}_n)$, by induction.
+Hence, $d_c(T{\big|}_n, R{\big|}_n) = \frac{n(n-1)}{2} - (n-1)$ = $\frac{(n-1)(n-2)}{2} = d(T{\big|}_n,R{\big|}_n)$, by the induction hypothesis.
 Lemma~\ref{lemma:distance_delete_taxon} implies that $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - |\rank_T(\parent_T(n+1)) - \rank_R(\parent_R(n+1))| = d(T,R) - (n-1)$.
 So $\frac{(n-1)(n-2)}{2} \leq d(T,R) - (n-1)$, which implies that $d(T, R) \geq \frac{n(n-1)}{2}$.
 Thus $d(T, R) = \frac{n(n-1)}{2}$.
@@ -447,8 +449,8 @@ The set of caterpillar trees is convex in $\rnni$.
 \end{theorem}
 
 \proof
-Note that it suffice to prove that $d_c(T, R) = d(T, R)$ for an arbitrary pair of caterpillar trees $T$ and $R$.
-Lemma~\ref{lemma:caterpillar_dist=diameter} implies that if $T$ and $R$ are at the maximal possible distance, that is, $d_c(T, R) = \frac{(n-1)(n-2)}{2}$.
+Note that it suffices to prove that $d_c(T, R) = d(T, R)$ for an arbitrary pair of caterpillar trees $T$ and $R$.
+Lemma~\ref{lemma:caterpillar_dist=diameter} implies that if $T$ and $R$ are at the maximal possible distance, it is $d_c(T, R) = \frac{(n-1)(n-2)}{2}$.
 Denote the latter number by $D$.
 
 Assume now that $d_c(T, R) = D - 1$.
@@ -466,15 +468,15 @@ Lemma~\ref{lemma:caterpillar_dist=diameter} implies that $d(\hat T, R) = D$.
 Assume that $d(T, R) < d_c(T, R)$ and let $p$ be a path from $T$ to $R$ of length $d(T, R)$.
 Consider a path $q$ obtained by concatenating paths $\csort(\hat T, T)$ and $p$.
 Note that $q$ is a path from $\hat T$ to $R$ which is shorter than $\csort(\hat T, R)$.
-Indeed, the two paths coincide between $\hat T$ and $T$ and $q$ is shorter between $T$ and $R$.
-Since $d_c(\hat T, R) = D$, the existence of $q$ is a contradiction to Lemma~\ref{lemma:caterpillar_dist=diameter}.
+Indeed, the two paths coincide between $\hat T$ and $T$, and $q$ is shorter between $T$ and $R$.
+Since $d_c(\hat T, R) = D$, the existence of $q$ is a contradiction of Lemma~\ref{lemma:caterpillar_dist=diameter}.
 \endproof
 
 
 \subsection{Diameter and radius}
 \label{section:diameter}
 
-\textcite[Theorem~7]{Gavryushkin2018-ol} gave an upper bound for the diameter of $\rnni$ space, which we recall is denoted by $\Delta(\rnni)$.
+\textcite[Theorem~7]{Gavryushkin2018-ol} gave an upper bound for the diameter of $\rnni$ space, denoted by $\Delta(\rnni)$.
 They showed that $\Delta(\rnni) = n^2 - 3n - 5/8$.
 In this section we improve that result and calculate the exact diameter and radius of the $\rnni$ space.
 
@@ -484,7 +486,7 @@ $\Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
 \end{theorem}
 
 \proof
-Since $d_c([1\ldots,n], [n-1,n,n-2,n-3, \ldots, 1]) = \frac{(n-1)(n-2)}{2}$, the claim follows directly from from Theorem~\ref{thm:caterpillar_convex} and Lemma~\ref{lemma:diameter_bound}.
+Since $d_c([1\ldots,n], [n-1,n,n-2,n-3, \ldots, 1]) = \frac{(n-1)(n-2)}{2}$, the claim follows directly from Theorem~\ref{thm:caterpillar_convex} and Lemma~\ref{lemma:diameter_bound}.
 \endproof
 
 We show in the rest of this section that the radius of $\rnni$ space coincides with its diameter.
@@ -509,14 +511,14 @@ d(T\big|_n,R\big|_n) \leq d(T,R) - (n-1).
 \label{eqn:max_dist_cat_proof}
 \end{equation}
 Note that $R\big|_n = \mdtree (T\big|_n)$ for an appropriate choice of attachment points in the execution of $\mdtree$.
-By induction hypothesis and Theorem~\ref{thm:diameter}, $d(T\big|_n,R\big|_n) = \frac{(n-1)(n-2)}{2}$.
-So inequality~(\ref{eqn:max_dist_cat_proof}) becomes $d(T,R) \geq \frac{(n-1)(n-2)}{2} + n - 1 = \frac{n(n-1)}{2}$, which with Theorem~\ref{thm:diameter} gives the desired equality.
+By the induction hypothesis and Theorem~\ref{thm:diameter}, $d(T\big|_n,R\big|_n) = \frac{(n-1)(n-2)}{2}$.
+So inequality~(\ref{eqn:max_dist_cat_proof}) becomes $d(T,R) \geq \frac{(n-1)(n-2)}{2} + n - 1 = \frac{n(n-1)}{2}$, which gives the desired equality with Theorem~\ref{thm:diameter}.
 \end{proof}
 
-The non-determinism of $\mdtree$ can be exploited to investigate what trees are at the maximal possible from a given caterpillar tree.
-In fact, those trees can have an arbitrary (non-ranked) topology!
+The non-determinism of $\mdtree$ can be exploited to investigate which trees are at the maximal possible distance from a given caterpillar tree.
+In fact, those trees can have an arbitrary (non-ranked) topology.
 This is because in each step of the algorithm the next taxon can be added on any edge incident to a leaf in the running tree.
-Therefore, if the input tree is a caterpillar tree, $\mdtree$ can be used to find a tree of pre-defined topology that is at the maximal possible distance from the input tree.
+Therefore, $\mdtree$ can be used to find a tree of pre-defined topology that is at the maximal possible distance from the input tree, in particular if the input is a caterpillar tree.
 Because the distance between trees is invariant under permutations of taxa labels, we conclude that for every tree $R$ on $n$ taxa there exists a caterpillar tree $T$ such that $d(T,R) = \Delta(\rnni) = \frac{(n-1)(n-2)}{2}$.
 This proves the following Theorem~\ref{thm:radius}.
 
@@ -536,7 +538,7 @@ Specifically, in $\nni$ there exist two trees $T$ and $R$, which share a split $
 To construct this example, \textcite{Li1996-zw} used the idea illustrated in Figure~\ref{fig:NNI_NP_proof} and showed that for an appropriate permutation of the taxa in the two caterpillar subtrees of both $T$ and $R$, it is strictly shorter to merge the two caterpillar subtrees first, then sort them simultaneously, and then split back to two caterpillar subtrees, rather the two caterpillar subtrees independently.
 
 The reason this example cannot be transferred to $\rnni$ is that additional rank moves are necessary to merge and then split the two caterpillar subtrees.
-Similarly to the example in Figure~\ref{fig:NNI_vs_RNNI}, adding rank moves to the shortest $\nni$ path from $T$ to $R$ results in a path that is no longer a shortest $\rnni$ path.
+Similarly to the example in Figure~\ref{fig:NNI_vs_RNNI}, adding rank moves to the shortest $\nni$ path from $T$ to $R$ results in a path that is not a shortest $\rnni$ path.
 Sorting the two caterpillar subtrees of $T$ and $R$ independently results in a shorter path in $\rnni$.
 
 \begin{figure}[H]
@@ -551,7 +553,7 @@ Instead, the depicted path where $\frac{n}{2}$ cherries are built and then sorte
 
 This argument motivated \textcite[Conjecture~9]{Gavryushkin2018-ol} to conjecture that every split shared between trees in $\rnni$ is maintained along every shortest path.
 
-The following example in Figure~\ref{fig:splitthm_counterexample} shows that this form of the Split Theorem does not hold.
+The example in Figure~\ref{fig:splitthm_counterexample} shows that this form of the Split Theorem does not hold.
 
 \begin{figure}[H]
 \centering
@@ -563,7 +565,7 @@ On the path at the bottom, which is a shortest path as well, this split is maint
 \end{figure}
 
 Hence not every shortest path between trees in $\rnni$ has to maintain every shared split of taxa.
-However, \textbf{there exists} still another shortest path connecting the two trees, along which every shared split is maintained.
+However, there exists yet another shortest path connecting the two trees, along which every shared split is maintained.
 This motivates the study of the following Weak Split Theorem in $\rnni$.
 
 \begin{conjecture}[Weak Split Theorem]
@@ -571,7 +573,7 @@ If a split of taxa $A | B$ is shared by two trees $T$ and $R$ in $\rnni$ then th
 \label{conjecture:split_theorem}
 \end{conjecture}
 
-Another interesting property of our counterexample in Figure~\ref{fig:splitthm_counterexample} is that the set of taxa $\{1, 2, 3\}$, which is a part of the split in both $T$ and $R$, does not form a \textbf{cluster} in $R$, that is, there is no single node in the tree all descended taxa of which are exactly $1$, $2$, and $3$.
+Another interesting property of our counterexample in Figure~\ref{fig:splitthm_counterexample} is that the set of taxa $\{1, 2, 3\}$, which is a part of the split in both $T$ and $R$, does not form a cluster in $R$, that is, there is no single node in the tree all descended taxa of which are exactly $1$, $2$, and $3$.
 Importantly, rooted phylogenetic trees can be uniquely represented by sets of clusters \autocite{Steel2016-ye}, but not by sets of splits as splits cannot define the position of the root.
 For example, trees $T$ and $R$ in Figure~\ref{fig:splitthm_counterexample} induce the same set of splits, but share no cluster.
 
