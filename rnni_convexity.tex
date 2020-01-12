@@ -34,11 +34,11 @@
 \newcommand{\findpath}{\textsc{FindPath}}
 \newcommand{\mdtree}{\textsc{MDTree}}
 
-\newtheorem{definition}{Definition}
-\newtheorem{theorem}[definition]{Theorem}
-\newtheorem{conjecture}[definition]{Conjecture}
-\newtheorem{lemma}[definition]{Lemma}
-\newtheorem{proposition}[definition]{Proposition}
+\newtheorem*{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
 
 \graphicspath{{figures/}}
 
@@ -237,7 +237,7 @@ Case $k > 1$.
 \begin{enumerate}
 \item $C_k = C_i \cup C_j$ for $i, j < k$.
 Suppress $C_i$ and $C_j$ in both $T'$ and $R$ to new taxa $c_i$ and $c_j$ respectively and proceed as in Case $k = 1$.
-\item $C_k = C_i \cup {x}$, where $x$ is a taxon not present in $C_1, \ldots, C_k$.
+\item $C_k = C_i \cup \{x\}$, where $x$ is a taxon not present in $C_1, \ldots, C_k$.
 Suppress $C_i$ in both $T'$ and $R$ to a new taxon $c_i$ and proceed as in Case $k = 1$.
 \item $C_k = \{x, y\}$ where both $x$ and $y$ are not in $C_1, \ldots, C_k$.
 Proceed as in Case $k = 1$.
@@ -365,7 +365,7 @@ In particular if $T$ is a tree on taxa $\{1, \ldots, n+1\}$ the tree $T{\big|}_n
 
 \begin{lemma}
 Let $T$ and $R$ be two trees on taxa $\{1, \ldots, n+1\}$.
-Then $d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - \delta$, where $\delta = |\rank_T(\parent_T(n+1)) - \rank_R(\parent_R(n+1))|$.
+Then ${d(T{\big|}_n, R{\big|}_n) \leq d(T,R) - \delta}$, where $\delta = |\rank_T(\parent_T(n+1)) - \rank_R(\parent_R(n+1))|$.
 \label{lemma:distance_delete_taxon}
 \end{lemma}
 
@@ -477,7 +477,7 @@ Since $d_c(\hat T, R) = D$, the existence of $q$ is a contradiction of Lemma~\re
 \label{section:diameter}
 
 \textcite[Theorem~7]{Gavryushkin2018-ol} gave an upper bound for the diameter of $\rnni$ space, denoted by $\Delta(\rnni)$.
-They showed that $\Delta(\rnni) = n^2 - 3n - 5/8$.
+They showed that $\Delta(\rnni) \leq n^2 - 3n - 5/8$.
 In this section we improve that result and calculate the exact diameter and radius of the $\rnni$ space.
 
 \begin{theorem}
@@ -568,9 +568,13 @@ Hence not every shortest path between trees in $\rnni$ has to maintain every sha
 However, there exists yet another shortest path connecting the two trees, along which every shared split is maintained.
 This motivates the study of the following Weak Split Theorem in $\rnni$.
 
-\begin{conjecture}[Weak Split Theorem]
-If a split of taxa $A | B$ is shared by two trees $T$ and $R$ in $\rnni$ then there exists a shortest path $p$ between $T$ and $R$ such that all trees on $p$ share the split $A | B$.
-\label{conjecture:split_theorem}
+\begin{definition}[Weak Split Theorem]
+If a split of taxa $A | B$ is shared by two trees $T$ and $R$ then there exists a shortest path $p$ between $T$ and $R$ such that all trees on $p$ share the split $A | B$.
+\end{definition}
+
+\begin{conjecture}
+\label{conjecture:weak_split_theorem}
+The Weak Split Theorem holds for $\rnni$.
 \end{conjecture}
 
 Another interesting property of our counterexample in Figure~\ref{fig:splitthm_counterexample} is that the set of taxa $\{1, 2, 3\}$, which is a part of the split in both $T$ and $R$, does not form a cluster in $R$, that is, there is no single node in the tree all descended taxa of which are exactly $1$, $2$, and $3$.
@@ -581,10 +585,14 @@ Furthermore, all our methods in this paper for computing shortest paths in speci
 
 These considerations motivate us to conjecture the following strong version of the Cluster Theorem.
 
-\begin{conjecture}[Cluster Theorem]
-Let $T$ and $R$ be trees in $\rnni$ that share a cluster $C$.
+\begin{definition}[Cluster Theorem]
+Let $T$ and $R$ be trees that share a cluster $C$.
 Then $C$ is present as a cluster in every tree on every shortest path between $T$ and $R$.
+\end{definition}
+
+\begin{conjecture}
 \label{conjecture:cluster_theorem}
+The Cluster Theorem holds for $\rnni$.
 \end{conjecture}
 
 We have computationally checked that this conjecture is true in $\rnni$ spaces with up to seven taxa ($n = 2, \ldots, 7$).
