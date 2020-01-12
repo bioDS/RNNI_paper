@@ -136,6 +136,7 @@ Formally, if $u$ and $v$ are nodes of a tree $T$ such that $|\rank_T(u) - \rank_
 The second type of operation is called an $\nni$ \emph{move} and defined in the usual way, that is, two trees $T$ and $R$ are said to be connected by an $\nni$ move if there exist internal edges $e$ in $T$ and $f$ in $R$ both of length one such that the trees obtained by shrinking $e$ and $f$ to internal nodes coincide.
 
 We use the notation $d(T, R)$ throughout the paper to denote the graph distance between trees in $\rnni$, that is, $d(T, R)$ is the length of a shortest $\rnni$ path between tree $T$ and $R$.
+When analysing the geometry of $\rnni$, we will consider a subset of trees and see that it is \emph{convex} in $\rnni$, which means that every pair of trees from this subset is connected by a shortest path that stays within this subset.
 
 \begin{figure}[H]
 \centering
@@ -334,7 +335,6 @@ Therefore, this algorithm is non-deterministic, which is an important observatio
 The study of shortest paths in the $\rnni$ graph in this section is motivated by our aim to understand the geometry of $\rnni$ as a metric space.
 We will employ the algorithms developed in the previous section to aid our analysis of shortest paths.
 Those algorithms will, for example, enable us to prove that the set of caterpillar trees is convex in $\rnni$ (Theorem~\ref{thm:caterpillar_convex} in Section~\ref{section:caterpillar_convex}).
-We call a set of trees \emph{convex} if every pair of trees from this set is connected by a shortest path that stays within this set.
 In Section~\ref{section:diameter} we will investigate the diameter and radius of the $\rnni$ space.
 Interestingly, the \emph{diameter} of $\rnni$, that is the maximum distance $\Delta(\rnni) = \max \{d(T, R) \mid T, R \in \rnni\}$ between any two trees in the graph, equals its \emph{radius} defined as $\min\limits_T \max\limits_R d(T,R)$.
 Next, we will consider the so-called Split Theorem \autocite{Gavryushkin2018-ol}, which states that every shared split of taxa is maintained along every shortest path.
