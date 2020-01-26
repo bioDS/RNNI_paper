@@ -91,7 +91,7 @@ Recent advances in computational phylogenetics have introduced various classes o
 However, the mathematical challenges resulting from this seemingly minor change in parametrisation (genomic distance VS time distance) of trees have only recently been brought to attention \autocite{Gavryushkin2016-uu}.
 These differences motivated \textcite{Gavryushkin2018-ol} to propose an extension of the $\nni$ graph to the class of discrete time-trees.
 The simplest such extension introduces the $\rnni$ graph on the set of ranked phylogenetic trees.
-Two rooted trees are considered adjacent if they differ by a single neighbour interchange or order change respecting that ranking. \todo{Can't read David's suggestion here.}
+Two rooted trees are considered adjacent if they differ by a single neighbour interchange or order change respecting that ranking (detailed description below).
 Considered with the graph-distance $\rnni$ becomes a metric space and inherits the geometric and algorithmic challenges that the $\nni$ space has been traditionally facing.
 Surprisingly, most of them cannot be settled by directly translating results or applying techniques developed for $\nni$ \autocite{Gavryushkin2018-ol}.
 
@@ -165,7 +165,7 @@ We will finish the paper with a discussion and open problems.
 In this section we introduce three algorithms, $\findpath$ (Section~\ref{section:alg_findpath}), $\csort$ (Section~\ref{section:alg_csort}), and $\mdtree$ (Section~\ref{section:alg_mdtree}).
 $\findpath$ computes an $\rnni$ path between trees.
 $\csort$ computes a shortest $\rnni$ path between caterpillar trees (also known as ladder trees, see later in this section for formal definitions).
-$\mdtree$ maximises the dissimilarity to find a remote tree from an arbitrary $\rnni$ tree.
+$\mdtree$ attempts to maximise the dissimilarity to find a remote tree from an arbitrary $\rnni$ tree.
 While these algorithms are interesting on their own (e.g.\ in simulation studies), they will also form an important ingredient to study the geometry of the $\rnni$ space later in this paper.
 For example, $\mdtree$ will be an important tool for finding the radius of the $\rnni$ graph, as the algorithm computes a tree with maximum distance if the input tree is a caterpillar tree.
 We will prove this fact in Section~\ref{section:diameter}.
@@ -346,11 +346,11 @@ We will employ the algorithms developed in the previous section to aid our analy
 Those algorithms will, for example, enable us to prove that the set of caterpillar trees is convex in $\rnni$ (Theorem~\ref{thm:caterpillar_convex} in Section~\ref{section:caterpillar_convex}).
 In Section~\ref{section:diameter} we will investigate the diameter and radius of the $\rnni$ space.
 Interestingly, the \emph{diameter} of $\rnni$, that is the maximum distance $\Delta(\rnni) = \max \{d(T, R) \mid T, R \in \rnni\}$ between any two trees in the graph, equals its \emph{radius} defined as $\min\limits_T \max\limits_R d(T,R)$.
-Next, we will consider the so-called Split Theorem \autocite{Gavryushkin2018-ol}, which states that every shared split of taxa is maintained along every shortest path.
+Next, we will consider the so-called Split Property \autocite{Gavryushkin2018-ol}, that is, every shared split of taxa is maintained along every shortest path.
 Recall that a \emph{split} is a bipartition of the set of taxa obtained by deleting an edge of the tree $T$.
 Splits are denoted by $A|B$.
-We will give a counterexample to the Split Theorem in $\rnni$ and consider a variant, the Weak Split Theorem, which states that every shared split of taxa is maintained along a shortest path.
-We will also consider the so-called Cluster Theorem as another weak version of the Split Theorem (see Conjecture~\ref{conjecture:cluster_theorem}).
+We will give a counterexample to show that $\rnni$ does not have the Split Property and consider a variant, the Weak Split Property, which says that every shared split of taxa is maintained along a shortest path.
+We will also consider the so-called Cluster Property as another weak version of the Split Property (see Conjecture~\ref{conjecture:cluster_theorem}).
 
 We start with the following auxiliary results.
 
@@ -539,11 +539,11 @@ The radius and diameter of the $\rnni$ space coincide and are equal to $\frac{(n
 \end{theorem}
 
 
-\subsection{Cluster Theorem}
+\subsection{Cluster Property}
 \label{section:cluster_theorem}
 
-In this section we discuss the so-called Split Theorem, which states that every split shared between two trees is maintained along shortest paths between the trees.
-For example, Split Theorem is true in the $\spr$ space and false in $\nni$ \autocite{Li1996-zw}.
+In this section we discuss the so-called Split Property, which states that every split shared between two trees is maintained along shortest paths between the trees.
+For example, the $\spr$ space has the Split Property while $\nni$ does not \autocite{Li1996-zw}.
 Specifically, in $\nni$ there exist two trees $T$ and $R$, which share a split $A | B$, such that every tree on every shortest path between $T$ and $R$ does not have $A | B$.
 
 To construct this example, \textcite{Li1996-zw} used the idea illustrated in Figure~\ref{fig:NNI_NP_proof} and showed that for an appropriate permutation of the taxa in the two caterpillar subtrees of both $T$ and $R$, it is strictly shorter to merge the two caterpillar subtrees first, then sort them simultaneously, and then split back to two caterpillar subtrees, rather the two caterpillar subtrees independently.
@@ -564,7 +564,7 @@ Instead, the depicted path where $\frac{n}{2}$ cherries are built and then sorte
 
 This argument motivated \textcite[Conjecture~9]{Gavryushkin2018-ol} to conjecture that every split shared between trees in $\rnni$ is maintained along every shortest path.
 
-The example in Figure~\ref{fig:splitthm_counterexample} shows that this form of the Split Theorem does not hold.
+The example in Figure~\ref{fig:splitthm_counterexample} shows that this form of the Split Property does not hold.
 
 \begin{figure}[H]
 \centering
@@ -577,15 +577,15 @@ On the path at the bottom, which is a shortest path as well, this split is maint
 
 Hence not every shortest path between trees in $\rnni$ has to maintain every shared split of taxa.
 However, there exists yet another shortest path connecting the two trees, along which every shared split is maintained.
-This motivates the study of the following Weak Split Theorem in $\rnni$.
+This motivates the study of the following Weak Split Property in $\rnni$.
 
-\begin{definition}[Weak Split Theorem]
+\begin{definition}[Weak Split Property]
 If a split of taxa $A | B$ is shared by two trees $T$ and $R$ then there exists a shortest path $p$ between $T$ and $R$ such that all trees on $p$ share the split $A | B$.
 \end{definition}
 
 \begin{conjecture}
 \label{conjecture:weak_split_theorem}
-The Weak Split Theorem holds for $\rnni$.
+The Weak Split Property holds for $\rnni$.
 \end{conjecture}
 
 Another interesting property of our counterexample in Figure~\ref{fig:splitthm_counterexample} is that the set of taxa $\{1, 2, 3\}$, which is a part of the split in both $T$ and $R$, does not form a cluster in $R$, that is, there is no single node in the tree all descended taxa of which are exactly $1$, $2$, and $3$.
@@ -594,16 +594,16 @@ For example, trees $T$ and $R$ in Figure~\ref{fig:splitthm_counterexample} induc
 
 Furthermore, all our methods in this paper for computing shortest paths in special subspaces of $\rnni$ demonstrate that shared clusters are maintained along shortest paths.
 
-These considerations motivate us to conjecture the following strong version of the Cluster Theorem.
+These considerations motivate us to conjecture the following strong version of the Cluster Property.
 
-\begin{definition}[Cluster Theorem]
+\begin{definition}[Cluster Property]
 Let $T$ and $R$ be trees that share a cluster $C$.
 Then $C$ is present as a cluster in every tree on every shortest path between $T$ and $R$.
 \end{definition}
 
 \begin{conjecture}
 \label{conjecture:cluster_theorem}
-The Cluster Theorem holds for $\rnni$.
+The Cluster Property holds for $\rnni$.
 \end{conjecture}
 
 We have computationally checked that this conjecture is true in $\rnni$ spaces with up to seven taxa ($n = 2, \ldots, 7$).
@@ -621,13 +621,13 @@ $\nni$ is especially known for its algorithmic hardness \autocite{Whidden2018-fw
 Our results suggest a surprising advance in this field of $\np$-problems -- adding ranking information to trees simplifies some of the algorithms and makes some unintuitive counterexamples impossible.
 We hence continued the investigation of the $\rnni$ graph on ranked phylogenetic trees in this paper.
 We have taken the route of comparing the classic $\nni$ with the $\rnni$ graph, so have mostly been concentrating on questions that are settled in $\nni$.
-Specifically, we have considered a number of geometric properties, including the diameter, radius, convexity of caterpillar trees, and the Split Theorem.
+Specifically, we have considered a number of geometric properties, including the diameter, radius, convexity of caterpillar trees, and the Split Property.
 We have also justified that the technique of \textcite{Dasgupta2000-xa} to prove that distances in $\nni$ are $\np$-hard to compute cannot be directly applied in $\rnni$.
-This led us to the Cluster Theorem, a statement that does not hold in $\nni$.
-All our algorithms and methods developed in this paper witness in favour of the Cluster Theorem being true in $\rnni$.
+This led us to the Cluster Property, a statement that does not hold in $\nni$.
+All our algorithms and methods developed in this paper witness in favour of the Cluster Property being true in $\rnni$.
 For example, we have checked the statement computationally for up to seven taxa \autocite{Collienne2019}.
-Although the Split Theorem is true in $\spr$, it is still $\np$-hard to compute distances in that graph.
-Hence Cluster Theorem alone cannot be used as an argument in favour of the distance problem having an efficient solution in $\rnni$.
+Although the Split Property is true in $\spr$, it is still $\np$-hard to compute distances in that graph.
+Hence Cluster Property alone cannot be used as an argument in favour of the distance problem having an efficient solution in $\rnni$.
 But the greedy nature of all our algorithms for computing shortest paths in $\rnni$ developed in this paper does provide such an argument.
 
 The algorithms we developed and implemented in this paper have served as a main ingredient for our study of the geometry of $\rnni$ space.
@@ -643,7 +643,7 @@ The question of whether computing $\rnni$ distances is $\np$-hard is still open.
 
 
 \section*{Acknowledgements}
-We thank Charles Semple for useful discussions about the Cluster Theorem, and Mike Steel for his useful comments that improved this paper.
+We thank Charles Semple for useful discussions about the Cluster Property, and Mike Steel for his useful comments that improved this paper.
 
 We acknowledge support from the Royal Society of New Zealand through the Rutherford Discovery Fellowship (RDF-UOO1702) awarded to AG.
 This work was partially supported by the Ministry of Business, Innovation, and Employment of New Zealand through the Endeavour Smart Ideas (CONT-61378-ENDSI-UOO) and Data Science Programmes grants.
