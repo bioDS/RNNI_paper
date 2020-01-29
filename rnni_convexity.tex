@@ -612,6 +612,28 @@ We computed these graphs according to the algorithm from \autocite{Gavryushkin20
 The source code of all these implementations can be openly accessed at \autocite{Collienne2019}.
 
 
+\subsection{Partition lattice}
+
+The \emph{partition lattice} on $\{1, \ldots, n\}$ is the lattice given by the partially ordered set $(\Pi_n,\leq)$, where $\Pi_n$ is the power set of $\{1, \ldots, n\}$ and $x \leq y$ if partition $x$ refines $y$.
+For simplification we will denote the partition lattice by $\Pi_n$.
+We assume that the partition lattice is ranked such that the partition into singletons has rank zero and the set $\{1, \ldots, n\}$ has rank $n-1$.
+This algebraic structure is related to the $\rnni$ graph in the following way.
+
+\begin{theorem}
+The $\rnni$ graph on $n$ taxa is isomorphic to the graph of maximal chains of the partition lattice $\Pi_n$ where two maximal chains are connected by an edge if and only if they differ by exactly one partition.
+The corresponding metric spaces are isometric.
+\end{theorem}
+
+\begin{proof}
+There is a one to one relation between ranked trees and maximum chains in a partition lattice.
+We can define a bijective mapping from the set of ranked trees to the set of maximum chains in $\Pi_n$ as follows.
+A tree $T$ maps onto a maximum chain $\mathcal{C}_T$ if the set in the partition of rank $i$ in $\mathcal{C}_T$ that is the union of two sets of the partition of rank $i-1$ in $\mathcal{C}_T$ is the cluster induced by the internal node of rank $i$ in $T$.
+
+An $\rnni$ move on a tree $T$ corresponds to changing exactly one partition on $\mathcal{C}_T$ as only one cluster changes by an $\rnni$ move on $T$.
+From this we can follow that the $\rnni$ graph and the metric space on maximum chains of the partition lattice with this operation are isometric.
+\end{proof}
+
+
 \section{Discussion}
 
 The problem of computing distances in all common phylogenetic graphs, including $\nni$ \autocite{Dasgupta2000-xa}, $\spr$ \autocite{Bordewich2005-nx}, and $\tbr$ \autocite{Allen2001-ky}, is $\np$-hard.
