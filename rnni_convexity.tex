@@ -621,7 +621,7 @@ In this section we establish a connection between the $\rnni$ graph and a well k
 The relation between these two provides a new direction for further research and leads to a different view on problems of either structure.
 
 The \emph{partition lattice} on $\{1, \ldots, n\}$ is the lattice given by the partially ordered set $(\Pi_n,\leq)$, where $\Pi_n$ is the power set of $\{1, \ldots, n\}$ and $x \leq y$ if partition $x$ refines $y$.
-For simplification we will denote the partition lattice by $\Pi_n$.
+For simplification we will denote the partition lattice by $\Pi_n$, $\Pi_4$ is illustrated in Figure~\ref{fig:partition_lattice4}.
 We assume that the partition lattice is ranked such that the partition into singletons has rank zero and the set $\{1, \ldots, n\}$ has rank $n-1$.
 This algebraic structure is related to the $\rnni$ graph in the following way.
 
@@ -638,6 +638,15 @@ A tree $T$ maps onto a maximum chain $\mathcal{C}_T$ if the set in the partition
 An $\rnni$ move on a tree $T$ corresponds to changing exactly one partition on $\mathcal{C}_T$ as only one cluster changes by an $\rnni$ move on $T$.
 From this we can follow that the $\rnni$ graph and the metric space on maximum chains of the partition lattice with this operation are isometric.
 \end{proof}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{partition_lattice4}
+\vspace{12pt}
+\caption{The partition lattice $\Pi_4$ on $\{1,2,3,4\}$.
+The highlighted edges correspond to an $\rnni$ path from the tree represented by the leftmost chain to the rightmost one.}
+\label{fig:partition_lattice4}
+\end{figure}
 
 
 \section{Discussion}
