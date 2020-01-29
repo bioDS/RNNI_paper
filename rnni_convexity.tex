@@ -257,7 +257,7 @@ Clearly, the worst-case complexity of $\findpath$ is quadratic in the number of 
 
 Because the algorithm returns a path between pairs of trees in $\rnni$, the length of the path approximates the $\rnni$ distance from above.
 A natural question then is how accurate this approximation is.
-We have computationally shown that the algorithm $\findpath$ finds the correct distance for trees up to seven taxa \autocite{Collienne2019}.
+We have computationally shown that the algorithm $\findpath$ finds the correct distance for trees up to seven taxa \autocite{Collienne2019} and know of no larger counterexample.
 
 
 \subsection{$\csort$}
@@ -564,7 +564,7 @@ Instead, the depicted path where $\frac{n}{2}$ cherries are built and then sorte
 
 This argument motivated \textcite[Conjecture~9]{Gavryushkin2018-ol} to conjecture that every split shared between trees in $\rnni$ is maintained along every shortest path.
 
-The example in Figure~\ref{fig:splitthm_counterexample} shows that this form of the Split Property does not hold.
+The example in Figure~\ref{fig:splitthm_counterexample} shows that, in this form, the Split Property is not present.
 
 \begin{figure}[H]
 \centering
@@ -585,7 +585,7 @@ If a split of taxa $A | B$ is shared by two trees $T$ and $R$ then there exists 
 
 \begin{conjecture}
 \label{conjecture:weak_split_theorem}
-The Weak Split Property holds for $\rnni$.
+$\rnni$ has the Weak Split Property.
 \end{conjecture}
 
 Another interesting property of our counterexample in Figure~\ref{fig:splitthm_counterexample} is that the set of taxa $\{1, 2, 3\}$, which is a part of the split in both $T$ and $R$, does not form a cluster in $R$, that is, there is no single node in the tree all descended taxa of which are exactly $1$, $2$, and $3$.
@@ -594,7 +594,7 @@ For example, trees $T$ and $R$ in Figure~\ref{fig:splitthm_counterexample} induc
 
 Furthermore, all our methods in this paper for computing shortest paths in special subspaces of $\rnni$ demonstrate that shared clusters are maintained along shortest paths.
 
-These considerations motivate us to conjecture the following strong version of the Cluster Property.
+These considerations motivate us to conjecture the following Cluster Property.
 
 \begin{definition}[Cluster Property]
 Let $T$ and $R$ be trees that share a cluster $C$.
@@ -603,10 +603,10 @@ Then $C$ is present as a cluster in every tree on every shortest path between $T
 
 \begin{conjecture}
 \label{conjecture:cluster_theorem}
-The Cluster Property holds for $\rnni$.
+$\rnni$ has the Cluster Property.
 \end{conjecture}
 
-We have computationally checked that this conjecture is true in $\rnni$ spaces with up to seven taxa ($n = 2, \ldots, 7$).
+We have found no counterexamples to this conjecture and have checked that it holds in $\rnni$ spaces with up to seven taxa ($n = 2, \ldots, 7$).
 Specifically, we computed subgraphs of $\rnni$ containing only trees with shared clusters and compared distances in this subgraph with distances in the whole $\rnni$ graph.
 We computed these graphs according to the algorithm from \autocite{Gavryushkin2018-ol} as discussed in Section~\ref{section:algorithms}.
 The source code of all these implementations can be openly accessed at \autocite{Collienne2019}.
@@ -646,10 +646,10 @@ We have taken the route of comparing the classic $\nni$ with the $\rnni$ graph, 
 Specifically, we have considered a number of geometric properties, including the diameter, radius, convexity of caterpillar trees, and the Split Property.
 We have also justified that the technique of \textcite{Dasgupta2000-xa} to prove that distances in $\nni$ are $\np$-hard to compute cannot be directly applied in $\rnni$.
 This led us to the Cluster Property, a statement that does not hold in $\nni$.
-All our algorithms and methods developed in this paper witness in favour of the Cluster Property being true in $\rnni$.
+All our algorithms and methods developed in this paper witness in favour of $\rnni$ having the Cluster Property.
 For example, we have checked the statement computationally for up to seven taxa \autocite{Collienne2019}.
-Although the Split Property is true in $\spr$, it is still $\np$-hard to compute distances in that graph.
-Hence Cluster Property alone cannot be used as an argument in favour of the distance problem having an efficient solution in $\rnni$.
+Although the Split Property is present in $\spr$, it is still $\np$-hard to compute distances in that graph.
+Hence the Cluster Property alone cannot be used as an argument in favour of the distance problem having an efficient solution in $\rnni$.
 But the greedy nature of all our algorithms for computing shortest paths in $\rnni$ developed in this paper does provide such an argument.
 
 The algorithms we developed and implemented in this paper have served as a main ingredient for our study of the geometry of $\rnni$ space.
