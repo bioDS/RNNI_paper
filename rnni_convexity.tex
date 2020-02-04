@@ -296,8 +296,8 @@ The running time of $\csort$ is quadratic in $n$.
 
 The path $p$ returned by $\csort$ is a shortest caterpillar path because every tree modification on $p$ reduces the number of inversions of taxa in $T$ and $R$, and no modification can reduce more than one insertion.
 Indeed, no $\rnni$ move on caterpillar trees can reduce the number of taxa inversions by more than one, assuming that inversions with both taxa of a cherry are counted only once.
-That is, if both pairs of taxa $(x, z)$ and $(y, z)$ appear in opposite orders in $T$ and $R$ and $x$ an $y$ build a cherry then they are counted as one inversion.
-Notice that because of this the distance between caterpillar trees does not coincide with the Kendall-Tau distance on permutations, even though the idea is very similar.
+That is, if both pairs of taxa $(x, z)$ and $(y, z)$ appear in opposite orders in $T$ and $R$ and $x$ an $y$ form a cherry then they are counted as one inversion.
+Notice that because of this the distance between caterpillar trees does not coincide with the Kendall tau distance \autocite{Kendall1948-tx}, counting the number of pairs of elements that appear in different order in two permutations, even though the idea is very similar.
 Hence any caterpillar path, every move along which reduced the number of inversions, is a shortest caterpillar path.
 
 It is not obvious that the path between $T$ and $R$ returned by $\csort$ has the least possible length among all $\rnni$ paths (not only caterpillar paths), that is, the length of $d(T, R)$.
