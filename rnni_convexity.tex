@@ -17,7 +17,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{csquotes}
 %\usepackage[notref,notcite]{showkeys}
-\usepackage[style=authoryear,ibidtracker=false,uniquename=false,giveninits=true,terseinits=true,maxbibnames=5,backend=biber]{biblatex}
+\usepackage[style=authoryear,ibidtracker=false,uniquename=false,giveninits=true,terseinits=true,maxbibnames=5,backend=biber,date=year]{biblatex}
 \renewbibmacro{in:}{}
 \addbibresource{rnni_convexity.bib}
 
@@ -67,7 +67,7 @@
 
 \begin{abstract}
 In this paper we study the graph of ranked phylogenetic trees where the adjacency relation is given by a local rearrangement of the tree structure.
-Our work is motivated by tree inference algorithms, such as maximum likelihood and Markov Chain Monte Carlo methods, where the geometry of the search space plays a central role for efficiency and practicality of optimisation.
+Our work is motivated by tree inference algorithms, such as maximum likelihood and Markov Chain Monte Carlo methods, where the geometry of the search space plays a central role for efficiency and practicality of optimisation and sampling.
 We hence focus on understanding the geometry of the space (graph) of ranked trees, the so-called ranked nearest neighbour interchange ($\rnni$) graph.
 We find the radius and diameter of the space exactly, improving the best previously known estimates.
 Since the $\rnni$ graph is a generalisation of the classical nearest neighbour interchange ($\nni$) graph to ranked phylogenetic trees, we compare geometric and algorithmic properties of the two graphs.
@@ -88,16 +88,16 @@ An important property of the $\nni$ graph is that computing distances is NP-hard
 \autocite{Whidden2016-kl}.
 
 Recent advances in computational phylogenetics have introduced various classes of molecular clock models \autocite{Yoder2000-ks,Drummond2006-nl,Drummond2010-yf} and made computational inference of phylogenetic time-trees possible \autocite{Ronquist2003-eq, Bouckaert2018-yr, Hadfield2018-xp}.
-However, the mathematical challenges resulting from this seemingly minor change in parametrisation (genomic distance VS time distance) of trees have only recently been brought to attention \autocite{Gavryushkin2016-uu}.
+However, the mathematical challenges resulting from this seemingly minor change in parametrisation (genomic distance versus time distance) of trees have only recently been brought to attention \autocite{Gavryushkin2016-uu}.
 These differences motivated \textcite{Gavryushkin2018-ol} to propose an extension of the $\nni$ graph to the class of discrete time-trees.
 The simplest such extension introduces the $\rnni$ graph on the set of ranked phylogenetic trees.
 Two rooted trees are considered adjacent if they differ by a single neighbour interchange or order change respecting that ranking (detailed description below).
-Considered with the graph-distance $\rnni$ becomes a metric space and inherits the geometric and algorithmic challenges that the $\nni$ space has been traditionally facing.
+As a metric space, the $\rnni$ graph inherits the geometric and algorithmic challenges that the $\nni$ space has been traditionally facing.
 Surprisingly, most of them cannot be settled by directly translating results or applying techniques developed for $\nni$ \autocite{Gavryushkin2018-ol}.
 
 In this paper, we consider the $\rnni$ space on ranked phylogenetic trees which have all taxa being of equal rank zero.
 An example of such a tree is depicted in Figure~\ref{fig:ranked_tree}.
-In the terminology of \autocite{Gavryushkin2018-ol}, the space considered in this paper is the space of ranked ultrametric phylogenetic trees ($\rnniu$ in their notations).
+In the terminology of \autocite{Gavryushkin2018-ol}, the space considered in this paper is the space of ranked ultrametric phylogenetic trees ($\rnniu$ in their notation).
 We postpone formal definitions until later in this section.
 
 \begin{figure}[H]
@@ -108,19 +108,19 @@ We postpone formal definitions until later in this section.
 \label{fig:ranked_tree}
 \end{figure}
 
-We investigate the geometry and algorithmic complexity of the $\rnni$ space.
+We investigate the geometry and algorithmic complexity of the $\rnni$ metric space.
 Specifically, in this paper we establish the exact radius and diameter of the space (Section~\ref{section:diameter}).
-We also show that the subset of caterpillar trees is convex in $\rnni$ (Section~\ref{section:caterpillar_convex}), thus settling one of the open problems proposed in \autocite{Gavryushkin2018-ol}.
-For establishing these geometric properties we use algorithms that will be introduced in Section~\ref{section:algorithms}.
+We also show that the subset of caterpillar trees is convex in the $\rnni$ space (Section~\ref{section:caterpillar_convex}), thus settling one of the open problems proposed in \autocite{Gavryushkin2018-ol}.
+To establish these geometric properties we use algorithms that will be introduced in Section~\ref{section:algorithms}.
 We will in particular provide an approximate algorithm that computes exact distances for small trees.
 The question of whether there exists a polynomial algorithm for computing the $\rnni$ distance remains an open problem.
 
-In the rest of this chapter we formally introduce the terminology used in this paper.
+In the remainder of this section we formally introduce the terminology used in this paper.
 
 A \emph{ranked phylogenetic tree} is a pair consisting of a rooted binary phylogenetic tree $T$ on the set $X = \{1, \ldots, n\}$ of \emph{taxa} for $n \in \mathbb N$, and a (total) rank function that maps all leaves of $T$ to $0$, all internal nodes of $T$ onto elements of the set $\{1, \ldots, n-1\}$, and respects the partial order on the nodes given by the tree.
 The latter means that if $u$ and $v$ are two internal nodes of $T$ such that there exists a path from a taxon $x \in X$ to the root which first passes through $u$ and then through $v$ then $\rank(u) < \rank(v)$.
 This definition also implies that the rank of every internal node is distinct and every $i$ with $1 \leq i \leq n-1$ equals the rank of some node.
-Ranked trees $(T_1, \rank_1)$ and $(T_2, \rank_2)$ are different if trees $T_1$ and $T_2$ are different or $T_1 = T_2$ and $\rank_1 \neq \rank_2$.
+Ranked trees $(T_1, \rank_1)$ and $(T_2, \rank_2)$ are considered equal if $T_1 = T_2$ and $\rank_1 = \rank_2$.
 Since all trees in this paper are ranked trees, we will abuse the notation and drop the rank function from the notation.
 We will also simply say trees to mean ranked phylogenetic trees.
 For a tree $T$, we will use $\rank_T$ to refer to its ranking.
@@ -133,7 +133,7 @@ Now we are ready to introduce the tree space which is the subject of study in th
 
 The vertex set of the $\rnni$ graph is the set of all ranked trees on $n$ taxa.
 We introduce two types of operation ($\rnni$ \emph{moves}) on trees (see Figure~\ref{fig:RNNI}) and say that two trees are adjacent in the $\rnni$ graph if one can be obtained from the other by an operation of either type.
-The first type of operation is called a \emph{rank move} and defined by swapping the ranks of two internal nodes that are not adjacent in the tree.
+The first type of operation is called a \emph{rank move} and defined by swapping the ranks of two internal nodes that are not adjacent in the tree but are consecutive in the ranking.
 Formally, if $u$ and $v$ are nodes of a tree $T$ such that $|\rank_T(u) - \rank_T(v)| = 1$ and $(u, v)$ is not an edge in $T$ then the tree $R$ obtained from $T$ by only changing $\rank_R(u) = \rank_T(v)$ and $\rank_R(v) = \rank_T(u)$ is said to be obtained by a rank move.
 The second type of operation is called an $\nni$ \emph{move} and defined in the usual way, that is, two trees $T$ and $R$ are said to be connected by an $\nni$ move if there exist internal edges $e$ in $T$ and $f$ in $R$ both of length one such that the trees obtained by shrinking $e$ and $f$ to internal nodes coincide.
 
@@ -167,19 +167,19 @@ In this section we introduce three algorithms, $\findpath$ (Section~\ref{section
 $\findpath$ computes an $\rnni$ path between trees.
 $\csort$ computes a shortest $\rnni$ path between caterpillar trees (also known as ladder trees, see later in this section for formal definitions).
 $\mdtree$ attempts to maximise the dissimilarity to find a remote tree from an arbitrary $\rnni$ tree.
-While these algorithms are interesting on their own (e.g.\ in simulation studies), they will also form an important ingredient to study the geometry of the $\rnni$ space later in this paper.
+While these algorithms are interesting on their own (e.g.\ in simulation studies), they will also form an important ingredient of our study of the geometry of the $\rnni$ space later in this paper.
 For example, $\mdtree$ will be an important tool for finding the radius of the $\rnni$ graph, as the algorithm computes a tree with maximum distance if the input tree is a caterpillar tree.
 We will prove this fact in Section~\ref{section:diameter}.
 
-The algorithm $\findpath$ can be used to approximate the $\rnni$ distance.
-We will study the accuracy of this approximation by computing the exact $\rnni$ distance for small trees.
+The algorithm $\findpath$ provides an upper bound the $\rnni$ distance.
+We will study the accuracy of this approximation by also computing the exact $\rnni$ distance for small trees.
 Specifically, we will use the algorithm for computing the complete $\rnni$ graph that is given in \autocite[Section 3.3]{Gavryushkin2018-ol}.
 After pre-computing the graph, we use Seidel's algorithm \autocite{seidel_all-pairs-shortest-path_1995} for computing distances.
 However, the large number of vertices in $\rnni$ is an obstacle when it comes to computing distances for larger trees.
 Since there are $\frac{n!(n-1)!}{2^{n-1}}$ vertices in the $\rnni$ graph \autocite{Gavryushkin2018-ol}, we compute the $\rnni$ graph on up to seven taxa for our analyses.
 This computational result will also be used later in the paper to support Conjecture~\ref{conjecture:cluster_theorem}, a modification of Conjecture~9 in \autocite{Gavryushkin2018-ol}, which we prove to be false in this paper.
 
-Note that computing the $\rnni$ space on trees with seven taxa is a challenging goal to achieve.
+Note that computing the $\rnni$ space on trees with seven taxa is a challenging goal.
 For example, \textcite{Whidden2016-kl} were able to compute the much smaller $\spr$ space on up to seven taxa and used this to compute curvature values for all pairs of trees within that space.
 %TODO: Make a zenodo dio for the repository before final publication
 We have implemented all our algorithms in a combination of Python and C, and the source code is available at \autocite{Collienne2019}.
@@ -188,7 +188,7 @@ We have implemented all our algorithms in a combination of Python and C, and the
 \subsection{$\findpath$}
 \label{section:alg_findpath}
 
-In this section we present $\findpath$, an efficient algorithm for computing paths, and therefore approximating distances, between trees in $\rnni$.
+In this section we present $\findpath$, an efficient heuristic for computing short paths between trees in $\rnni$.
 
 Before introducing the algorithm we need the following definitions.
 Each node $v$ of a tree defines a \emph{cluster} $C$, which is the set of taxa descending from $v$.
@@ -264,8 +264,8 @@ We have computationally shown that the algorithm $\findpath$ finds the correct d
 \subsection{$\csort$}
 \label{section:alg_csort}
 
-In this section we introduce an algorithm to compute paths between \emph{caterpillar trees}, which are trees where each internal node is adjacent to at least one leaf.
-As a result caterpillar trees have only one \emph{cherry}, which is a pair of taxa that share their parent.
+In this section we introduce an algorithm to compute $\rnni$ paths between \emph{caterpillar trees}, which are trees where each internal node is adjacent to at least one leaf.
+Caterpillar trees have only one \emph{cherry}, which is a pair of taxa that share their parent.
 A path between two caterpillar trees that only consists of caterpillar trees is called a \emph{caterpillar path}.
 We can identify a caterpillar tree $T = [\{x_1, x_2\}, \{x_1, x_2, x_3\}, \ldots, \{x_1, \ldots, x_{n-1}\}]$ with the list of its taxa $[x_1, x_2, \ldots, x_n]$, assuming that $x_1 < x_2$ (recall that the set of taxa is $\{1, \ldots, n\}$).
 
@@ -612,7 +612,7 @@ $\rnni$ has the Cluster Property.
 We have found no counterexamples to this conjecture and have checked that it holds in $\rnni$ spaces with up to seven taxa ($n = 2, \ldots, 7$).
 Specifically, we computed subgraphs of $\rnni$ containing only trees with shared clusters and compared distances in this subgraph with distances in the whole $\rnni$ graph.
 We computed these graphs according to the algorithm from \autocite{Gavryushkin2018-ol} as discussed in Section~\ref{section:algorithms}.
-The source code of all these implementations can be openly accessed at \autocite{Collienne2019}.
+The source code of all these implementations is available at \autocite{Collienne2019}.
 
 
 \subsection{Partition lattice}
