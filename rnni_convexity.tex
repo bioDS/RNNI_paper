@@ -353,7 +353,7 @@ Recall that a \emph{split} is a bipartition of the set of taxa obtained by delet
 Splits are denoted by $A|B$.
 We will give a counterexample to show that $\rnni$ does not have the Split Property and consider a variant, the Weak Split Property, which says that every shared split of taxa is maintained along a shortest path.
 We will also consider the so-called Cluster Property as another weak version of the Split Property (see Conjecture~\ref{conjecture:cluster_theorem}).
-In the final part of this geometry section we will discuss the relation between the $\rnni$ graph and the so-called partition lattice, a well known algebraic structure.
+In the final part of this geometry section we will discuss the relation between the $\rnni$ graph and the so-called partition lattice, a well-known algebraic structure.
 
 We start with the following auxiliary results.
 
@@ -618,11 +618,12 @@ The source code of all these implementations is available at \autocite{Collienne
 \subsection{Partition lattice}
 \label{section:partition_lattice}
 
-In this section we establish a connection between the $\rnni$ graph and a well known algebraic structure, the partition lattice.
-The relation between these two provides a new direction for further research and leads to a different view on problems of either structure.
+In this section we establish a connection between the $\rnni$ graph and a well-known algebraic structure, the partition lattice.
+This connection provides a new direction for further research and translates results and open problems from the language of phylogenetics to the language of lattice theory.
 
-The \emph{partition lattice} on $\{1, \ldots, n\}$ is the lattice given by the partially ordered set $(\Pi_n,\leq)$, where $\Pi_n$ is the power set of $\{1, \ldots, n\}$ and $x \leq y$ if partition $x$ refines $y$.
-For simplification we will denote the partition lattice by $\Pi_n$, $\Pi_4$ is illustrated in Figure~\ref{fig:partition_lattice4}.
+The \emph{partition lattice} on $\{1, \ldots, n\}$ is the lattice given by the partially ordered set $(\Pi_n, \leq)$, where $\Pi_n$ is the power set of $\{1, \ldots, n\}$ and $x \leq y$ if partition $x$ refines $y$, which means...
+For simplification we will denote the partition lattice on $n$ elements by $\Pi_n$.
+$\Pi_4$ is illustrated in Figure~\ref{fig:partition_lattice4}.
 We assume that the partition lattice is ranked such that the partition into singletons has rank zero and the set $\{1, \ldots, n\}$ has rank $n-1$.
 This algebraic structure is related to the $\rnni$ graph in the following way.
 
