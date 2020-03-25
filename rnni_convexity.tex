@@ -215,7 +215,7 @@ We continue extending $p$ in this way by repeatedly performing $\rnni$ moves unt
 \label{alg:findpath:line:for_loop}
     \WHILE {$\rank_{T'}(\mrca_{T'}(C_k))>k$}
         \IF {node $u$ with $\rank_{T'}(u) = rank_{T'}(\mrca_{T'}(C_k))-1$ is adjacent to $\mrca_{T'}(C_k)$}
-            \STATE $T'$ is $T'$ with $\rank_{T'}(\mrca_{T'}(C_k))$ decreased by an $\nni$ move
+            \STATE $T''$ is $T'$ with $\rank_{T'}(\mrca_{T'}(C_k))$ decreased by an $\nni$ move
         \ELSE
             \STATE $T''$ is $T'$ with ranks of $u$ and $\mrca_{T'}(C_k)$ swapped
         \ENDIF
