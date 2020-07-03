@@ -33,6 +33,7 @@
 \newcommand{\csort}{\textsc{Caterpillar Sort}}
 \newcommand{\findpath}{\textsc{FindPath}}
 \newcommand{\mdtree}{\textsc{MDTree}}
+\newcommand{\sidma}[1]{\todo[color=green]{#1}}
 
 \newtheorem*{definition}{Definition}
 \newtheorem{theorem}{Theorem}
@@ -197,6 +198,7 @@ All trees on $n$ leaves share trivial clusters, which are those induced by leave
 A tree is unambiguously defined by the list of its clusters sorted according to the rank of the inducing nodes.
 We will refer to this list of $n-2$ clusters for a given tree on $n$ taxa as a \emph{cluster representation} of the tree \autocite{Gavryushkin2018-ol, Gavryushkin2016-uu, Semple2003-nj}.
 
+\sidma{Since this is the crux of the paper, expand, add images, and work through an example of the algorithm}
 Let $T$ and $R$ be arbitrary trees and $[C_1, \ldots, C_{n-2}]$ be the cluster representation of $R$ (the ``destination'' tree).
 Then $C_i$ is induced by the node of rank $i$ for $i = 1, \ldots, n-2$.
 $\findpath$ computes a path by iteratively extending a sequence $p$ of trees starting from $T$.
@@ -206,6 +208,7 @@ We search for a node in the last tree $T'$ of $p$ from the previous step that in
 This node is denoted by $\mrca_{T'}(C_k)$ (short for \emph{most recent common ancestor}).
 We then extend $p$ by adding the tree obtained from $T'$ by performing an $\rnni$ move that decreases the rank of $\mrca_{T'}(C_k)$.
 We continue extending $p$ in this way by repeatedly performing $\rnni$ moves until the rank of $\mrca_{T'}(C_k) = k$, thus completing step $k$.
+\sidma{Reword [line 5 of algorithm] and/or expand discussion in text to demonstrate what this is doing}
 
 \begin{algorithm}[H]
 \caption{$\findpath$($T,R$)}
@@ -233,12 +236,15 @@ $\findpath$ is a correct deterministic algorithm.
 \end{proposition}
 
 \proof
+\sidma{Remove the sentence "It is not hard to see that the algorithm..." or move to before the proof in the informal discussion of what the algorithm is doing. In the formal discussion (i.e. the proof), state why the algorithm terminates (i.e. expand on the rest of that first paragraph).}
 It is not hard to see that the algorithm terminates with a path ending in $R$.
 Indeed, every iteration of the \textbf{for} loop (line~\ref{alg:findpath:line:for_loop}) is completed once $\rank_{T'}(\mrca_{T'}(C_k)) = k$, that is, the first $k$ clusters of $T'$ and $R$ coincide.
 Hence after $n-2$ such iteration the path has to arrive at $R$.
 
+\sidma{Include an argument about why line 5 makes sense in the algorithm, in the explanation of it before the proof, and here, in the proof.}
 To complete the proof, it suffices to show that the update operation (line~\ref{alg:findpath:line:move_set_down}) is well-defined, that is the $\rnni$ move that decreases the rank of $\mrca_{T'}(C_k)$ is unique.
 
+\sidma{Remove "it is not hard to see" and replace with images or written explanation. }
 Case $k = 1$.
 In this case $C_k$ consists of two taxa $\{x, y\}$.
 The node $v = \mrca_{T'}(x, y)$ has $\rank_{T'}(v) = r > 1$.
@@ -248,6 +254,8 @@ If the rank move is impossible then there is an edge in $T'$ connecting $v$ and 
 The only way to decrease the rank of $\mrca(x, y)$ then is to perform an $\nni$ move on that edge.
 It is not hard to see that out of two possible $\nni$ moves only one decreases the rank of this $\mrca$.
 
+\sidma{Fill in the missing words before starting the subcases.}
+\sidma{Define the term "supress" in terms of ranked trees.}
 Case $k > 1$.
 \begin{enumerate}
 \item $C_k = C_i \cup C_j$ for $i, j < k$.
@@ -256,9 +264,11 @@ Suppress $C_i$ and $C_j$ in both $T'$ and $R$ to new taxa $c_i$ and $c_j$ respec
 Suppress $C_i$ in both $T'$ and $R$ to a new taxon $c_i$ and proceed as in Case $k = 1$.
 \item $C_k = \{x, y\}$ where both $x$ and $y$ are not in $C_1, \ldots, C_k$.
 Proceed as in Case $k = 1$.
+\sidma{The end of the proof is missing. Complete the proof. }
 \end{enumerate}
 \endproof
 
+\sidma{While is highly likely that the worst-case complexity is quadratic, you need to demonstrate why that is the case. The simplest, and most convincing way would be to write this as a proposition and then go line-by-line detailing the running time.}
 Clearly, the worst-case complexity of $\findpath$ is quadratic in the number of taxa.
 
 Because the algorithm returns a path between pairs of trees in $\rnni$, the length of the path approximates the $\rnni$ distance from above.
@@ -297,12 +307,16 @@ Notice that there might be more than just one such move per step, which means th
 \end{algorithmic}
 \end{algorithm}
 
+\sidma{Since these algorithms are central to your paper, write out the proofs of their running time and correctness.}
 The running time of $\csort$ is quadratic in $n$.
 
 The path $p$ returned by $\csort$ is a shortest caterpillar path because every tree modification on $p$ reduces the number of inversions of taxa in $T$ and $R$, and no modification can reduce more than one insertion.
+\sidma{Define "number of inversions"}
 Indeed, no $\rnni$ move on caterpillar trees can reduce the number of taxa inversions by more than one, assuming that inversions with both taxa of a cherry are counted only once.
+\sidma{Define "appear in opposite orders"}
 That is, if both pairs of taxa $(x, z)$ and $(y, z)$ appear in opposite orders in $T$ and $R$ and $x$ an $y$ form a cherry then they are counted as one inversion.
 Notice that because of this the distance between caterpillar trees does not coincide with the Kendall tau distance \autocite{Kendall1948-tx}, counting the number of pairs of elements that appear in different order in two permutations, even though the idea is very similar.
+\sidma{Not sure why the statement starting with "Hence" about the shortest caterpillar path follows from the previous statements about Kendal tau distances. Explain the connection or reword}
 Hence any caterpillar path, every move along which reduced the number of inversions, is a shortest caterpillar path.
 
 It is not obvious that the path between $T$ and $R$ returned by $\csort$ has the least possible length among all $\rnni$ paths (not only caterpillar paths), that is, the length of $d(T, R)$.
@@ -316,6 +330,7 @@ Our Python implementation of this algorithm can be accessed at \autocite{Collien
 
 The idea behind this algorithm is to efficiently return a tree as far away from a given tree as possible.
 As we will see in Section~\ref{section:diameter}, $\mdtree$ achieves this goal for caterpillar trees.
+\sidma{ Explain or prove why the MDTree only produces caterpillars. Add images and work through the algorithm.}
 
 $\mdtree$ (Algorithm~\ref{alg:max_dist_tree}) works as follows.
 Given an arbitrary tree $T$, order its taxa in a list $L = [l_1, \ldots, l_n]$ so that the ranks of their parents are non-decreasing with respect to this order.
@@ -354,6 +369,7 @@ Those algorithms will, for example, enable us to prove that the set of caterpill
 In Section~\ref{section:diameter} we will investigate the diameter and radius of the $\rnni$ space.
 Interestingly, the \emph{diameter} of $\rnni$, that is the maximum distance $\Delta(\rnni) = \max \{d(T, R) \mid T, R \in \rnni\}$ between any two trees in the graph, equals its \emph{radius} defined as $\min\limits_T \max\limits_R d(T,R)$.
 Next, we will consider the so-called Split Property \autocite{Gavryushkin2018-ol}, that is, every shared split of taxa is maintained along every shortest path.
+\sidma{State whether you are including the root in your set of taxa. If not, then it would be good to explain why different rooted trees have the same set of splits (e.g., the rooted trees (1,(2,3)) and ((1,2),3) have the same split set) so that the later discussion on clusters is clearer.}
 Recall that a \emph{split} is a bipartition of the set of taxa obtained by deleting an edge of the tree $T$.
 Splits are denoted by $A|B$.
 We will give a counterexample to show that $\rnni$ does not have the Split Property and consider a variant, the Weak Split Property, which says that every shared split of taxa is maintained along a shortest path.
@@ -366,8 +382,10 @@ We start with the following auxiliary results.
 $\Delta(\rnni) \leq \frac{(n-1)(n-2)}{2}$ for $n \geq 3$.
 \label{lemma:diameter_bound}
 \end{lemma}
+\sidma{Include example and image for this lemma}
 
 \begin{proof}
+\sidma{This is an good motivation of the lemma and would be better as a lead-in to the proof, and then fill in a rigorous proof in its place.}
 Since the diameter is bounded from above by the maximum length of a path computed by $\findpath$, it is enough to find this maximum.
 Let us assume that $T$ and $R = [C_1, \ldots, C_{n-2}]$ are trees for which $\findpath$ computes a path of maximum length.
 It follows that in each step of $\findpath$ the most recent common ancestor of the cluster $C_k$ considered in that step is the root.
@@ -435,6 +453,7 @@ Then $d(T,R) = \frac{(n-1)(n-2)}{2}$ if and only if $d_c(T,R) = \frac{(n-1)(n-2)
 \end{lemma}
 
 \begin{proof}
+\sidma{Second sentence runs on and does not make sense. What is a step? If it is a single move on the caterpillar tree, then moves one per step? Rewrite to make this clear.}
 First note that $d(T,R) = \frac{(n-1)(n-2)}{2}$ implies $d_c(T,R) \geq \frac{(n-1)(n-2)}{2}$.
 In each step $i=0, \ldots, n-3$ of $\csort$ at most $n-2-i$ pairs of taxa swap positions, as in the worst case the taxon considered in step $k$ is moved from the cherry of the tree up to the position $n-k$.
 It follows that the maximum length of a path computed by $\csort$ is
@@ -639,7 +658,8 @@ The corresponding metric spaces are isometric.
 \end{theorem}
 
 \begin{proof}
-There is a one to one relation between ranked trees and maximum chains in a partition lattice.
+\sidma{Most of the proof is missing. Add in rest of proof.}
+There is a one-to-one relation between ranked trees and maximum chains in a partition lattice.
 We can define a bijective mapping from the set of ranked trees to the set of maximum chains in $\Pi_n$ as follows.
 A tree $T$ maps onto a maximum chain $\mathcal{C}_T$ if the set in the partition of rank $i$ in $\mathcal{C}_T$ that is the union of two sets of the partition of rank $i-1$ in $\mathcal{C}_T$ is the cluster induced by the internal node of rank $i$ in $T$.
 
