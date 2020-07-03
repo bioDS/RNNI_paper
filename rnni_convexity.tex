@@ -34,6 +34,7 @@
 \newcommand{\findpath}{\textsc{FindPath}}
 \newcommand{\mdtree}{\textsc{MDTree}}
 \newcommand{\sidma}[1]{\todo[color=green]{#1}}
+\newcommand{\moved}[1]{\todo[color=red]{start moved bock}{#1}\todo[color=red]{end moved block}}
 
 \newtheorem*{definition}{Definition}
 \newtheorem{theorem}{Theorem}
@@ -198,6 +199,7 @@ All trees on $n$ leaves share trivial clusters, which are those induced by leave
 A tree is unambiguously defined by the list of its clusters sorted according to the rank of the inducing nodes.
 We will refer to this list of $n-2$ clusters for a given tree on $n$ taxa as a \emph{cluster representation} of the tree \autocite{Gavryushkin2018-ol, Gavryushkin2016-uu, Semple2003-nj}.
 
+\moved{
 \sidma{Since this is the crux of the paper, expand, add images, and work through an example of the algorithm}
 Let $T$ and $R$ be arbitrary trees and $[C_1, \ldots, C_{n-2}]$ be the cluster representation of $R$ (the ``destination'' tree).
 Then $C_i$ is induced by the node of rank $i$ for $i = 1, \ldots, n-2$.
@@ -269,7 +271,7 @@ Proceed as in Case $k = 1$.
 \endproof
 
 \sidma{While is highly likely that the worst-case complexity is quadratic, you need to demonstrate why that is the case. The simplest, and most convincing way would be to write this as a proposition and then go line-by-line detailing the running time.}
-Clearly, the worst-case complexity of $\findpath$ is quadratic in the number of taxa.
+Clearly, the worst-case complexity of $\findpath$ is quadratic in the number of taxa.}
 
 Because the algorithm returns a path between pairs of trees in $\rnni$, the length of the path approximates the $\rnni$ distance from above.
 A natural question then is how accurate this approximation is.
